@@ -336,3 +336,25 @@ h2.slogan {
     font-size: 1.25rem;
   }
 }
+
+@media (max-width: 600px) {
+  .footer-contenido {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-izquierda,
+  .footer-derecha {
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-izquierda {
+    margin-bottom: 10px;
+  }
+
+  .footer-item {
+    justify-content: center;
+  }
+}
