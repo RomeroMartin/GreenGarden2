@@ -220,6 +220,50 @@ h2.slogan {
   box-shadow: 0 -2px 6px rgba(96, 124, 107, 0.2);
 }
 
+.footer-contenido {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 0 20px;
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.footer-izquierda {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.footer-derecha {
+  text-align: right;
+  color: var(--blanco);
+  font-size: 14px;
+}
+
+.footer-item {
+  display: flex;
+  align-items: center;
+  color: var(--blanco);
+  text-decoration: none;
+  font-size: 14px;
+  gap: 8px;
+  transition: opacity 0.3s ease;
+}
+
+.footer-item:hover {
+  opacity: 0.8;
+}
+
+.icono {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) invert(1); /* convierte el svg a blanco */
+}
+
 /* ---------------------------------------------
   GALERÍA DE MENÚ
 --------------------------------------------- */
