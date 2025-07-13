@@ -284,12 +284,6 @@ h2.slogan {
   transition: transform 0.3s ease;
 }
 
-.galeria img:hover,
-.galeria img:focus {
-  transform: scale(1.05);
-  outline: none;
-}
-
 /* ---------------------------------------------
   SECCIÓN DE PLAYROOM / REGLAMENTO
 --------------------------------------------- */
@@ -364,5 +358,3 @@ h2.slogan {
     text-align: center;
   }
 }
-
-
