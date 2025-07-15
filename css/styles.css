@@ -23,7 +23,7 @@
   ESTILO GENERAL DE BODY Y ESTRUCTURA BASE
 --------------------------------------------- */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Nunito', sans-serif;
   background-color: var(--beige-suave);
   color: var(--texto);
   text-align: center;
@@ -96,12 +96,12 @@ footer.footer {
   HEADER Y LOGO
 --------------------------------------------- */
 .header {
-  padding: 50px 0 30px; /* separa el logo del borde superior */
+  padding: 50px 0 30px;
 }
 
 .logo {
-  width: 90vw;         /* ocupa el 90% del ancho de la pantalla */
-  max-width: 500px;    /* límite para que no se vuelva gigante */
+  width: 90vw;
+  max-width: 500px;
   height: auto;
   margin: 0 auto;
   display: block;
@@ -116,6 +116,7 @@ h1 {
   color: var(--verde-oscuro);
   margin-bottom: 15px;
   font-weight: 700;
+  font-family: 'Quicksand', sans-serif;
 }
 
 h2.slogan {
@@ -125,6 +126,7 @@ h2.slogan {
   margin-top: 10px;
   margin-bottom: 25px;
   font-style: italic;
+  font-family: 'Quicksand', sans-serif;
 }
 
 .intro {
@@ -261,7 +263,7 @@ h2.slogan {
 .icono {
   width: 20px;
   height: 20px;
-  filter: brightness(0) invert(1); /* convierte el svg a blanco */
+  filter: brightness(0) invert(1);
 }
 
 /* ---------------------------------------------
@@ -297,6 +299,9 @@ h2.slogan {
   color: var(--texto);
 }
 
+/* ---------------------------------------------
+  LISTAS DE PLAYROOM
+--------------------------------------------- */
 .reglamento-section ul {
   list-style-type: disc;
   padding-left: 20px;
