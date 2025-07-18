@@ -7,6 +7,7 @@
   <title>Reglamento Playroom | Green Garden</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
   <link rel="icon" href="img/favicon.ico.jpeg" type="image/x-icon" />
 </head>
 <body>
@@ -18,14 +19,10 @@
     <a href="index.html" class="volver">← Volver al inicio</a>
     <h1>Reglamento del Playroom</h1>
 
-    <section class="reglamento-section" aria-label="Reglas para el uso del playroom">
-      <p>Para garantizar la seguridad y la diversión de todos, te pedimos respetar las siguientes normas:</p>
-      <ul>
-        <li>Los niños deben estar acompañados por un adulto.</li>
-        <li>No se permite ingresar comida o bebida.</li>
-        <li>Tiempo máximo de uso: 30 minutos.</li>
-        <li>Usar el área con respeto hacia otros niños.</li>
-      </ul>
+    <section class="galeria" aria-label="Imagen del reglamento">
+      <a href="img/reglamento/reglamento.jpg" class="glightbox" data-gallery="reglamento">
+        <img src="img/reglamento/reglamento.jpg" alt="Reglamento del Playroom" tabindex="0" />
+      </a>
     </section>
   </main>
 
@@ -40,7 +37,7 @@
           <img src="img/icons/mail.svg" alt="Correo electrónico" class="icono" />
           greengardenlaplata@gmail.com
         </a>
-        <a href="https://instagram.com/greengardenlaplata" target="_blank" class="footer-item">
+        <a href="https://instagram.com/greengardenlaplata" target="_blank" class="footer-item" rel="noopener noreferrer">
           <img src="img/icons/instagram.svg" alt="Instagram" class="icono" />
           @greengardenlaplata
         </a>
@@ -52,5 +49,16 @@
       </div>
     </div>
   </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+  <script>
+    const lightbox = GLightbox({
+      selector: '.glightbox',
+      loop: true,
+      touchNavigation: true,
+      keyboardNavigation: true,
+      closeOnOutsideClick: true
+    });
+  </script>
 </body>
 </html>
