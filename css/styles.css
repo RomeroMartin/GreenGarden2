@@ -39,7 +39,7 @@ body {
 }
 
 /* ---------------------------------------------
-  ANIMACIÓN DE APARICIÓN PARA MAIN
+  ANIMACIÓN DE APARICIÓN
 --------------------------------------------- */
 main {
   animation: aparecer 0.6s ease-out;
@@ -57,9 +57,6 @@ main {
   }
 }
 
-/* ---------------------------------------------
-  ANIMACIÓN DE APARICIÓN PARA HEADER Y FOOTER
---------------------------------------------- */
 header.header {
   animation: aparecerHeader 0.6s ease-out;
   animation-fill-mode: forwards;
@@ -137,7 +134,7 @@ h2.slogan {
 }
 
 /* ---------------------------------------------
-  BOTONES PRINCIPALES
+  BOTONES
 --------------------------------------------- */
 .botones {
   display: flex;
@@ -192,7 +189,7 @@ h2.slogan {
 }
 
 /* ---------------------------------------------
-  LINKS EN GENERAL
+  LINKS
 --------------------------------------------- */
 .contenedor a {
   color: var(--verde-oscuro);
@@ -260,6 +257,14 @@ h2.slogan {
   opacity: 0.8;
 }
 
+.footer-label {
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* ---------------------------------------------
+  ÍCONOS
+--------------------------------------------- */
 .icono {
   width: 20px;
   height: 20px;
@@ -267,7 +272,7 @@ h2.slogan {
 }
 
 /* ---------------------------------------------
-  GALERÍA DE MENÚ
+  GALERÍA
 --------------------------------------------- */
 .galeria {
   display: flex;
@@ -286,8 +291,14 @@ h2.slogan {
   transition: transform 0.3s ease;
 }
 
+.galeria img:hover,
+.galeria img:focus {
+  transform: scale(1.05);
+  outline: none;
+}
+
 /* ---------------------------------------------
-  SECCIÓN DE PLAYROOM / REGLAMENTO
+  SECCIÓN DE PLAYROOM
 --------------------------------------------- */
 .reglamento-section {
   max-width: 650px;
@@ -299,9 +310,6 @@ h2.slogan {
   color: var(--texto);
 }
 
-/* ---------------------------------------------
-  LISTAS DE PLAYROOM
---------------------------------------------- */
 .reglamento-section ul {
   list-style-type: disc;
   padding-left: 20px;
@@ -313,7 +321,7 @@ h2.slogan {
 }
 
 /* ---------------------------------------------
-  MEDIA QUERIES (Responsive)
+  MEDIA QUERIES
 --------------------------------------------- */
 @media (min-width: 768px) {
   .boton {
@@ -352,6 +360,10 @@ h2.slogan {
     align-items: center;
     text-align: center;
     width: 100%;
+  }
+
+  .footer-derecha {
+    margin-top: 20px;
   }
 
   .footer-item {
