@@ -1,40 +1,60 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Green Garden - Próximamente</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #607c6b;
-      color: white;
-      font-family: 'Segoe UI', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-    }
-    img {
-      max-width: 400px;
-      margin-bottom: 40px;
-    }
-    h1 {
-      font-size: 2rem;
-      margin: 0;
-    }
-    p {
-      font-size: 1.2rem;
-      margin-top: 10px;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="robots" content="index, follow" />
+  <meta name="keywords" content="restaurante, menú, playroom, familia, Green Garden, comida saludable" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Consultá el menú y el reglamento del playroom de Green Garden." />
+  <title>Green Garden - Nuestra casa, tu lugar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" href="img/favicon.ico.jpeg" type="image/x-icon" />
 </head>
 <body>
-  <img src="img/logo.png" alt="Logo Green Garden"> <!-- Asegurate que el logo se llame así o cambialo -->
-  <h1>¡Muy pronto!</h1>
-  <p>Lo estamos preparando para vos. 🌿</p>
+  <header class="header">
+    <img src="img/logo.png" alt="Logo de Green Garden" class="logo" />
+  </header>
+
+  <main class="contenedor">
+    <h1 class="titulo-principal">Bienvenidos a<br>Green Garden</h1>
+    <h2 class="slogan">Nuestra casa, tu lugar.</h2>
+    <p class="intro">Accedé a nuestro menú digital y conocé el reglamento del área de juegos para niños.</p>
+
+    <nav class="botones" aria-label="Navegación principal">
+      <a href="menu.html" class="boton"><span class="boton-texto">Ver Menú Almuerzo/Cena</span></a>
+      <a href="menumerienda.html" class="boton"><span class="boton-texto">Ver Menú Merienda</span></a>
+      <a href="reglamento.html" class="boton">
+        <span class="boton-texto">
+          Reglamento
+          <span style="display:block;">Playroom</span>
+        </span>
+      </a>
+    </nav>
+  </main>
+
+  <footer class="footer">
+  <div class="footer-contenido">
+    <div class="footer-izquierda">
+      <a href="tel:02214895239" class="footer-item">
+        <img src="img/icons/phone.svg" alt="Teléfono" class="icono" />
+          Reservas al: 0221-4895239
+      </a>
+      <a href="mailto:greengardenlaplata@gmail.com" class="footer-item">
+        <img src="img/icons/mail.svg" alt="Correo electrónico" class="icono" />
+        greengardenlaplata@gmail.com
+      </a>
+      <a href="https://instagram.com/greengardenlaplata" target="_blank" rel="noopener noreferrer" class="footer-item">
+        <img src="img/icons/instagram.svg" alt="Instagram" class="icono" />
+        @greengardenlaplata
+      </a>
+    </div>
+
+    <div class="footer-derecha">
+      <p>&copy; 2025 Green Garden.</p>
+      <p>Desarrollado por Romero Martin</p>
+    </div>
+  </div>
+</footer>
 </body>
 </html>
