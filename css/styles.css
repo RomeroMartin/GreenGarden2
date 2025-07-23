@@ -375,3 +375,6 @@ h2.slogan {
     text-align: center;
   }
 }
+  .bloque {
+    display: block;
+}
