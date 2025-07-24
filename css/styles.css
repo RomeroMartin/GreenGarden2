@@ -321,6 +321,31 @@ h2.slogan {
 }
 
 /* ---------------------------------------------
+  CLASES AGREGADAS PARA HTML LIMPIO
+--------------------------------------------- */
+.bloque {
+  display: block;
+}
+
+.reglamento-section.instructivo {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.reglamento-section.instructivo h2 {
+  font-size: 1.8rem;
+}
+
+.reglamento-section.instructivo span {
+  color: var(--verde-oscuro);
+  font-weight: 600;
+}
+
+.boton-camaras {
+  margin-top: 20px;
+}
+
+/* ---------------------------------------------
   MEDIA QUERIES
 --------------------------------------------- */
 @media (min-width: 768px) {
@@ -374,7 +399,4 @@ h2.slogan {
   .footer {
     text-align: center;
   }
-}
-  .bloque {
-    display: block;
 }
