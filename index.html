@@ -103,5 +103,45 @@
       </div>
 
     </footer>
+            <!-- ================= POPUP EVENTO (San Valentín) ================= -->
+        <!-- Para desactivar el popup en el futuro, comentar este bloque -->
+
+        <div id="popup-evento" class="popup-overlay" aria-hidden="true">
+          <div class="popup-contenido">
+            <button class="popup-cerrar" aria-label="Cerrar popup">&times;</button>
+            <img
+              src="img/popup.webp"
+              alt="Sugerencias del menú especial Día de los Enamorados"
+              class="popup-imagen"
+            />
+          </div>
+        </div>
+
+        <script>
+          // Mostrar popup al cargar la página
+          window.addEventListener("load", () => {
+            const popup = document.getElementById("popup-evento");
+            popup.classList.add("activo");
+            popup.setAttribute("aria-hidden", "false");
+          });
+
+          // Cerrar popup
+          document.querySelector(".popup-cerrar").addEventListener("click", () => {
+            const popup = document.getElementById("popup-evento");
+            popup.classList.remove("activo");
+            popup.setAttribute("aria-hidden", "true");
+          });
+
+          // Cerrar clickeando fuera de la imagen
+          document.getElementById("popup-evento").addEventListener("click", (e) => {
+            if (e.target.id === "popup-evento") {
+              e.currentTarget.classList.remove("activo");
+              e.currentTarget.setAttribute("aria-hidden", "true");
+            }
+          });
+        </script>
+
+        <!-- ================================================================ -->
+
   </body>
 </html>
