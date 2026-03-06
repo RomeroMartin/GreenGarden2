@@ -116,6 +116,10 @@ h1 {
   font-family: 'Quicksand', sans-serif;
 }
 
+h2 {
+  text-align: center;
+}
+
 h2.slogan {
   font-size: 1.5rem;
   font-weight: 600;
@@ -325,6 +329,11 @@ h2.slogan {
 --------------------------------------------- */
 .bloque {
   display: block;
+}
+
+.reglamento {
+  max-width: 900px;
+  text-align: justify;
 }
 
 .reglamento-section.instructivo {
