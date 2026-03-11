@@ -109,16 +109,19 @@
 <div id="popup-evento" class="popup-overlay" aria-hidden="true">
   <div class="popup-contenido">
     <button class="popup-cerrar" aria-label="Cerrar popup">&times;</button>
+
     <img
       id="popup-imagen"
       src=""
       alt="Promoción especial"
       class="popup-imagen"
     />
+
   </div>
 </div>
 
 <script>
+
 window.addEventListener("load", () => {
 
   const popup = document.getElementById("popup-evento");
@@ -126,69 +129,147 @@ window.addEventListener("load", () => {
   const popupImg = document.getElementById("popup-imagen");
 
   const ahora = new Date();
-  const dia = ahora.getDay(); 
-  // 0 domingo, 1 lunes, 2 martes, 3 miércoles, 4 jueves, 5 viernes, 6 sábado
+  const dia = ahora.getDay();
   const hora = ahora.getHours();
 
-  let imagenPopup = null;
+  /* =====================================
+     CONTROL DE FRECUENCIA (30 MINUTOS)
+  ===================================== */
 
-  /* =========================
-     1️⃣ POPUP EJECUTIVO
-     Lunes a Viernes 11-16
-     ========================= */
-  if (dia >= 1 && dia <= 5 && hora >= 11 && hora < 16) {
-    imagenPopup = "img/popupejecutivo.webp";
+  const intervalo = 30 * 60 * 1000;
+  const ultimaVez = localStorage.getItem("popupLastClosed");
+  const ahoraMs = Date.now();
+
+  if (ultimaVez && (ahoraMs - ultimaVez) < intervalo) {
+    return;
   }
 
-  /* =========================
-     2️⃣ POPUP GALICIA
-     Martes 08-23:59
-     (solo si no hay ejecutivo)
-     ========================= */
-  else if (dia === 2 && hora >= 8 && hora <= 23) {
-    imagenPopup = "img/popupgalicia.webp";
+  /* =====================================
+     AGENDA DE PROMOCIONES
+  ===================================== */
+
+  const promociones = [
+
+    {
+      nombre: "menu_ejecutivo",
+      days: [1,2,3,4,5],
+      start: 11,
+      end: 16,
+      startDate: "2025-01-01",
+      endDate: null,
+      image: "img/popupejecutivo.webp",
+      priority: 3
+    },
+
+    {
+      nombre: "promo_bancaria",
+      days: [2],
+      start: 8,
+      end: 24,
+      startDate: "2025-01-01",
+      endDate: "2026-03-31",
+      image: "img/popupgalicia.webp",
+      priority: 2
+    },
+
+    {
+      nombre: "sugerencia_noche",
+      days: [5,6],
+      start: 20,
+      end: 1,
+      startDate: "2025-01-01",
+      endDate: null,
+      image: "img/popupsugerencia.webp",
+      priority: 1
+    }
+
+  ];
+
+  /* =====================================
+     VALIDACIÓN HORARIO
+  ===================================== */
+
+  function horarioValido(start, end, horaActual) {
+
+    if (start < end) {
+      return horaActual >= start && horaActual < end;
+    } else {
+      return horaActual >= start || horaActual < end;
+    }
+
   }
 
-  /* =========================
-     3️⃣ POPUP SUGERENCIA
-     Viernes y Sábado 20-01
-     ========================= */
-  else if (
-    (dia === 5 && hora >= 20) || // viernes desde 20
-    (dia === 6 && hora >= 20) || // sábado desde 20
-    (dia === 6 && hora < 1) ||   // madrugada sábado hasta 01
-    (dia === 0 && hora < 1)      // madrugada domingo hasta 01
-  ) {
-    imagenPopup = "img/popupsugerencia.webp";
+  /* =====================================
+     VALIDACIÓN FECHA
+  ===================================== */
+
+  function fechaValida(startDate, endDate) {
+
+    const hoy = new Date();
+    const inicio = startDate ? new Date(startDate) : null;
+    const fin = endDate ? new Date(endDate) : null;
+
+    if (inicio && hoy < inicio) return false;
+    if (fin && hoy > fin) return false;
+
+    return true;
+
   }
 
-  /* =========================
-     Mostrar popup si hay imagen
-     ========================= */
-  if (imagenPopup) {
-    popupImg.src = imagenPopup;
+  let promoActiva = null;
 
-    popup.classList.add("activo");
-    popup.setAttribute("aria-hidden", "false");
-  }
+  promociones.forEach(promo => {
 
-  /* =========================
-     Cerrar popup
-     ========================= */
+    const diaValido = promo.days.includes(dia);
+    const horaValida = horarioValido(promo.start, promo.end, hora);
+    const fechaOk = fechaValida(promo.startDate, promo.endDate);
 
-  botonCerrar.addEventListener("click", () => {
-    popup.classList.remove("activo");
-    popup.setAttribute("aria-hidden", "true");
+    if (diaValido && horaValida && fechaOk) {
+
+      if (!promoActiva || promo.priority > promoActiva.priority) {
+        promoActiva = promo;
+      }
+
+    }
+
   });
 
+  if (!promoActiva) return;
+
+  /* =====================================
+     MOSTRAR POPUP
+  ===================================== */
+
+  popupImg.src = promoActiva.image;
+
+  popup.classList.add("activo");
+  popup.setAttribute("aria-hidden", "false");
+
+  /* =====================================
+     CERRAR POPUP
+  ===================================== */
+
+  function cerrarPopup() {
+
+    popup.classList.remove("activo");
+    popup.setAttribute("aria-hidden", "true");
+
+    localStorage.setItem("popupLastClosed", Date.now());
+
+  }
+
+  botonCerrar.addEventListener("click", cerrarPopup);
+
   popup.addEventListener("click", (e) => {
+
     if (e.target.id === "popup-evento") {
-      popup.classList.remove("activo");
-      popup.setAttribute("aria-hidden", "true");
+      cerrarPopup();
     }
+
   });
 
 });
+
 </script>
 
 <!-- ================================================================ -->
