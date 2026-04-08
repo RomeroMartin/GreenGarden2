@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Green Garden — Nosotros</title>
+  <meta name="description" content="Conocé la historia de Green Garden, restaurante en La Plata desde 2016.">
+  <link rel="icon" href="img/favicon.jpeg" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--beige:#F7F2E8;--beige-mid:#EDE5D0;--beige-deep:#DDD0B3;--sage-pale:#D4E4D0;--sage:#8BB89A;--sage-mid:#6A9E7B;--sage-deep:#3D6B4F;--green-dark:#244033;--white:#FDFAF5;--text:#1E2E23;--text-muted:#5C7A65;--radius:12px}
+    html{scroll-behavior:smooth}
+    body{font-family:'DM Sans',sans-serif;background:var(--beige);color:var(--text);line-height:1.7;overflow-x:hidden}
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5vw;height:68px;display:flex;align-items:center;justify-content:space-between;background:rgba(36,64,51,.97);box-shadow:0 2px 20px rgba(0,0,0,.15)}
+    .nav-links{display:flex;align-items:center;gap:.2rem;list-style:none}
+    .nav-links a{color:rgba(255,255,255,.85);text-decoration:none;font-size:.88rem;font-weight:400;padding:.4rem .85rem;border-radius:20px;transition:background .2s,color .2s}
+    .nav-links a:hover,.nav-links a.active{background:rgba(255,255,255,.12);color:#fff}
+    .nav-cta{background:var(--sage-mid)!important;color:var(--white)!important;font-weight:500!important}
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer}
+    .hamburger span{display:block;width:24px;height:2px;background:#fff;border-radius:2px}
+    .mobile-menu{display:none;position:fixed;top:68px;left:0;right:0;bottom:0;background:var(--green-dark);z-index:99;padding:2.5rem 5vw;flex-direction:column}
+    .mobile-menu.open{display:flex}
+    .mobile-menu a{color:rgba(255,255,255,.8);text-decoration:none;font-size:1.1rem;font-weight:300;padding:.85rem 0;border-bottom:1px solid rgba(255,255,255,.08);display:block}
+    .mobile-menu .mob-cta{margin-top:1.5rem;background:var(--sage-mid);color:var(--white);text-align:center;padding:1rem;border-radius:30px;font-weight:500;border-bottom:none}
+    .section-label{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--sage-mid);font-weight:500;margin-bottom:.75rem;display:block}
+    .section-title{font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:400;color:var(--green-dark);line-height:1.2;margin-bottom:1.4rem}
+    .btn-sage{background:var(--sage-mid);color:var(--white);padding:.85rem 1.8rem;border-radius:30px;text-decoration:none;font-weight:500;font-size:.88rem;transition:background .2s;display:inline-flex;align-items:center;gap:.5rem}
+    .btn-sage:hover{background:var(--sage-deep)}
+    .site-footer{background:var(--green-dark);padding:2.5rem 5vw;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-size:.82rem;color:rgba(247,242,232,.5)}
+    .site-footer a{color:rgba(247,242,232,.5);text-decoration:none}.site-footer a:hover{color:var(--sage)}
+    .site-footer strong{color:var(--beige);font-weight:400}
+    .footer-contact{display:flex;flex-direction:column;gap:.4rem}
+    .footer-right{text-align:right}
+
+    /* PAGE */
+    .page-header{background:var(--green-dark);padding:8rem 5vw 5rem;position:relative;overflow:hidden}
+    .ph-bg{position:absolute;inset:0;background-image:linear-gradient(to right,rgba(36,64,51,.97) 45%,rgba(36,64,51,.55) 100%),url('img/nosotros2.webp');background-size:cover;background-position:center}
+    .ph-content{position:relative;z-index:2;max-width:580px}
+    .ph-content h1{font-family:'DM Serif Display',serif;font-size:clamp(2.2rem,5vw,3.8rem);color:var(--white);font-weight:400;margin-bottom:.75rem;line-height:1.1}
+    .ph-content h1 em{color:var(--sage-pale);font-style:italic}
+    .ph-content p{color:rgba(255,255,255,.52);font-size:.95rem;font-weight:300;max-width:460px}
+
+    .historia{background:var(--beige);padding:6rem 5vw;display:grid;grid-template-columns:1fr 1fr;gap:6vw;align-items:start}
+    .historia-text p{color:var(--text-muted);font-size:.93rem;margin-bottom:1.1rem;font-weight:300;line-height:1.75}
+    .pullquote{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--sage-deep);font-style:italic;border-left:3px solid var(--sage-mid);padding-left:1.25rem;margin:1.75rem 0;line-height:1.6}
+    .historia-imgs{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+    .historia-imgs img{width:100%;border-radius:var(--radius);object-fit:cover;display:block}
+    .historia-imgs img:first-child{grid-column:1/-1;aspect-ratio:16/9}
+    .historia-imgs img:not(:first-child){aspect-ratio:3/4}
+
+    .valores{background:var(--sage-pale);padding:5rem 5vw}
+    .valores-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.25rem;margin-top:2.5rem}
+    .valor-card{background:var(--white);border-radius:var(--radius);padding:1.75rem;border:1px solid rgba(107,158,123,.15)}
+    .vc-icon{font-size:1.8rem;margin-bottom:.85rem;display:block}
+    .vc-title{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--green-dark);font-weight:400;margin-bottom:.5rem}
+    .vc-text{font-size:.85rem;color:var(--text-muted);font-weight:300;line-height:1.6}
+
+    .info-section{background:var(--white);padding:5rem 5vw}
+    .info-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.25rem;margin-top:2.5rem}
+    .info-card{padding:1.75rem;border:1px solid var(--beige-deep);border-radius:var(--radius);text-align:center}
+    .ic-icon{font-size:1.5rem;margin-bottom:.75rem;display:block}
+    .info-card h4{font-family:'DM Serif Display',serif;font-size:1rem;font-weight:400;color:var(--text);margin-bottom:.35rem}
+    .info-card p,.info-card a{font-size:.85rem;color:var(--text-muted);font-weight:300;text-decoration:none;word-break:break-word;overflow-wrap:break-word}
+    .info-card a:hover{color:var(--sage-deep)}
+
+    .mapa-section{background:var(--beige);padding:5rem 5vw}
+    .mapa-section h2{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--green-dark);font-weight:400;margin-bottom:1.5rem}
+    .mapa-wrap{border-radius:var(--radius);overflow:hidden;height:380px;border:1px solid var(--beige-deep)}
+    .mapa-wrap iframe{width:100%;height:100%;border:none;display:block}
+
+    @media(max-width:768px){
+      .nav-links{display:none}.hamburger{display:flex}
+      .historia{grid-template-columns:1fr;padding:5rem 5vw}
+      .historia-imgs{order:-1;margin-bottom:1rem}
+      .site-footer{flex-direction:column;align-items:flex-start}.footer-right{text-align:left}
+    }
+  .navbar-logo{height:72px;width:auto;display:block;filter:brightness(0) invert(1)}
+    .navbar-logo-link{display:flex;align-items:center;flex-shrink:0}
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="navbar-logo-link"><img src="img/logo.png" alt="Green Garden" class="navbar-logo"></a>
+  
+  <ul class="nav-links">
+    <li><a href="index.html">Inicio</a></li>
+    <li><a href="menu.html">Menú</a></li>
+    <li><a href="playroom.html">Playroom</a></li>
+    <li><a href="nosotros.html" class="active">Nosotros</a></li>
+    <li><a href="tel:02214895239" class="nav-cta">Reservar</a></li>
+  </ul>
+  <div class="hamburger" id="ham"><span></span><span></span><span></span></div>
+</nav>
+<div class="mobile-menu" id="mobMenu">
+  <a href="index.html" onclick="closeMob()">Inicio</a>
+  <a href="menu.html" onclick="closeMob()">Menú</a>
+  <a href="playroom.html" onclick="closeMob()">Playroom</a>
+  <a href="nosotros.html" onclick="closeMob()">Nosotros</a>
+  <a href="tel:02214895239" class="mob-cta">📞 Reservar: 0221-4895239</a>
+</div>
+
+<div class="page-header">
+  <div class="ph-bg"></div>
+  <div class="ph-content">
+    <span class="section-label" style="color:var(--sage-pale)">Un poco de nosotros</span>
+    <h1>Nuestra casa,<br><em>tu lugar.</em></h1>
+    <p>Desde 2016 llevamos gastronomía, calidez y familia a cada mesa de La Plata.</p>
+  </div>
+</div>
+
+<div class="historia" id="historia">
+  <div class="historia-text">
+    <span class="section-label">Nuestra historia</span>
+    <h2 class="section-title">Cocina con alma</h2>
+    <p>Bienvenidos a <strong>Green Garden</strong>. Desde nuestra apertura en 2016 nos dedicamos a brindar una experiencia gastronómica única en La Plata, pensando en cada detalle, en cada receta y en cada sistema de cocción.</p>
+    <div class="pullquote">"Diseñamos una experiencia gastronómica basada en brindar lo mejor y atender cada necesidad de nuestros comensales."</div>
+    <p>En nuestras instalaciones de Diag. 74 e/49 y 50 contamos con un primer piso de producción equipado con cámaras de frío positivo y negativo, sector de envasado al vacío, sectores de producción específica y próximamente panadería artesanal.</p>
+    <p>Trabajamos con primeras marcas y proveedores de excelencia, que ayudan a nuestro equipo de profesionales gastronómicos a crear y mantener vivas las recetas de nuestra casa.</p>
+    <p>En <strong>Green Garden</strong> nuestros clientes son familia. Por eso diseñamos un espacio completamente para niños, con juegos para todas las edades al cuidado de nuestras profes y vigilado por cámaras de seguridad que los padres pueden ver desde la mesa.</p>
+  </div>
+  <div class="historia-imgs">
+    <img src="img/nosotros1.webp" alt="Salón Green Garden">
+    <img src="img/nosotros2.webp" alt="Green Garden ambiente">
+    <img src="img/nosotros3.webp" alt="Green Garden equipo" style="object-position:top">
+  </div>
+</div>
+
+<div class="valores">
+  <span class="section-label">Lo que nos define</span>
+  <h2 class="section-title">Nuestros valores</h2>
+  <div class="valores-grid">
+    <div class="valor-card"><span class="vc-icon">🌿</span><div class="vc-title">Ingredientes frescos</div><p class="vc-text">Trabajamos con los mejores proveedores del mercado para garantizar materia prima de primera calidad en cada plato.</p></div>
+    <div class="valor-card"><span class="vc-icon">👨‍🍳</span><div class="vc-title">Equipo profesional</div><p class="vc-text">Nuestros cocineros crean y mantienen vivas las recetas de la casa, llevándolas a un nivel de excelencia total.</p></div>
+    <div class="valor-card"><span class="vc-icon">👨‍👩‍👧‍👦</span><div class="vc-title">Espacio familiar</div><p class="vc-text">Pensamos en toda la familia. El playroom y la atención personalizada garantizan una experiencia completa.</p></div>
+    <div class="valor-card"><span class="vc-icon">🔧</span><div class="vc-title">Tecnología de vanguardia</div><p class="vc-text">Hornos, parrillas y sistemas de cocción industrial que garantizan estándares de seguridad y eficacia en cada plato.</p></div>
+  </div>
+</div>
+
+<div class="info-section">
+  <span class="section-label">Encontranos</span>
+  <h2 class="section-title">Dónde & cuándo</h2>
+  <div class="info-cards">
+    <div class="info-card"><span class="ic-icon">📍</span><h4>Ubicación</h4><p>Diag. 74 1618<br>La Plata, Buenos Aires</p></div>
+    <div class="info-card"><span class="ic-icon">🕐</span><h4>Horarios</h4><p>Lunes a Domingo<br>08:00 — 02:00 hs.</p></div>
+    <div class="info-card"><span class="ic-icon">📞</span><h4>Reservas</h4><a href="tel:02214895239">0221-489-5239</a></div>
+    <div class="info-card"><span class="ic-icon">✉️</span><h4>Email</h4><a href="mailto:greengardenlaplata@gmail.com">greengardenlaplata@gmail.com</a></div>
+    <div class="info-card"><span class="ic-icon">📷</span><h4>Instagram</h4><a href="https://instagram.com/greengardenlaplata" target="_blank">@greengardenlaplata</a></div>
+  </div>
+</div>
+
+<div class="mapa-section" id="mapa">
+  <h2>Dónde estamos</h2>
+  <div class="mapa-wrap">
+    <iframe src="https://www.google.com/maps?q=Diag.+74+1618,+La+Plata,+Buenos+Aires&output=embed" loading="lazy" allowfullscreen title="Mapa Green Garden"></iframe>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-contact">
+    <strong>Green Garden</strong>
+    <a href="tel:02214895239">📞 0221-489-5239</a>
+    <a href="mailto:greengardenlaplata@gmail.com">✉️ greengardenlaplata@gmail.com</a>
+    <a href="https://instagram.com/greengardenlaplata" target="_blank">📷 @greengardenlaplata</a>
+  </div>
+  <div class="footer-right">
+    <p>Diag. 74 1618, La Plata, Buenos Aires</p>
+    <p>Lunes a Domingo · 08:00 — 02:00 hs</p>
+    <p style="margin-top:.5rem;font-size:.75rem">© 2026 Green Garden · Desarrollado por <a href="https://www.martinromero.com.ar" target="_blank" rel="noopener noreferrer">Martin Romero</a></p>
+  </div>
+</footer>
+
+<script>
+document.getElementById('ham').addEventListener('click',()=>document.getElementById('mobMenu').classList.toggle('open'));
+function closeMob(){document.getElementById('mobMenu').classList.remove('open')}
+</script>
+</body>
+</html>

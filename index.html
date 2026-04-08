@@ -1,280 +1,522 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="index, follow" />
-    <meta name="keywords" content="restaurante, menú, playroom, familia, Green Garden, comida saludable" />
-    <meta name="description" content="Consultá el menú y el reglamento del playroom de Green Garden." />
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Green Garden — Nuestra casa, tu lugar.</title>
+  <meta name="description" content="Green Garden - Restaurante en La Plata. Platos caseros, sabores frescos y un ambiente único para compartir.">
+  <link rel="icon" href="img/favicon.jpeg" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <meta property="og:title" content="Green Garden — Nuestra casa, tu lugar.">
+  <meta property="og:description" content="Platos caseros, sabores frescos y un ambiente único en La Plata.">
+  <meta property="og:type" content="website"><meta property="og:url" content="https://greengarden.com.ar">
+  <style>
 
-    <title>Green Garden - Nuestra casa, tu lugar</title>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --beige:#F7F2E8;
+      --beige-mid:#EDE5D0;
+      --beige-deep:#DDD0B3;
+      --sage-pale:#D4E4D0;
+      --sage:#8BB89A;
+      --sage-mid:#6A9E7B;
+      --sage-deep:#3D6B4F;
+      --green-dark:#244033;
+      --white:#FDFAF5;
+      --text:#1E2E23;
+      --text-muted:#5C7A65;
+      --radius:12px;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:'DM Sans',sans-serif;background:var(--beige);color:var(--text);line-height:1.7;overflow-x:hidden}
 
-    <!-- Open Graph: Vista previa para WhatsApp, Facebook, etc. -->
-    <meta property="og:title" content="Green Garden - Nuestra casa, tu lugar" />
-    <meta property="og:description" content="Consultá el menú digital y el reglamento del Playroom de Green Garden." />
-    <meta property="og:image" content="https://romeromartin.github.io/GreenGarden2/img/logo.png" />
-    <meta property="og:url" content="https://romeromartin.github.io/GreenGarden2/" />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="es_AR" />
+    /* ── NAV ── */
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5vw;height:80px;display:flex;align-items:center;justify-content:space-between;transition:background .3s,box-shadow .3s}
+    .navbar.scrolled,.navbar.solid{background:rgba(36,64,51,.97);box-shadow:0 2px 20px rgba(0,0,0,.15)}
+    .nav-links{display:flex;align-items:center;gap:.2rem;list-style:none}
+    .nav-links a{color:rgba(255,255,255,.85);text-decoration:none;font-size:.88rem;font-weight:400;padding:.4rem .85rem;border-radius:20px;transition:background .2s,color .2s}
+    .nav-links a:hover{background:rgba(255,255,255,.1);color:#fff}
+    .nav-cta{background:var(--sage-mid)!important;color:var(--white)!important;font-weight:500!important}
+    .nav-cta:hover{background:var(--sage-deep)!important}
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer}
+    .hamburger span{display:block;width:24px;height:2px;background:#fff;border-radius:2px}
+    .mobile-menu{display:none;position:fixed;top:68px;left:0;right:0;bottom:0;background:var(--green-dark);z-index:99;padding:2.5rem 5vw;flex-direction:column}
+    .mobile-menu.open{display:flex}
+    .mobile-menu a{color:rgba(255,255,255,.8);text-decoration:none;font-size:1.15rem;font-weight:300;padding:.9rem 0;border-bottom:1px solid rgba(255,255,255,.08);display:block}
+    .mobile-menu .mob-cta{margin-top:1.5rem;background:var(--sage-mid);color:var(--white);text-align:center;padding:1rem;border-radius:30px;font-weight:500;border-bottom:none}
 
-    <!-- Twitter Cards -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Green Garden - Nuestra casa, tu lugar" />
-    <meta name="twitter:description" content="Consultá el menú digital y el reglamento del Playroom de Green Garden." />
-    <meta name="twitter:image" content="https://romeromartin.github.io/GreenGarden2/img/logo.png" />
+    /* ── FOOTER ── */
+    .site-footer{background:var(--green-dark);padding:2.5rem 5vw;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-size:.82rem;color:rgba(247,242,232,.5)}
+    .site-footer a{color:rgba(247,242,232,.5);text-decoration:none}
+    .site-footer a:hover{color:var(--sage)}
+    .site-footer strong{color:var(--beige);font-weight:400}
+    .footer-contact{display:flex;flex-direction:column;gap:.4rem}
+    .footer-right{text-align:right}
 
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="css/styles.css" />
-    <link rel="icon" href="img/favicon.ico.jpeg" type="image/x-icon" />
+    /* ── UTILS ── */
+    .section-label{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--sage-mid);font-weight:500;margin-bottom:.75rem;display:block}
+    .section-title{font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:400;color:var(--green-dark);line-height:1.2;margin-bottom:1.4rem}
+    .btn-sage{background:var(--sage-mid);color:var(--white);padding:.85rem 1.8rem;border-radius:30px;text-decoration:none;font-weight:500;font-size:.88rem;transition:background .2s;display:inline-flex;align-items:center;gap:.5rem}
+    .btn-sage:hover{background:var(--sage-deep)}
+    .btn-outline-sage{border:1.5px solid var(--sage);color:var(--sage-deep);padding:.85rem 1.8rem;border-radius:30px;text-decoration:none;font-weight:500;font-size:.88rem;transition:border-color .2s,background .2s;display:inline-flex;align-items:center;gap:.5rem}
+    .btn-outline-sage:hover{border-color:var(--sage-mid);background:var(--sage-pale)}
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9T928H6DX1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+    .mob-close{background:none;border:none;color:rgba(255,255,255,.7);font-size:1.8rem;cursor:pointer;align-self:flex-end;padding:.25rem .5rem;margin-bottom:.5rem;line-height:1;transition:color .2s}
+    .mob-close:hover{color:var(--white)}
+   @media(max-width:768px){
+      .nav-links{display:none}
+      .hamburger{display:flex}
+      .site-footer{flex-direction:column;align-items:flex-start}
+      .footer-right{text-align:left}
+    }
 
-      gtag('config', 'G-9T928H6DX1');
-    </script>
 
-  </head>
-  <body>
-    <header class="header" role="banner">
-      <img src="img/logo.png" alt="Logo de Green Garden" class="logo" />
-    </header>
+    /* ── HERO ── */
+    .hero{height:100svh;min-height:700px;position:relative;display:flex;flex-direction:column;justify-content:flex-start;overflow:hidden;background:var(--green-dark)}
+    .hero-bg{position:absolute;inset:0;background-image:linear-gradient(105deg,rgba(36,64,51,.92) 38%,rgba(36,64,51,.42) 100%),url('img/hero.webp');background-size:cover;background-position:center}
+    .hero-circle{position:absolute;right:-5vw;top:50%;transform:translateY(-50%);width:min(55vw,580px);height:min(55vw,580px);border-radius:50%;border:1px solid rgba(212,228,208,.15);pointer-events:none}
+    .hero-circle::before{content:'';position:absolute;inset:2rem;border-radius:50%;border:1px solid rgba(212,228,208,.08)}
+    .hero-content{position:relative;z-index:2;padding:calc(80px + 2rem) 5vw 0;max-width:680px;flex-shrink:0}
+    .hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(212,228,208,.12);border:1px solid rgba(212,228,208,.25);border-radius:30px;padding:.35rem 1rem;font-size:.78rem;color:var(--sage-pale);letter-spacing:.08em;margin-bottom:1rem}
+    .badge-dot{width:6px;height:6px;border-radius:50%;background:var(--sage);animation:badgePulse 2s ease-in-out infinite;flex-shrink:0}
+    @keyframes badgePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+    .hero h1{font-family:'DM Serif Display',serif;font-size:clamp(3rem,6vw,5rem);color:var(--white);line-height:1.05;margin-bottom:1.25rem}
+    .hero h1 .green{color:var(--sage-pale);font-style:italic}
+    .hero p{font-size:1rem;color:rgba(255,255,255,.62);margin-bottom:2.5rem;max-width:420px;font-weight:300;line-height:1.7}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:1.5rem}
+    .btn-hero-primary{background:var(--sage-mid);color:var(--white);padding:.9rem 2rem;border-radius:30px;text-decoration:none;font-weight:500;font-size:.9rem;transition:background .2s,transform .1s;display:inline-flex;align-items:center;gap:.5rem}
+    .btn-hero-primary:hover{background:var(--sage-deep);transform:translateY(-1px)}
+    .btn-hero-outline{border:1.5px solid rgba(255,255,255,.25);color:rgba(255,255,255,.85);padding:.9rem 2rem;border-radius:30px;text-decoration:none;font-weight:400;font-size:.9rem;transition:border-color .2s,background .2s;display:inline-flex;align-items:center;gap:.5rem}
+    .btn-hero-outline:hover{border-color:var(--sage-pale);background:rgba(212,228,208,.08)}
+    .hero-stats{position:relative;padding:1.5rem 5vw 2.5rem;display:flex;gap:3rem;z-index:2;flex-wrap:wrap;margin-top:auto;flex-shrink:0}
+    .stat-num{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--white);line-height:1;display:block}
+    .stat-label{font-size:.72rem;color:rgba(255,255,255,.5);letter-spacing:.08em;text-transform:uppercase;font-weight:300;display:block;margin-top:.2rem;white-space:nowrap}
+    @media(max-width:600px){.hero-stats{gap:1.5rem;padding-bottom:2rem}.stat-num{font-size:1.4rem}.stat-label{font-size:.72rem;color:rgba(255,255,255,.5);letter-spacing:.08em;text-transform:uppercase;font-weight:300;display:block;margin-top:.2rem;white-space:nowrap}}
 
-    <main class="contenedor" role="main">
-      <h1 class="titulo-principal">Bienvenidos a<br>Green Garden</h1>
-      <h2 class="slogan">Nuestra casa, tu lugar.</h2>
-      <p class="intro">
-        Accedé a nuestro menú digital y conocé el reglamento del área de juegos para niños.
-      </p>
+    /* ── ACCESOS ── */
+    .quick-access{background:var(--sage-pale);padding:4rem 5vw}
+    .qa-head{margin-bottom:2rem}
+    .qa-head h2{font-family:'DM Serif Display',serif;font-size:1.5rem;font-weight:400;color:var(--green-dark)}
+    .qa-sub{font-size:.85rem;color:var(--text-muted);font-weight:300;margin-top:.25rem}
+    .qa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem}
+    .qa-card{background:var(--white);border:1px solid rgba(107,158,123,.18);border-radius:var(--radius);padding:1.5rem;text-decoration:none;display:flex;flex-direction:column;gap:.6rem;transition:border-color .2s,transform .2s,box-shadow .2s;position:relative;overflow:hidden}
+    .qa-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--sage-mid);transform:scaleX(0);transform-origin:left;transition:transform .25s}
+    .qa-card:hover{border-color:var(--sage-mid);transform:translateY(-2px);box-shadow:0 8px 24px rgba(107,158,123,.12)}
+    .qa-card:hover::before{transform:scaleX(1)}
+    .qa-icon-wrap{width:44px;height:44px;border-radius:10px;background:var(--sage-pale);display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+    .qa-title{font-weight:500;font-size:.95rem;color:var(--green-dark)}
+    .qa-desc{font-size:.82rem;color:var(--text-muted);font-weight:300;flex:1;line-height:1.5}
+    .qa-link{font-size:.8rem;color:var(--sage-mid);font-weight:500}
 
-      <nav class="botones" aria-label="Navegación principal">
-        <a href="menu.html" class="boton">
-          <span class="boton-texto">Ver Menú Almuerzo/Cena</span>
-        </a>
-        <a href="menumerienda.html" class="boton">
-          <span class="boton-texto">Ver Menú Merienda</span>
-        </a>
-        <a href="reglamento.html" class="boton">
-          <span class="boton-texto">
-            Reglamento
-            <span class="bloque">Playroom</span>
-          </span>
-        </a>
-      </nav>
-    </main>
+    /* ── ABOUT ── */
+    .about{background:var(--beige);padding:7rem 5vw;display:grid;grid-template-columns:1fr 1fr;gap:6vw;align-items:center}
+    .about-imgs{position:relative;height:460px}
+    .ai-main{position:absolute;top:0;left:0;width:75%;height:80%;border-radius:var(--radius);overflow:hidden;background:var(--sage-pale)}
+    .ai-main img{width:100%;height:100%;object-fit:cover}
+    .ai-accent{position:absolute;bottom:0;right:0;width:55%;height:52%;border-radius:var(--radius);overflow:hidden;background:var(--sage-mid);border:6px solid var(--beige)}
+    .ai-accent img{width:100%;height:100%;object-fit:cover}
+    .ai-badge{position:absolute;top:28%;right:-1rem;background:var(--green-dark);color:var(--sage-pale);border-radius:10px;padding:1rem;text-align:center;font-size:.73rem;line-height:1.4;min-width:90px}
+    .ai-badge strong{display:block;font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--sage-pale);font-weight:400;margin-bottom:.2rem}
+    .about-text p{color:var(--text-muted);font-size:.93rem;margin-bottom:1rem;font-weight:300}
+    .feat-list{list-style:none;margin:1.5rem 0;display:flex;flex-direction:column;gap:.7rem}
+    .feat-list li{display:flex;align-items:center;gap:.75rem;font-size:.88rem;color:var(--text)}
+    .feat-check{width:20px;height:20px;border-radius:50%;background:var(--sage-pale);border:1.5px solid var(--sage-mid);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;color:var(--sage-deep)}
+    @media(max-width:768px){.about{grid-template-columns:1fr;padding:5rem 5vw}.about-imgs{height:300px;margin-bottom:3rem}.ai-badge{right:.5rem}}
 
-    <footer class="footer" role="contentinfo">
-      <div class="footer-contenido">
-        <div class="footer-izquierda">
-          <a href="tel:02214895239" class="footer-item">
-            <img src="img/icons/phone.svg" alt="Teléfono" class="icono" />
-            Reservas al: 0221-4895239
-          </a>
-          <a href="mailto:greengardenlaplata@gmail.com" class="footer-item">
-            <img src="img/icons/mail.svg" alt="Correo electrónico" class="icono" />
-            greengardenlaplata@gmail.com
-          </a>
-          <a
-            href="https://instagram.com/greengardenlaplata"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="footer-item"
-          >
-            <img src="img/icons/instagram.svg" alt="Instagram" class="icono" />
-            @greengardenlaplata
-          </a>
-        </div>
+    /* ── MENÚ PREVIEW ── */
+    .menu-section{background:var(--green-dark);padding:7rem 5vw}
+    .menu-section .section-title{color:var(--white)}
+    .menu-section .section-label{color:var(--sage-pale)}
+    .menu-intro{color:rgba(255,255,255,.5);font-size:.93rem;max-width:500px;margin-bottom:3rem;font-weight:300}
+    .menu-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem}
+    .menu-card{background:rgba(255,255,255,.05);border:1px solid rgba(139,184,154,.12);border-radius:var(--radius);overflow:hidden;transition:transform .25s,border-color .25s;text-decoration:none;display:flex;flex-direction:column}
+    .menu-card:hover{transform:translateY(-4px);border-color:rgba(139,184,154,.3)}
+    .menu-card-img{height:180px;overflow:hidden;background:var(--sage-deep)}
+    .menu-card-img img{width:100%;height:100%;object-fit:cover;display:block}
+    .menu-card-body{padding:1.25rem;flex:1;display:flex;flex-direction:column}
+    .menu-tag{font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sage-pale);opacity:.7;margin-bottom:.4rem;display:block}
+    .menu-card h3{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--white);font-weight:400;margin-bottom:.4rem}
+    .menu-card p{font-size:.83rem;color:rgba(255,255,255,.48);font-weight:300;margin-bottom:1rem;flex:1;line-height:1.6}
+    .menu-card-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--sage-pale);font-size:.82rem;font-weight:500;transition:color .2s;margin-top:auto}
+    .menu-card-link:hover{color:var(--sage)}
+    .tacc-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(139,184,154,.15);border:1px solid rgba(139,184,154,.25);border-radius:20px;padding:.2rem .75rem;font-size:.72rem;color:var(--sage-pale);margin-bottom:.6rem;width:fit-content}
 
-        <div class="footer-derecha">
-          <p>&copy; 2025 Green Garden.</p>
-          <p>Desarrollado por Romero Martin</p>
-        </div>
+    /* ── PLAYROOM PREVIEW ── */
+    .playroom{background:var(--beige-mid);padding:7rem 5vw}
+    .playroom-inner{display:grid;grid-template-columns:1fr 1fr;gap:6vw;align-items:center}
+    .play-vis{position:relative;padding-bottom:1.5rem}
+    .play-main{background:var(--sage-pale);border-radius:16px;overflow:hidden;aspect-ratio:4/3}
+    .play-main img{width:100%;height:100%;object-fit:cover;display:block}
+    .play-mini{position:absolute;bottom:0;left:-1rem;background:var(--white);border:1px solid rgba(107,158,123,.15);border-radius:12px;padding:.9rem 1.1rem;display:flex;align-items:center;gap:.75rem;box-shadow:0 4px 20px rgba(0,0,0,.07)}
+    .pm-icon{width:38px;height:38px;border-radius:8px;background:var(--sage-pale);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+    .pm-label{font-size:.75rem;color:var(--text-muted);font-weight:300}
+    .pm-val{font-size:.88rem;font-weight:500;color:var(--green-dark)}
+    .play-ring{position:absolute;top:-1.5rem;right:-1.5rem;width:100px;height:100px;border-radius:50%;border:1.5px dashed var(--sage-pale);pointer-events:none;animation:ringRotate 20s linear infinite}
+    @keyframes ringRotate{to{transform:rotate(360deg)}}
+    .playroom-text p{color:var(--text-muted);font-size:.93rem;font-weight:300;margin-bottom:1rem}
+    .play-feats{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:1.5rem 0}
+    .pf{background:var(--white);border-radius:8px;padding:.8rem 1rem;font-size:.85rem;color:var(--green-dark);display:flex;align-items:center;gap:.5rem;border:1px solid rgba(107,158,123,.15)}
+    .play-actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.5rem}
+    @media(max-width:768px){.playroom-inner{grid-template-columns:1fr}.play-vis{padding-bottom:2.5rem}.play-mini{left:1rem}}
+
+    /* ── ALIADOS ── */
+    .aliados{background:var(--sage-pale);padding:4.5rem 5vw;text-align:center}
+    .aliados h2{font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--green-dark);font-weight:400;margin-bottom:.4rem}
+    .aliados-sub{font-size:.87rem;color:var(--text-muted);margin-bottom:2.5rem;font-weight:300}
+    .aliados-wrap{overflow:hidden;mask-image:linear-gradient(to right,transparent 0%,black 12%,black 88%,transparent 100%)}
+    .aliados-track{display:flex;align-items:center;gap:3rem;animation:scrollAliados 22s linear infinite;width:max-content}
+    .aliados-track:hover{animation-play-state:paused}
+    .aliados-track img{height:36px;width:auto;object-fit:contain;filter:saturate(0) opacity(.5);transition:filter .3s}
+    .aliados-track img:hover{filter:saturate(1) opacity(1)}
+    @keyframes scrollAliados{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+    /* ── CONTACTO ── */
+    .contact{background:var(--green-dark);padding:6rem 5vw;display:grid;grid-template-columns:1fr 1fr;gap:6vw;align-items:start}
+    .contact-l h2{font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,3vw,2.5rem);color:var(--white);font-weight:400;margin-bottom:1rem;line-height:1.2}
+    .contact-l>p{color:rgba(255,255,255,.45);font-size:.9rem;font-weight:300;margin-bottom:2rem}
+    .ci-list{display:flex;flex-direction:column;gap:1rem}
+    .ci{display:flex;align-items:center;gap:1rem;text-decoration:none;color:rgba(255,255,255,.72);transition:color .2s}
+    .ci:hover{color:var(--sage)}
+    .ci-ico{width:40px;height:40px;border-radius:10px;background:rgba(212,228,208,.1);border:1px solid rgba(212,228,208,.15);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+    .ci-lbl{font-size:.75rem;color:rgba(255,255,255,.35);margin-bottom:.1rem}
+    .ci-val{font-size:.88rem}
+    .contact-r{background:rgba(255,255,255,.04);border:1px solid rgba(139,184,154,.12);border-radius:16px;padding:2rem}
+    .info-row{display:flex;justify-content:space-between;align-items:flex-start;padding:.75rem 0;border-bottom:1px solid rgba(139,184,154,.08);font-size:.87rem}
+    .info-row:last-child{border-bottom:none}
+    .ir-lbl{color:rgba(255,255,255,.38);font-weight:300}
+    .ir-val{color:rgba(255,255,255,.82);text-align:right}
+    @media(max-width:768px){.contact{grid-template-columns:1fr}}
+  .navbar-logo{height:72px;width:auto;display:block;filter:brightness(0) invert(1)}
+    .navbar-logo-link{display:flex;align-items:center;flex-shrink:0}
+
+        /* ── POPUP EVENTO ESPECIAL ── */
+    .popup-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(58,71,63,.75);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s ease;z-index:9999}
+    .popup-overlay.activo{opacity:1;pointer-events:all}
+    .popup-contenido{position:relative;max-width:92vw;max-height:85vh;animation:popupEntrada .4s ease;display:flex;align-items:center;justify-content:center}
+    .popup-imagen{width:auto;max-width:100%;height:auto;max-height:85vh;border-radius:14px;box-shadow:0 10px 25px rgba(0,0,0,.35);object-fit:contain}
+    .popup-cerrar{position:absolute;top:-15px;right:-15px;background:var(--sage-mid);color:var(--white);border:none;width:36px;height:36px;border-radius:50%;font-size:22px;font-weight:bold;cursor:pointer;box-shadow:0 4px 8px rgba(0,0,0,.3);transition:transform .2s ease,background .3s ease}
+    .popup-cerrar:hover{background:var(--sage-deep);transform:scale(1.1)}
+    @keyframes popupEntrada{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+    @media(max-width:600px){.popup-contenido{max-width:95vw;max-height:80vh}.popup-imagen{max-height:80vh}.popup-cerrar{top:-12px;right:-12px;width:34px;height:34px;font-size:20px}}
+  </style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="navbar-logo-link"><img src="img/logo.png" alt="Green Garden" class="navbar-logo"></a>
+  
+  <ul class="nav-links"><li><a href="index.html">Inicio</a></li>
+<li><a href="menu.html">Menú</a></li>
+<li><a href="playroom.html">Playroom</a></li>
+<li><a href="nosotros.html">Nosotros</a></li><li><a href="tel:02214895239" class="nav-cta">Reservar</a></li></ul>
+  <div class="hamburger" id="ham"><span></span><span></span><span></span></div>
+</nav>
+<div class="mobile-menu" id="mobMenu">
+  <a href="index.html" onclick="closeMob()">Inicio</a>
+<a href="menu.html" onclick="closeMob()">Menú</a>
+<a href="playroom.html" onclick="closeMob()">Playroom</a>
+<a href="nosotros.html" onclick="closeMob()">Nosotros</a>
+  <a href="tel:02214895239" class="mob-cta">📞 Reservar: 0221-4895239</a>
+</div>
+
+<!-- HERO -->
+<section id="inicio" class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-circle"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><div class="badge-dot"></div>Abierto hoy · 08:00 — 02:00 hs</div>
+    <h1>Nuestra casa,<br><span class="green">tu lugar.</span></h1>
+    <p>Gastronomía con alma casera. Platos pensados con los mejores ingredientes, en un espacio familiar único en La Plata.</p>
+    <div class="hero-actions">
+      <a href="menu.html" class="btn-hero-primary">Ver el Menú →</a>
+      <a href="playroom.html" class="btn-hero-outline">Playroom ↓</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div><span class="stat-num">+9</span><span class="stat-label">Años</span></div>
+    <div><span class="stat-num">08–02</span><span class="stat-label">Todos los días</span></div>
+  </div>
+</section>
+
+<!-- ACCESOS RÁPIDOS -->
+<div class="quick-access" id="accesos">
+  <div class="qa-head">
+    <h2>Acceso rápido</h2>
+    <p class="qa-sub">Todo lo que necesitás a un toque</p>
+  </div>
+  <div class="qa-grid">
+    <a href="menu.html#almuerzo" class="qa-card">
+      <div class="qa-icon-wrap">🍽️</div>
+      <div class="qa-title">Almuerzos & Cenas</div>
+      <div class="qa-desc">Nuestra carta completa de platos del día.</div>
+      <div class="qa-link">Ver carta →</div>
+    </a>
+    <a href="menu.html#merienda" class="qa-card">
+      <div class="qa-icon-wrap">☕</div>
+      <div class="qa-title">Desayunos & Meriendas</div>
+      <div class="qa-desc">Todo lo dulce para cualquier momento.</div>
+      <div class="qa-link">Ver carta →</div>
+    </a>
+    <a href="menu.html#sintacc" class="qa-card">
+      <div class="qa-icon-wrap">🌾</div>
+      <div class="qa-title">Menú Sin TACC</div>
+      <div class="qa-desc">Opciones libres de gluten para todos los horarios.</div>
+      <div class="qa-link">Ver carta →</div>
+    </a>
+    <a href="playroom.html#camaras" class="qa-card">
+      <div class="qa-icon-wrap">📷</div>
+      <div class="qa-title">Cámaras Playroom</div>
+      <div class="qa-desc">Mirá a los chicos en tiempo real desde tu mesa.</div>
+      <div class="qa-link">Conectarme →</div>
+    </a>
+  </div>
+</div>
+
+<!-- NOSOTROS PREVIEW -->
+<div class="about" id="nosotros">
+  <div class="about-imgs">
+    <div class="ai-main"><img src="img/nosotros1.webp" alt="Salón Green Garden"></div>
+    <div class="ai-accent"><img src="img/nosotros2.webp" alt="Green Garden equipo"></div>
+    <div class="ai-badge"><strong>2016</strong>Acompañándote<br>desde siempre</div>
+  </div>
+  <div class="about-text">
+    <span class="section-label">Nuestra historia</span>
+    <h2 class="section-title">Cocina con alma,<br>sabor de casa</h2>
+    <p>Desde 2016 diseñamos una experiencia gastronómica basada en la excelencia. Instalaciones en Diag. 74 e/49 y 50 con producción propia y tecnología de vanguardia.</p>
+    <ul class="feat-list">
+      <li><span class="feat-check">✓</span>Producción propia con cámaras de frío y envasado al vacío</li>
+      <li><span class="feat-check">✓</span>Hornos y sistemas de cocción industriales de primer nivel</li>
+      <li><span class="feat-check">✓</span>Menú para todos los horarios del día</li>
+      <li><span class="feat-check">✓</span>Playroom infantil con profes y cámaras en vivo</li>
+    </ul>
+    <a href="nosotros.html" class="btn-sage" style="margin-top:1.5rem">Conocer más →</a>
+  </div>
+</div>
+
+<!-- MENÚ PREVIEW -->
+<section id="menu" class="menu-section">
+  <span class="section-label">Lo que servimos</span>
+  <h2 class="section-title">Nuestro Menú</h2>
+  <p class="menu-intro">Platos caseros con los mejores ingredientes del mercado, disponibles en todos los horarios del día.</p>
+  <div class="menu-cards">
+    <a href="menu.html#almuerzo" class="menu-card">
+      <div class="menu-card-img"><img src="img/almuerzo.webp" alt="Almuerzos y Cenas"></div>
+      <div class="menu-card-body">
+        <span class="menu-tag">Mediodía & noche</span>
+        <h3>Almuerzos & Cenas</h3>
+        <p>Platos caseros, abundantes y con sabor único. La carta completa.</p>
+        <span class="menu-card-link">Ver carta completa →</span>
       </div>
-
-      <div itemscope itemtype="https://schema.org/Restaurant" style="display: none;">
-        <meta itemprop="name" content="Green Garden" />
-        <meta itemprop="address" content="La Plata, Buenos Aires, Argentina" />
-        <meta itemprop="telephone" content="+54-221-4895239" />
-        <meta itemprop="servesCuisine" content="Comida como en casa" />
-        <meta itemprop="url" content="https://romeromartin.github.io/GreenGarden2/" />
+    </a>
+    <a href="menu.html#merienda" class="menu-card">
+      <div class="menu-card-img"><img src="img/merienda.webp" alt="Desayunos y Meriendas"></div>
+      <div class="menu-card-body">
+        <span class="menu-tag">Mañana & tarde</span>
+        <h3>Desayunos & Meriendas</h3>
+        <p>Café de especialidad y lo mejor de la pastelería para el momento dulce.</p>
+        <span class="menu-card-link">Ver carta de merienda →</span>
       </div>
+    </a>
+    <a href="menu.html#sintacc" class="menu-card">
+      <div class="menu-card-img"><img src="img/sintacc.webp" alt="Desayunos y Meriendas"></div> 
+      <div class="menu-card-body">
+        <span class="menu-tag">Todos los horarios</span>
+        <div class="tacc-badge">✓ Sin TACC</div>
+        <h3>Menú Sin TACC</h3>
+        <p>Opciones libres de gluten para celíacos. Almuerzo, cena y merienda incluidos.</p>
+        <span class="menu-card-link">Ver opciones Sin TACC →</span>
+      </div>
+    </a>
+  </div>
+</section>
 
-    </footer>
-            
-    <!-- ================= POPUP EVENTOS PROGRAMADOS ================= -->
+<!-- PLAYROOM PREVIEW -->
+<div class="playroom" id="playroom">
+  <div class="playroom-inner">
+    <div class="play-vis">
+      <div class="play-ring"></div>
+      <div class="play-main"><img src="img/playroom1.webp" alt="Playroom Green Garden"></div>
+      <div class="play-mini">
+        <div class="pm-icon">📷</div>
+        <div><div class="pm-label">Cámaras en vivo</div><div class="pm-val">Mirá desde la mesa</div></div>
+      </div>
+    </div>
+    <div class="playroom-text">
+      <span class="section-label">Para los más chicos</span>
+      <h2 class="section-title">Playroom<br>Infantil</h2>
+      <p>Un espacio seguro con personal a cargo para que los chicos disfruten mientras los adultos se relajan.</p>
+      <div class="play-feats">
+        <div class="pf">👶 3 a 10 años</div>
+        <div class="pf">🧑‍💼 Personal a cargo</div>
+        <div class="pf">📹 Cámaras en vivo</div>
+        <div class="pf">🏠 Máx. 30 niños</div>
+      </div>
+      <div class="play-actions">
+        <a href="playroom.html#camaras" class="btn-sage">Ver cámaras en vivo →</a>
+        <a href="playroom.html#reglamento" class="btn-outline-sage">Reglamento</a>
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- ALIADOS -->
+<div class="aliados" id="aliados">
+  <h2>Nuestros Aliados</h2>
+  <p class="aliados-sub">Trabajamos con las mejores marcas para garantizar calidad en cada plato.</p>
+  <div class="aliados-wrap">
+    <div class="aliados-track">
+      <img src="img/aliados/cocacola.png" alt="Coca-Cola">
+      <img src="img/aliados/heineken.png" alt="Heineken">
+      <img src="img/aliados/segafredo.png" alt="Segafredo">
+      <img src="img/aliados/losprados.png" alt="Los Prados">
+      <img src="img/aliados/escorihuelagascon.png" alt="Escorihulea Gascón">
+      <img src="img/aliados/cocacola.png" alt="Coca-Cola">
+      <img src="img/aliados/heineken.png" alt="Heineken">
+      <img src="img/aliados/segafredo.png" alt="Segafredo">
+      <img src="img/aliados/losprados.png" alt="Los Prados">
+      <img src="img/aliados/escorihuelagascon.png" alt="Escorihulea Gascón">
+      <img src="img/aliados/cocacola.png" alt="Coca-Cola">
+      <img src="img/aliados/heineken.png" alt="Heineken">
+      <img src="img/aliados/segafredo.png" alt="Segafredo">
+      <img src="img/aliados/losprados.png" alt="Los Prados">
+      <img src="img/aliados/escorihuelagascon.png" alt="Escorihulea Gascón">
+      <img src="img/aliados/cocacola.png" alt="Coca-Cola">
+      <img src="img/aliados/heineken.png" alt="Heineken">
+      <img src="img/aliados/segafredo.png" alt="Segafredo">
+      <img src="img/aliados/losprados.png" alt="Los Prados">
+      <img src="img/aliados/escorihuelagascon.png" alt="Escorihulea Gascón">
+    </div>
+  </div>
+</div>
+
+<!-- CONTACTO -->
+<div class="contact" id="contacto">
+  <div class="contact-l">
+    <h2>Vení a<br>visitarnos</h2>
+    <p>Abiertos todos los días de 08:00 a 02:00 hs. Te esperamos.</p>
+    <div class="ci-list">
+      <a href="tel:02214895239" class="ci"><div class="ci-ico">📞</div><div><div class="ci-lbl">Reservas</div><div class="ci-val">0221-489-5239</div></div></a>
+      <a href="mailto:greengardenlaplata@gmail.com" class="ci"><div class="ci-ico">✉️</div><div><div class="ci-lbl">Email</div><div class="ci-val">greengardenlaplata@gmail.com</div></div></a>
+      <a href="https://instagram.com/greengardenlaplata" target="_blank" class="ci"><div class="ci-ico">📸</div><div><div class="ci-lbl">Instagram</div><div class="ci-val">@greengardenlaplata</div></div></a>
+    </div>
+  </div>
+  <div class="contact-r">
+    <p style="color:rgba(255,255,255,.38);font-size:.73rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:1.5rem">Información</p>
+    <div class="info-row"><span class="ir-lbl">Dirección</span><span class="ir-val">Diag. 74 1618, La Plata</span></div>
+    <div class="info-row"><span class="ir-lbl">Horarios</span><span class="ir-val">Lun – Dom · 08:00 – 02:00</span></div>
+    <div class="info-row"><span class="ir-lbl">Playroom</span><span class="ir-val">3 a 10 años · $2.500</span></div>
+    <div class="info-row"><span class="ir-lbl">Capacidad máx.</span><span class="ir-val">30 niños</span></div>
+    <div class="info-row"><span class="ir-lbl">WiFi</span><span class="ir-val">Green Garden - Libre</span></div>
+    <a href="nosotros.html#mapa" class="btn-sage" style="margin-top:1.5rem;width:100%;justify-content:center">Ver ubicación en mapa →</a>
+  </div>
+</div>
+
+
+<footer class="site-footer">
+  <div class="footer-contact">
+    <strong>Green Garden</strong>
+    <a href="tel:02214895239">📞 0221-489-5239</a>
+    <a href="mailto:greengardenlaplata@gmail.com">✉️ greengardenlaplata@gmail.com</a>
+    <a href="https://instagram.com/greengardenlaplata" target="_blank">📷 @greengardenlaplata</a>
+  </div>
+  <div class="footer-right">
+    <p>Diag. 74 1618, La Plata, Buenos Aires</p>
+    <p>Lunes a Domingo · 08:00 — 02:00 hs</p>
+    <p style="margin-top:.5rem;font-size:.75rem">© 2026 Green Garden · Desarrollado por <a href="https://www.martinromero.com.ar" target="_blank" rel="noopener noreferrer">Martin Romero</a></p>
+  </div>
+</footer>
+
+<!-- ══ POPUP EVENTOS PROGRAMADOS ══ -->
 <div id="popup-evento" class="popup-overlay" aria-hidden="true">
   <div class="popup-contenido">
     <button class="popup-cerrar" aria-label="Cerrar popup">&times;</button>
-
-    <img
-      id="popup-imagen"
-      src=""
-      alt="Promoción especial"
-      class="popup-imagen"
-    />
-
+    <img id="popup-imagen" src="" alt="Promoción especial" class="popup-imagen">
   </div>
 </div>
 
 <script>
-
 window.addEventListener("load", () => {
-
   const popup = document.getElementById("popup-evento");
   const botonCerrar = document.querySelector(".popup-cerrar");
   const popupImg = document.getElementById("popup-imagen");
-
   const ahora = new Date();
   const dia = ahora.getDay();
   const hora = ahora.getHours();
 
-  /* =====================================
-     CONTROL DE FRECUENCIA (30 MINUTOS)
-  ===================================== */
-
   const intervalo = 30 * 60 * 1000;
   const ultimaVez = localStorage.getItem("popupLastClosed");
   const ahoraMs = Date.now();
-
-  if (ultimaVez && (ahoraMs - ultimaVez) < intervalo) {
-    return;
-  }
-
-  /* =====================================
-     AGENDA DE PROMOCIONES
-  ===================================== */
+  if (ultimaVez && (ahoraMs - ultimaVez) < intervalo) return;
 
   const promociones = [
-
     {
       nombre: "menu_ejecutivo",
       days: [1,2,3,4,5],
-      start: 11,
-      end: 16,
-      startDate: "2025-01-01",
-      endDate: null,
+      start: 11, end: 17,
+      startDate: "2025-01-01", endDate: null,
       image: "img/popupejecutivo.webp",
       priority: 3
     },
-
-/*
-    {
-      nombre: "promo_bancaria",
-      days: [2],
-      start: 8,
-      end: 24,
-      startDate: "2026-03-01",
-      endDate: "2026-03-31",
-      image: "img/popupgalicia.webp",
-      priority: 2
-    },
-*/
-
     {
       nombre: "sugerencia_noche",
       days: [5,6],
-      start: 20,
-      end: 1,
-      startDate: "2025-01-01",
-      endDate: null,
+      start: 20, end: 1,
+      startDate: "2025-01-01", endDate: null,
       image: "img/popupsugerencia.webp",
       priority: 1
     }
-
   ];
 
-  /* =====================================
-     VALIDACIÓN HORARIO
-  ===================================== */
-
   function horarioValido(start, end, horaActual) {
-
-    if (start < end) {
-      return horaActual >= start && horaActual < end;
-    } else {
-      return horaActual >= start || horaActual < end;
-    }
-
+    if (start < end) return horaActual >= start && horaActual < end;
+    else return horaActual >= start || horaActual < end;
   }
 
-  /* =====================================
-     VALIDACIÓN FECHA
-  ===================================== */
-
   function fechaValida(startDate, endDate) {
-
     const hoy = new Date();
     const inicio = startDate ? new Date(startDate) : null;
     const fin = endDate ? new Date(endDate) : null;
-
     if (inicio && hoy < inicio) return false;
     if (fin && hoy > fin) return false;
-
     return true;
-
   }
 
   let promoActiva = null;
-
   promociones.forEach(promo => {
-
-    const diaValido = promo.days.includes(dia);
-    const horaValida = horarioValido(promo.start, promo.end, hora);
-    const fechaOk = fechaValida(promo.startDate, promo.endDate);
-
-    if (diaValido && horaValida && fechaOk) {
-
-      if (!promoActiva || promo.priority > promoActiva.priority) {
-        promoActiva = promo;
-      }
-
+    if (promo.days.includes(dia) && horarioValido(promo.start, promo.end, hora) && fechaValida(promo.startDate, promo.endDate)) {
+      if (!promoActiva || promo.priority > promoActiva.priority) promoActiva = promo;
     }
-
   });
 
   if (!promoActiva) return;
 
-  /* =====================================
-     MOSTRAR POPUP
-  ===================================== */
-
   popupImg.src = promoActiva.image;
-
   popup.classList.add("activo");
   popup.setAttribute("aria-hidden", "false");
 
-  /* =====================================
-     CERRAR POPUP
-  ===================================== */
-
   function cerrarPopup() {
-
     popup.classList.remove("activo");
     popup.setAttribute("aria-hidden", "true");
-
     localStorage.setItem("popupLastClosed", Date.now());
-
   }
 
   botonCerrar.addEventListener("click", cerrarPopup);
-
   popup.addEventListener("click", (e) => {
-
-    if (e.target.id === "popup-evento") {
-      cerrarPopup();
-    }
-
+    if (e.target.id === "popup-evento") cerrarPopup();
   });
-
 });
-
 </script>
 
-<!-- ================================================================ -->
-
-  </body>
+<script>
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',scrollY>60);
+});
+document.getElementById('ham').addEventListener('click',()=>{
+  document.getElementById('mobMenu').classList.toggle('open');
+});
+function closeMob(){
+  document.getElementById('mobMenu').classList.remove('open');
+}
+</script>
+</body>
 </html>
