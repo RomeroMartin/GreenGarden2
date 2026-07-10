@@ -6,7 +6,9 @@
   <meta name="description" content="Green Garden - Restaurante en La Plata. Platos caseros, sabores frescos y un ambiente único para compartir.">
   <link rel="icon" href="img/favicon.jpeg" type="image/x-icon">
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="img/hero.webp" fetchpriority="high">
   <meta property="og:title" content="Green Garden — Nuestra casa, tu lugar.">
   <meta property="og:description" content="Platos caseros, sabores frescos y un ambiente único en La Plata.">
   <meta property="og:type" content="website">
@@ -38,6 +40,9 @@
     }
     html{scroll-behavior:smooth}
     body{font-family:'DM Sans',sans-serif;background:var(--beige);color:var(--text);line-height:1.7;overflow-x:hidden}
+    .skip-link{position:absolute;left:-999px;top:0;z-index:200;background:var(--sage-mid);color:#fff;padding:.7rem 1.2rem;border-radius:0 0 8px 0;text-decoration:none}
+    .skip-link:focus{left:0}
+    :focus-visible{outline:2px solid var(--sage);outline-offset:3px}
 
     /* ── NAV ── */
     .navbar{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5vw;height:80px;display:flex;align-items:center;justify-content:space-between;transition:background .3s,box-shadow .3s}
@@ -255,9 +260,10 @@
   </script>
 </head>
 <body>
+<a class="skip-link" href="#inicio">Saltar al contenido</a>
 
 <nav class="navbar" id="navbar">
-  <a href="index.html" class="navbar-logo-link"><img src="img/logo.png" alt="Green Garden" class="navbar-logo"></a>
+  <a href="index.html" class="navbar-logo-link"><img src="img/logo.png" alt="Green Garden" class="navbar-logo" width="194" height="72" decoding="async"></a>
   
   <ul class="nav-links"><li><a href="index.html">Inicio</a></li>
 <li><a href="menu.html">Menú</a></li>
@@ -278,7 +284,7 @@
   <div class="hero-bg"></div>
   <div class="hero-circle"></div>
   <div class="hero-content">
-    <div class="hero-badge"><div class="badge-dot"></div>Abierto hoy · 08:00 — 02:00 hs</div>
+    <div class="hero-badge" id="statusBadge"><div class="badge-dot"></div><span id="statusText">Abierto · 08:00 — 02:00 hs</span></div>
     <h1>Nuestra casa,<br><span class="green">tu lugar.</span></h1>
     <p>Gastronomía con alma casera. Platos pensados con los mejores ingredientes, en un espacio familiar único en La Plata.</p>
     <div class="hero-actions">
@@ -451,7 +457,7 @@
     <div class="ci-list">
       <a href="tel:02214895239" class="ci"><div class="ci-ico">📞</div><div><div class="ci-lbl">Reservas</div><div class="ci-val">0221-489-5239</div></div></a>
       <a href="mailto:greengardenlaplata@gmail.com" class="ci"><div class="ci-ico">✉️</div><div><div class="ci-lbl">Email</div><div class="ci-val">greengardenlaplata@gmail.com</div></div></a>
-      <a href="https://instagram.com/greengardenlaplata" target="_blank" class="ci"><div class="ci-ico">📸</div><div><div class="ci-lbl">Instagram</div><div class="ci-val">@greengardenlaplata</div></div></a>
+      <a href="https://instagram.com/greengardenlaplata" target="_blank" rel="noopener" class="ci"><div class="ci-ico">📸</div><div><div class="ci-lbl">Instagram</div><div class="ci-val">@greengardenlaplata</div></div></a>
     </div>
   </div>
   <div class="contact-r">
@@ -471,12 +477,12 @@
     <strong>Green Garden</strong>
     <a href="tel:02214895239">📞 0221-489-5239</a>
     <a href="mailto:greengardenlaplata@gmail.com">✉️ greengardenlaplata@gmail.com</a>
-    <a href="https://instagram.com/greengardenlaplata" target="_blank">📷 @greengardenlaplata</a>
+    <a href="https://instagram.com/greengardenlaplata" target="_blank" rel="noopener">📷 @greengardenlaplata</a>
   </div>
   <div class="footer-right">
     <p>Diag. 74 1618, La Plata, Buenos Aires</p>
     <p>Lunes a Domingo · 08:00 — 02:00 hs</p>
-    <p style="margin-top:.5rem;font-size:.75rem">© 2026 Green Garden · Desarrollado por <a href="https://www.martinromerostudio.com.ar" target="_blank" rel="noopener noreferrer">Martin Romero Studio</a></p>
+    <p style="margin-top:.5rem;font-size:.75rem">© <span data-year>2026</span> Green Garden · Desarrollado por <a href="https://www.martinromerostudio.com.ar" target="_blank" rel="noopener noreferrer">Martin Romero Studio</a></p>
   </div>
 </footer>
 
@@ -555,12 +561,19 @@ window.addEventListener("load", () => {
   popupImg.src = promoActiva.image;
   popup.classList.add("activo");
   popup.setAttribute("aria-hidden", "false");
+  const focoPrevio = document.activeElement;
+  botonCerrar.focus();
 
   function cerrarPopup() {
     popup.classList.remove("activo");
     popup.setAttribute("aria-hidden", "true");
     localStorage.setItem("popupLastClosed", Date.now());
+    document.removeEventListener("keydown", onKey);
+    if (focoPrevio && focoPrevio.focus) focoPrevio.focus();
   }
+
+  function onKey(e) { if (e.key === "Escape") cerrarPopup(); }
+  document.addEventListener("keydown", onKey);
 
   botonCerrar.addEventListener("click", cerrarPopup);
   popup.addEventListener("click", (e) => {
@@ -579,6 +592,20 @@ document.getElementById('ham').addEventListener('click',()=>{
 function closeMob(){
   document.getElementById('mobMenu').classList.remove('open');
 }
+
+// Año dinámico del footer
+document.querySelectorAll('[data-year]').forEach(function(el){el.textContent=new Date().getFullYear();});
+
+// Estado abierto/cerrado en tiempo real (horario 08:00–02:00 todos los días)
+(function(){
+  var t=document.getElementById('statusText');
+  var dot=document.querySelector('#statusBadge .badge-dot');
+  if(!t) return;
+  var m=new Date().getHours()*60+new Date().getMinutes();
+  var abierto = m>=480 || m<120;
+  t.textContent = abierto ? 'Abierto ahora · hasta las 02:00 hs' : 'Cerrado ahora · Abrimos 08:00 hs';
+  if(dot) dot.style.background = abierto ? 'var(--sage)' : '#C98A2B';
+})();
 </script>
 </body>
 </html>

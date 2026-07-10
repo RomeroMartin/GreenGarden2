@@ -16,6 +16,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://www.greengarden.com.ar/img/almuerzo.webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
   <style>
@@ -28,6 +29,9 @@
     }
     html{scroll-behavior:smooth}
     body{font-family:'DM Sans',sans-serif;background:var(--beige);color:var(--text);line-height:1.7;overflow-x:hidden}
+    .skip-link{position:absolute;left:-999px;top:0;z-index:200;background:var(--sage-mid);color:#fff;padding:.7rem 1.2rem;border-radius:0 0 8px 0;text-decoration:none}
+    .skip-link:focus{left:0}
+    :focus-visible{outline:2px solid var(--sage);outline-offset:3px}
     .navbar{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5vw;height:68px;display:flex;align-items:center;justify-content:space-between;transition:background .3s,box-shadow .3s}
     .navbar.solid{background:rgba(36,64,51,.97);box-shadow:0 2px 20px rgba(0,0,0,.15)}
     .nav-links{display:flex;align-items:center;gap:.2rem;list-style:none}
@@ -127,8 +131,9 @@
     </style>
 </head>
 <body>
+<a class="skip-link" href="#almuerzo">Saltar al contenido</a>
 <nav class="navbar solid" id="navbar">
-  <a href="index.html" class="navbar-logo-link"><img src="img/logo.png" alt="Green Garden" class="navbar-logo"></a>
+  <a href="index.html" class="navbar-logo-link"><img src="img/logo.png" alt="Green Garden" class="navbar-logo" width="194" height="72" decoding="async"></a>
   
   <ul class="nav-links"><li><a href="index.html">Inicio</a></li>
 <li><a href="menu.html" class="active">Menú</a></li>
@@ -232,12 +237,12 @@
     <strong>Green Garden</strong>
     <a href="tel:02214895239">📞 0221-489-5239</a>
     <a href="mailto:greengardenlaplata@gmail.com">✉️ greengardenlaplata@gmail.com</a>
-    <a href="https://instagram.com/greengardenlaplata" target="_blank">📷 @greengardenlaplata</a>
+    <a href="https://instagram.com/greengardenlaplata" target="_blank" rel="noopener">📷 @greengardenlaplata</a>
   </div>
   <div class="footer-right">
     <p>Diag. 74 1618, La Plata, Buenos Aires</p>
     <p>Lunes a Domingo · 08:00 — 02:00 hs</p>
-    <p style="margin-top:.5rem;font-size:.75rem">© 2026 Green Garden · Desarrollado por <a href="https://www.martinromerostudio.com.ar" target="_blank" rel="noopener noreferrer">Martin Romero Studio</a></p>
+    <p style="margin-top:.5rem;font-size:.75rem">© <span data-year>2026</span> Green Garden · Desarrollado por <a href="https://www.martinromerostudio.com.ar" target="_blank" rel="noopener noreferrer">Martin Romero Studio</a></p>
   </div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
@@ -282,6 +287,7 @@ function activarTabPorHash() {
   }
 }
 document.addEventListener('DOMContentLoaded', activarTabPorHash);
+document.querySelectorAll('[data-year]').forEach(function(el){el.textContent=new Date().getFullYear();});
 </script>
 </body>
 </html>
