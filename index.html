@@ -491,29 +491,22 @@ window.addEventListener("load", () => {
   if (ultimaVez && (ahoraMs - ultimaVez) < intervalo) return;
 
   const promociones = [
+  
     {
-      nombre: "menu_ejecutivo",
-      days: [1,2,3,4,5],
-      start: 11, end: 16,
-      startDate: "2025-01-01", endDate: null,
-      image: "img/popupejecutivo.webp",
-      priority: 3
-    },
-    {
-      nombre: "sugerencia_noche",
-      days: [5,6],
-      start: 20, end: 1,
-      startDate: "2025-01-01", endDate: null,
+      nombre: "sugerencia",
+      days: [0,1,2,3,4,5,6],
+      start: 12, end: 1,
+      startDate: "2026-01-01", endDate: null,
       image: "img/popupsugerencia.webp",
-      priority: 1
+      priority: 9
     },
     {
       nombre: "proximamente",
       days: [0,1,2,3,4,5,6],      // todos los días
-      start: 0, end: 23,           // todo el día
+      start: 16, end: 20,           // todo el día
       startDate: "2026-06-25", endDate: null,
       image: "img/proximamente.png",
-      priority: 10                 // le gana a todos
+      priority: 10                // le gana a todos
     }
   ];
 
