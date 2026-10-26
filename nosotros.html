@@ -4,177 +4,182 @@
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Green Garden — Nosotros</title>
   <meta name="description" content="Conocé la historia de Green Garden, restaurante en La Plata desde 2016.">
-  <link rel="icon" href="img/favicon.jpeg" type="image/x-icon">
+  <meta name="theme-color" content="#002f2a">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="img/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="img/favicon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
   <link rel="canonical" href="https://www.greengarden.com.ar/nosotros.html">
+  <link rel="preload" as="font" type="font/woff2" href="fonts/GreenFont-Regular.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="fonts/MyriadPro-Regular.woff2" crossorigin>
   <meta property="og:type" content="website">
   <meta property="og:title" content="Green Garden — Nosotros">
   <meta property="og:description" content="Conocé la historia de Green Garden, restaurante en La Plata desde 2016.">
   <meta property="og:url" content="https://www.greengarden.com.ar/nosotros.html">
-  <meta property="og:image" content="https://www.greengarden.com.ar/img/nosotros1.webp">
+  <meta property="og:image" content="https://www.greengarden.com.ar/img/og-nosotros.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:locale" content="es_AR">
   <meta property="og:site_name" content="Green Garden">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://www.greengarden.com.ar/img/nosotros1.webp">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    :root{--beige:#F7F2E8;--beige-mid:#EDE5D0;--beige-deep:#DDD0B3;--sage-pale:#D4E4D0;--sage:#8BB89A;--sage-mid:#6A9E7B;--sage-deep:#3D6B4F;--green-dark:#244033;--white:#FDFAF5;--text:#1E2E23;--text-muted:#5C7A65;--radius:12px}
-
-
-    .navbar{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5vw;height:68px;display:flex;align-items:center;justify-content:space-between;background:rgba(36,64,51,.97);box-shadow:0 2px 20px rgba(0,0,0,.15)}
-
-    .nav-links a:hover,.nav-links a.active{background:rgba(255,255,255,.12);color:#fff}
-
-
-    .mobile-menu a{color:rgba(255,255,255,.8);text-decoration:none;font-size:1.1rem;font-weight:300;padding:.85rem 0;border-bottom:1px solid rgba(255,255,255,.08);display:block}
-
-
-
-
-    /* PAGE */
-    .page-header{background:var(--green-dark);padding:8rem 5vw 5rem;position:relative;overflow:hidden}
-    .ph-bg{position:absolute;inset:0;background-image:linear-gradient(to right,rgba(36,64,51,.97) 45%,rgba(36,64,51,.55) 100%),url('img/nosotros2.webp');background-size:cover;background-position:center}
-    .ph-content{position:relative;z-index:2;max-width:580px}
-    .ph-content h1{font-family:'DM Serif Display',serif;font-size:clamp(2.2rem,5vw,3.8rem);color:var(--white);font-weight:400;margin-bottom:.75rem;line-height:1.1}
-    .ph-content h1 em{color:var(--sage-pale);font-style:italic}
-    .ph-content p{color:rgba(255,255,255,.52);font-size:.95rem;font-weight:300;max-width:460px}
-
-    .historia{background:var(--beige);padding:6rem 5vw;display:grid;grid-template-columns:1fr 1fr;gap:6vw;align-items:start}
-    .historia-text p{color:var(--text-muted);font-size:.93rem;margin-bottom:1.1rem;font-weight:300;line-height:1.75}
-    .pullquote{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--sage-deep);font-style:italic;border-left:3px solid var(--sage-mid);padding-left:1.25rem;margin:1.75rem 0;line-height:1.6}
-    .historia-imgs{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
-    .historia-imgs img{width:100%;border-radius:var(--radius);object-fit:cover;display:block}
-    .historia-imgs img:first-child{grid-column:1/-1;aspect-ratio:16/9}
-    .historia-imgs img:not(:first-child){aspect-ratio:3/4}
-
-    .valores{background:var(--sage-pale);padding:5rem 5vw}
-    .valores-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.25rem;margin-top:2.5rem}
-    .valor-card{background:var(--white);border-radius:var(--radius);padding:1.75rem;border:1px solid rgba(107,158,123,.15)}
-    .vc-icon{font-size:1.8rem;margin-bottom:.85rem;display:block}
-    .vc-title{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--green-dark);font-weight:400;margin-bottom:.5rem}
-    .vc-text{font-size:.85rem;color:var(--text-muted);font-weight:300;line-height:1.6}
-
-    .info-section{background:var(--white);padding:5rem 5vw}
-    .info-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.25rem;margin-top:2.5rem}
-    .info-card{padding:1.75rem;border:1px solid var(--beige-deep);border-radius:var(--radius);text-align:center}
-    .ic-icon{font-size:1.5rem;margin-bottom:.75rem;display:block}
-    .info-card h4{font-family:'DM Serif Display',serif;font-size:1rem;font-weight:400;color:var(--text);margin-bottom:.35rem}
-    .info-card p,.info-card a{font-size:.85rem;color:var(--text-muted);font-weight:300;text-decoration:none;word-break:break-word;overflow-wrap:break-word}
-    .info-card a:hover{color:var(--sage-deep)}
-
-    .mapa-section{background:var(--beige);padding:5rem 5vw}
-    .mapa-section h2{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--green-dark);font-weight:400;margin-bottom:1.5rem}
-    .mapa-wrap{border-radius:var(--radius);overflow:hidden;height:380px;border:1px solid var(--beige-deep)}
-    .mapa-wrap iframe{width:100%;height:100%;border:none;display:block}
-
-    @media(max-width:768px){
-      .nav-links{display:none}.hamburger{display:flex}
-      .historia{grid-template-columns:1fr;padding:5rem 5vw}
-      .historia-imgs{order:-1;margin-bottom:1rem}
-      .site-footer{flex-direction:column;align-items:flex-start}.footer-right{text-align:left}
-    }
-
-    </style>
+  <meta name="twitter:title" content="Green Garden — Nosotros">
+  <meta name="twitter:description" content="Conocé la historia de Green Garden, restaurante en La Plata desde 2016.">
+  <meta name="twitter:image" content="https://www.greengarden.com.ar/img/og-nosotros.jpg">
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="pages.css">
 </head>
 <body>
-<a class="skip-link" href="#historia">Saltar al contenido</a>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-<nav class="navbar">
-  <a href="index.html" class="navbar-logo-link"><img src="img/logo.png" alt="Green Garden" class="navbar-logo" width="194" height="72" decoding="async"></a>
-  
-  <ul class="nav-links">
-    <li><a href="index.html">Inicio</a></li>
-    <li><a href="menu.html">Menú</a></li>
-    <li><a href="playroom.html">Playroom</a></li>
-    <li><a href="nosotros.html" class="active">Nosotros</a></li>
-    <li><a href="tel:02214895239" class="nav-cta">Reservar</a></li>
-  </ul>
-  <div class="hamburger" id="ham"><span></span><span></span><span></span></div>
-</nav>
-<div class="mobile-menu" id="mobMenu">
-  <a href="index.html" onclick="closeMob()">Inicio</a>
-  <a href="menu.html" onclick="closeMob()">Menú</a>
-  <a href="playroom.html" onclick="closeMob()">Playroom</a>
-  <a href="nosotros.html" onclick="closeMob()">Nosotros</a>
-  <a href="tel:02214895239" class="mob-cta">📞 Reservar: 0221-4895239</a>
-</div>
+<!-- HEADER -->
+<header class="site-header">
+  <div class="container header-bar">
+    <a class="header-logo" href="index.html" aria-label="Green Garden, ir al inicio"><img src="img/logo-light.webp" alt="Green Garden" width="108" height="54"></a>
+    <nav class="nav-desktop" aria-label="Principal">
+      <a href="index.html">Inicio</a>
+      <a href="menu.html">Menú</a>
+      <a href="playroom.html">Playroom</a>
+      <a href="nosotros.html" aria-current="page">Nosotros</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <div class="header-actions">
+      <div class="status" data-status><span class="status-dot"></span><span class="status-text">Abierto ahora</span></div>
+      <a class="header-cta" href="tel:02214895239"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>Reservar</a>
+      <button class="menu-toggle" type="button" id="menuToggle" aria-expanded="false" aria-controls="navMobile" aria-label="Abrir menú">
+        <svg class="ico-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        <svg class="ico-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </div>
+  <nav class="nav-mobile" id="navMobile" aria-label="Menú móvil">
+    <a href="index.html">Inicio <span aria-hidden="true">→</span></a>
+    <a href="menu.html">Menú <span aria-hidden="true">→</span></a>
+    <a href="playroom.html">Playroom <span aria-hidden="true">→</span></a>
+    <a href="nosotros.html" aria-current="page">Nosotros <span aria-hidden="true">●</span></a>
+    <a href="#contacto">Contacto <span aria-hidden="true">→</span></a>
+    <div class="status" data-status><span class="status-dot"></span><span class="status-text">Abierto ahora</span><span>· Todos los días 08:00 — 02:00</span></div>
+  </nav>
+</header>
 
-<div class="page-header">
-  <div class="ph-bg"></div>
-  <div class="ph-content">
-    <span class="section-label" style="color:var(--sage-pale)">Un poco de nosotros</span>
+<main id="contenido">
+<section class="page-hero about-hero">
+  <img class="watermark" src="img/iso-gold.webp" alt="" aria-hidden="true">
+  <div class="container page-hero-inner">
+    <span class="eyebrow">Un poco de nosotros</span>
     <h1>Nuestra casa,<br><em>tu lugar.</em></h1>
-    <p>Desde 2016 llevamos gastronomía, calidez y familia a cada mesa de La Plata.</p>
+    <div class="divider" aria-hidden="true"><i></i></div>
+    <p class="page-hero-text">Acompañando a La Plata desde 2016.</p>
   </div>
-</div>
+</section>
 
-<div class="historia" id="historia">
-  <div class="historia-text">
-    <span class="section-label">Nuestra historia</span>
-    <h2 class="section-title">Cocina con alma</h2>
-    <p>Bienvenidos a <strong>Green Garden</strong>. Desde nuestra apertura en 2016 nos dedicamos a brindar una experiencia gastronómica única en La Plata, pensando en cada detalle, en cada receta y en cada sistema de cocción.</p>
-    <div class="pullquote">"Diseñamos una experiencia gastronómica basada en brindar lo mejor y atender cada necesidad de nuestros comensales."</div>
-    <p>En nuestras instalaciones de Diag. 74 e/49 y 50 contamos con un primer piso de producción equipado con cámaras de frío positivo y negativo, sector de envasado al vacío, sectores de producción específica y próximamente panadería artesanal.</p>
-    <p>Trabajamos con primeras marcas y proveedores de excelencia, que ayudan a nuestro equipo de profesionales gastronómicos a crear y mantener vivas las recetas de nuestra casa.</p>
-    <p>En <strong>Green Garden</strong> nuestros clientes son familia. Por eso diseñamos un espacio completamente para niños, con juegos para todas las edades al cuidado de nuestras profes y vigilado por cámaras de seguridad que los padres pueden ver desde la mesa.</p>
+<section id="historia" class="history" aria-labelledby="historia-titulo">
+  <div class="container history-inner">
+    <div class="history-top">
+      <div class="history-copy">
+        <span class="eyebrow">Nuestra historia</span>
+        <h2 id="historia-titulo" class="h-display h-section--lg">Cocina con alma</h2>
+        <div class="divider divider--short" aria-hidden="true"><i></i></div>
+        <p>Desde que abrimos en 2016, buscamos ofrecer una experiencia gastronómica única en La Plata, cuidando cada detalle: las recetas, los procesos y los sistemas de cocción.</p>
+      </div>
+      <blockquote class="quote">
+        <span class="quote-mark" aria-hidden="true">“</span>
+        <p>Diseñamos una experiencia gastronómica basada en brindar lo mejor y atender cada necesidad de nuestros comensales.</p>
+        <cite>Green Garden</cite>
+      </blockquote>
+    </div>
+    <div class="pillars">
+      <div class="pillar">
+        <span class="pillar-num">I</span>
+        <h3>Nuestras instalaciones</h3>
+        <p>En Diagonal 74 contamos con un primer piso de producción con cámaras de frío positivas y negativas, envasado al vacío y sectores especializados.</p>
+        <span class="pill">Próximamente: panadería artesanal</span>
+      </div>
+      <div class="pillar">
+        <span class="pillar-num">II</span>
+        <h3>Proveedores y cocina</h3>
+        <p>Trabajamos con marcas y proveedores líderes, y nuestros cocineros profesionales mantienen las recetas de la casa.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-num">III</span>
+        <h3>Espacio familiar</h3>
+        <p>Un área infantil con juegos para todas las edades, a cargo de profes y con cámaras que podés ver desde tu mesa.</p>
+        <a href="playroom.html">Conocer el playroom →</a>
+      </div>
+    </div>
+    <ul class="trio">
+      <li><img src="img/t/nosotros1.webp" alt="Salón de Green Garden" width="640" height="1137" loading="lazy"></li>
+      <li><img src="img/t/nosotros2.webp" alt="Ambiente de Green Garden" width="640" height="480" loading="lazy"></li>
+      <li><img src="img/t/nosotros3.webp" alt="El equipo de Green Garden" width="640" height="1138" loading="lazy" style="object-position:top"></li>
+    </ul>
   </div>
-  <div class="historia-imgs">
-    <img src="img/nosotros1.webp" alt="Salón Green Garden">
-    <img src="img/nosotros2.webp" alt="Green Garden ambiente">
-    <img src="img/nosotros3.webp" alt="Green Garden equipo" style="object-position:top">
-  </div>
-</div>
+</section>
 
-<div class="valores">
-  <span class="section-label">Lo que nos define</span>
-  <h2 class="section-title">Nuestros valores</h2>
-  <div class="valores-grid">
-    <div class="valor-card"><span class="vc-icon">🌿</span><div class="vc-title">Ingredientes frescos</div><p class="vc-text">Trabajamos con los mejores proveedores del mercado para garantizar materia prima de primera calidad en cada plato.</p></div>
-    <div class="valor-card"><span class="vc-icon">👨‍🍳</span><div class="vc-title">Equipo profesional</div><p class="vc-text">Nuestros cocineros crean y mantienen vivas las recetas de la casa, llevándolas a un nivel de excelencia total.</p></div>
-    <div class="valor-card"><span class="vc-icon">👨‍👩‍👧‍👦</span><div class="vc-title">Espacio familiar</div><p class="vc-text">Pensamos en toda la familia. El playroom y la atención personalizada garantizan una experiencia completa.</p></div>
-    <div class="valor-card"><span class="vc-icon">🔧</span><div class="vc-title">Tecnología de vanguardia</div><p class="vc-text">Hornos, parrillas y sistemas de cocción industrial que garantizan estándares de seguridad y eficacia en cada plato.</p></div>
+<section class="values" aria-labelledby="valores-titulo">
+  <div class="container values-inner">
+    <div class="center-head">
+      <span class="eyebrow">Lo que nos define</span>
+      <h2 id="valores-titulo" class="h-display h-section--lg">Nuestros valores</h2>
+      <div class="divider" aria-hidden="true"><i></i></div>
+    </div>
+    <ul class="values-grid">
+        <li class="value"><span class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c0-8 5-14 15-14 0 10-6 15-14 15M5 19c3-4 6-7 10-9"/></svg></span><h3>Ingredientes frescos</h3><p>Proveedores de mercado de primera calidad.</p></li>
+        <li class="value"><span class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 14a4 4 0 0 1-.8-7.9A5 5 0 0 1 16 5a4 4 0 0 1 1 7.9V20H7z"/><path d="M7 16.5h10"/></svg></span><h3>Equipo profesional</h3><p>Cocineros que mantienen las recetas de la casa en lo más alto.</p></li>
+        <li class="value"><span class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7M5 9.5V20h14V9.5"/><path d="M10 20v-5h4v5"/></svg></span><h3>Espacio familiar</h3><p>Playroom y atención personalizada para toda la familia.</p></li>
+        <li class="value"><span class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="1"/><path d="M4 9h16M8 13h8v3H8z"/></svg></span><h3>Tecnología de vanguardia</h3><p>Hornos, parrillas y sistemas de cocción industriales, pensados para la seguridad y la eficiencia.</p></li>
+    </ul>
   </div>
-</div>
+</section>
 
-<div class="info-section">
-  <span class="section-label">Encontranos</span>
-  <h2 class="section-title">Dónde & cuándo</h2>
-  <div class="info-cards">
-    <div class="info-card"><span class="ic-icon">📍</span><h4>Ubicación</h4><p>Diag. 74 1618<br>La Plata, Buenos Aires</p></div>
-    <div class="info-card"><span class="ic-icon">🕐</span><h4>Horarios</h4><p>Lunes a Domingo<br>08:00 — 02:00 hs.</p></div>
-    <div class="info-card"><span class="ic-icon">📞</span><h4>Reservas</h4><a href="tel:02214895239">0221-489-5239</a></div>
-    <div class="info-card"><span class="ic-icon">✉️</span><h4>Email</h4><a href="mailto:greengardenlaplata@gmail.com">greengardenlaplata@gmail.com</a></div>
-    <div class="info-card"><span class="ic-icon">📷</span><h4>Instagram</h4><a href="https://instagram.com/greengardenlaplata" target="_blank" rel="noopener">@greengardenlaplata</a></div>
+<section id="donde" class="where on-dark" aria-labelledby="donde-titulo">
+  <div class="container where-inner">
+    <div class="where-info">
+      <span class="eyebrow">Encontranos</span>
+      <h2 id="donde-titulo" class="h-display h-section--lg">Dónde y cuándo</h2>
+      <div class="info-list">
+        <div><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d6b36a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span><span class="info-label">Ubicación</span><span class="info-value">Diag. 74 1618 (e/ 49 y 50), La Plata</span></span></div>
+        <div><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d6b36a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span><span class="info-label">Horarios</span><span class="info-value">Lunes a domingo · 08:00 — 02:00 hs</span></span></div>
+        <a href="tel:02214895239"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d6b36a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg><span><span class="info-label">Reservas</span><span class="info-value">0221 489-5239</span></span></a>
+        <a href="mailto:greengardenlaplata@gmail.com"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d6b36a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18v12H3zM3 7l9 6 9-6"/></svg><span><span class="info-label">Email</span><span class="info-value">greengardenlaplata@gmail.com</span></span></a>
+        <a href="https://instagram.com/greengardenlaplata" target="_blank" rel="noopener"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d6b36a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r=".6"/></svg><span><span class="info-label">Instagram</span><span class="info-value">@greengardenlaplata</span></span></a>
+      </div>
+    </div>
+    <div class="where-map">
+      <div class="map-frame" id="mapa">
+        <iframe src="https://www.google.com/maps?q=Diag.+74+1618,+La+Plata,+Buenos+Aires&amp;output=embed" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" title="Mapa de Green Garden"></iframe>
+      </div>
+      <a class="btn btn--gold" href="https://maps.google.com/?q=Diagonal+74+1618+La+Plata" target="_blank" rel="noopener">Cómo llegar <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </div>
   </div>
-</div>
+</section>
+</main>
 
-<div class="mapa-section" id="mapa">
-  <h2>Dónde estamos</h2>
-  <div class="mapa-wrap">
-    <iframe src="https://www.google.com/maps?q=Diag.+74+1618,+La+Plata,+Buenos+Aires&output=embed" loading="lazy" allowfullscreen title="Mapa Green Garden"></iframe>
-  </div>
-</div>
-
-<footer class="site-footer">
-  <div class="footer-contact">
-    <strong>Green Garden</strong>
-    <a href="tel:02214895239">📞 0221-489-5239</a>
-    <a href="mailto:greengardenlaplata@gmail.com">✉️ greengardenlaplata@gmail.com</a>
-    <a href="https://instagram.com/greengardenlaplata" target="_blank" rel="noopener">📷 @greengardenlaplata</a>
-  </div>
-  <div class="footer-right">
-    <p>Diag. 74 1618, La Plata, Buenos Aires</p>
-    <p>Lunes a Domingo · 08:00 — 02:00 hs</p>
-    <p style="margin-top:.5rem;font-size:.75rem">© <span data-year>2026</span> Green Garden · Desarrollado por <a href="https://www.martinromerostudio.com.ar" target="_blank" rel="noopener noreferrer">Martin Romero Studio</a></p>
+<!-- FOOTER -->
+<footer class="site-footer" id="contacto">
+  <div class="container footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="img/logo-light.webp" alt="Green Garden" width="180" height="90" loading="lazy">
+        <p>Nuestra casa, tu lugar.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h3>Contacto</h3>
+          <a href="tel:+542214895239">0221 489-5239</a>
+          <a href="mailto:greengardenlaplata@gmail.com" style="overflow-wrap:anywhere">greengardenlaplata@gmail.com</a>
+          <a href="https://instagram.com/greengardenlaplata" target="_blank" rel="noopener">@greengardenlaplata</a>
+        </div>
+        <div class="footer-col"><h3>Dirección</h3><span>Diag. 74 1618<br>La Plata, Buenos Aires</span></div>
+        <div class="footer-col"><h3>Horarios</h3><span>Lunes a domingo<br>08:00 — 02:00 hs</span></div>
+      </div>
+    </div>
+    <div class="footer-divider" aria-hidden="true"><i></i></div>
+    <div class="footer-bottom">
+      <span>© <span data-year>2026</span> Green Garden. Todos los derechos reservados.</span>
+      <span>Desarrollado por <a href="https://www.martinromerostudio.com.ar" target="_blank" rel="noopener noreferrer">Martin Romero Studio</a></span>
+    </div>
   </div>
 </footer>
 
-<script>
-document.getElementById('ham').addEventListener('click',()=>document.getElementById('mobMenu').classList.toggle('open'));
-function closeMob(){document.getElementById('mobMenu').classList.remove('open')}
-document.querySelectorAll('[data-year]').forEach(function(el){el.textContent=new Date().getFullYear();});
-</script>
+<script src="site.js" defer></script>
 </body>
 </html>

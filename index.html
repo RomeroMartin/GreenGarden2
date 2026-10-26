@@ -4,205 +4,157 @@
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Green Garden — Nuestra casa, tu lugar.</title>
   <meta name="description" content="Green Garden - Restaurante en La Plata. Platos caseros, sabores frescos y un ambiente único para compartir.">
-  <link rel="icon" href="img/favicon.jpeg" type="image/x-icon">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="img/hero.webp" fetchpriority="high">
+  <meta name="theme-color" content="#002f2a">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="img/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="img/favicon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="preload" as="font" type="font/woff2" href="fonts/GreenFont-Regular.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="fonts/MyriadPro-Regular.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="fonts/MyriadPro-LightSemiCnIt.woff2" crossorigin>
+  <link rel="preload" as="image" href="img/hero-frame.webp" fetchpriority="high">
+<script>
+// Popups programados. La lista de promociones se edita acá; el resto de la lógica no cambia.
+// Se resuelve al principio para pedir la imagen del popup lo antes posible (precarga).
+(() => {
+  const ahora = new Date();
+  const dia = ahora.getDay();
+  const hora = ahora.getHours();
+
+  const intervalo = 30 * 60 * 1000;
+  const ultimaVez = localStorage.getItem("popupLastClosed");
+  const ahoraMs = Date.now();
+  if (ultimaVez && (ahoraMs - ultimaVez) < intervalo) return;
+
+  const promociones = [
+     /*{
+      nombre: "sugerencia",
+      days: [0,1,2,3,4,5,6],
+      start: 11, end: 1,
+      startDate: "2026-01-01", endDate: null,
+      image: "img/popupsugerencia.webp",
+      priority: 9 
+     },*/
+    {
+      nombre: "proximamente",
+      days: [0,1,2,3,4,5,6],
+      start: 3, end: 2,
+      startDate: "2026-06-25", endDate: null,
+      image: "img/proximamente.webp",
+      priority: 9
+    },
+
+    {
+      nombre: "mama",
+      days: [0,1,2,3,4,5,6],
+      start: 11, end: 2,
+      startDate: "2026-10-17", endDate: "2026-10-19",
+      image: "img/felizdiamama.webp",
+      priority: 10              // le gana a todos
+    }
+  ];
+
+  function horarioValido(start, end, horaActual) {
+    if (start < end) return horaActual >= start && horaActual < end;
+    else return horaActual >= start || horaActual < end;
+  }
+
+  function fechaValida(startDate, endDate) {
+    const hoy = new Date();
+    const inicio = startDate ? new Date(startDate) : null;
+    const fin = endDate ? new Date(endDate) : null;
+    if (inicio && hoy < inicio) return false;
+    if (fin && hoy > fin) return false;
+    return true;
+  }
+
+  let promoActiva = null;
+  promociones.forEach(promo => {
+    if (promo.days.includes(dia) && horarioValido(promo.start, promo.end, hora) && fechaValida(promo.startDate, promo.endDate)) {
+      if (!promoActiva || promo.priority > promoActiva.priority) promoActiva = promo;
+    }
+  });
+
+  if (!promoActiva) return;
+
+  const precarga = document.createElement("link");
+  precarga.rel = "preload";
+  precarga.as = "image";
+  precarga.href = promoActiva.image;
+  precarga.setAttribute("fetchpriority", "high");
+  document.head.appendChild(precarga);
+
+  document.addEventListener("DOMContentLoaded", () => {
+  const popup = document.getElementById("popup-evento");
+  const botonCerrar = document.querySelector(".popup-cerrar");
+  const popupImg = document.getElementById("popup-imagen");
+
+  popupImg.fetchPriority = "high";
+  popupImg.src = promoActiva.image;
+  popup.classList.add("activo");
+  popup.setAttribute("aria-hidden", "false");
+  const focoPrevio = document.activeElement;
+  botonCerrar.focus();
+
+  function cerrarPopup() {
+    popup.classList.remove("activo");
+    popup.setAttribute("aria-hidden", "true");
+    localStorage.setItem("popupLastClosed", Date.now());
+    document.removeEventListener("keydown", onKey);
+    if (focoPrevio && focoPrevio.focus) focoPrevio.focus();
+  }
+
+  function onKey(e) { if (e.key === "Escape") cerrarPopup(); }
+  document.addEventListener("keydown", onKey);
+
+  botonCerrar.addEventListener("click", cerrarPopup);
+  popup.addEventListener("click", (e) => {
+    if (e.target.id === "popup-evento") cerrarPopup();
+  });
+  });
+})();
+</script>
   <meta property="og:title" content="Green Garden — Nuestra casa, tu lugar.">
   <meta property="og:description" content="Platos caseros, sabores frescos y un ambiente único en La Plata.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.greengarden.com.ar/">
-  <meta property="og:image" content="https://www.greengarden.com.ar/img/hero.webp">
+  <meta property="og:image" content="https://www.greengarden.com.ar/img/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Green Garden — Nuestra casa, tu lugar.">
   <meta property="og:locale" content="es_AR">
   <meta property="og:site_name" content="Green Garden">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Green Garden — Nuestra casa, tu lugar.">
   <meta name="twitter:description" content="Platos caseros, sabores frescos y un ambiente único en La Plata.">
-  <meta name="twitter:image" content="https://www.greengarden.com.ar/img/hero.webp">
+  <meta name="twitter:image" content="https://www.greengarden.com.ar/img/og-image.jpg">
   <link rel="canonical" href="https://www.greengarden.com.ar/">
-  <link rel="stylesheet" href="styles.css">
-  <style>
+  <!-- inline-css:start -->
+  <style>@font-face{font-family:"Green Font";src:url("fonts/GreenFont-Regular.woff2") format("woff2");font-weight:400;font-display:swap}@font-face{font-family:"Myriad";src:url("fonts/MyriadPro-Regular.woff2") format("woff2");font-weight:400;font-display:swap}@font-face{font-family:"Myriad Italic";src:url("fonts/MyriadPro-LightSemiCnIt.woff2") format("woff2");font-weight:300;font-display:swap}:root{--green:#002f2a;--green-2:#0b3f39;--gold:#d6b36a;--gold-ink:#7A5C22;--ivory:#F6F1E6;--paper:#FBF8F1;--line:#E3D9C3;--ink:#141414;--muted:#3F3F3A;--muted-dark:#C9D3CF;--muted-dark-2:#B9C7C2;--black:#000;--header-h:76px;--pad:clamp(20px,5vw,48px);--f-display:"Green Font","Myriad","Segoe UI",sans-serif;--f-text:"Myriad","Segoe UI",Arial,sans-serif;--f-italic:"Myriad Italic","Myriad","Segoe UI",sans-serif}*,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:var(--f-text);color:var(--ink);background:var(--ivory);line-height:1.5;overflow-x:hidden}img{max-width:100%;display:block}a{color:var(--gold-ink)}a:hover{color:var(--green)}h1,h2,h3,p,ul{margin:0}ul,ol{padding:0;list-style:none}[id]{scroll-margin-top:var(--header-h)}a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}.skip-link{position:absolute;left:-999px;top:0;z-index:200;background:var(--gold);color:var(--green);padding:.7rem 1.2rem;text-decoration:none}.skip-link:focus{left:0}.container{max-width:1200px;margin:0 auto;padding-inline:var(--pad)}.eyebrow{font-family:var(--f-italic);font-size:19px;color:var(--gold-ink);letter-spacing:.02em}.on-dark .eyebrow,.eyebrow--gold{color:var(--gold)}.h-display{font-family:var(--f-display);font-weight:400;text-transform:uppercase;color:var(--green);letter-spacing:.05em;line-height:1.08}.h-section{font-size:clamp(30px,4vw,46px)}.h-section--lg{font-size:clamp(32px,4.4vw,52px);line-height:1.05}.on-dark .h-display{color:var(--ivory)}.divider{display:flex;align-items:center;gap:10px}.divider::before,.divider::after{content:"";width:56px;height:1px;background:var(--gold)}.divider i{width:8px;height:8px;background:var(--gold);transform:rotate(45deg)}.divider--short::before{width:40px}.divider--short::after{display:none}.pill{padding:4px 10px;border:1px solid var(--gold-ink);color:var(--gold-ink);font-size:11px;letter-spacing:.14em;text-transform:uppercase;border-radius:999px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 28px;border-radius:2px;text-decoration:none;font-size:13px;letter-spacing:.16em;text-transform:uppercase;border:1px solid transparent;transition:background .2s,color .2s,border-color .2s}.btn svg{flex:none}.btn--gold{background:var(--gold);color:var(--green)}.btn--gold:hover{background:var(--ivory);color:var(--green)}.btn--ghost{border-color:rgba(214,179,106,.6);color:var(--ivory)}.btn--ghost:hover{background:rgba(214,179,106,.15);color:var(--ivory)}.btn--outline{border-color:var(--green);color:var(--green)}.btn--outline:hover{background:var(--green);color:var(--ivory)}.btn--green{background:var(--green);color:var(--ivory);justify-content:space-between}.btn--green:hover{background:var(--green-2);color:var(--ivory)}.site-header{position:sticky;top:0;z-index:20;background:var(--green);border-bottom:1px solid rgba(214,179,106,.28)}.header-bar{height:var(--header-h);display:flex;align-items:center;justify-content:space-between;gap:16px}.header-logo img{height:54px;width:auto}.nav-desktop{display:none;align-items:center;gap:36px}.nav-desktop a{color:var(--ivory);text-decoration:none;font-size:13px;letter-spacing:.18em;text-transform:uppercase}.nav-desktop a:hover{color:var(--gold)}.header-actions{display:flex;align-items:center;gap:18px}.status{display:none;align-items:center;gap:8px;color:var(--muted-dark-2);font-size:13px;letter-spacing:.04em}.status-dot{width:8px;height:8px;border-radius:50%;background:#C9A24E}.status.is-open .status-dot{background:#6FCF97}.header-cta{min-height:44px;padding:0 18px;background:var(--gold);color:var(--green);text-decoration:none;font-size:13px;letter-spacing:.16em;text-transform:uppercase;border-radius:2px;display:inline-flex;align-items:center;gap:8px}.header-cta:hover{background:var(--ivory);color:var(--green)}.menu-toggle{width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid rgba(214,179,106,.5);border-radius:2px;color:var(--ivory);cursor:pointer;padding:0}.menu-toggle .ico-close{display:none}.menu-toggle[aria-expanded="true"] .ico-open{display:none}.menu-toggle[aria-expanded="true"] .ico-close{display:block}.nav-mobile{display:none;flex-direction:column;padding:8px var(--pad) 28px;background:var(--green);border-top:1px solid rgba(214,179,106,.2)}.nav-mobile.is-open{display:flex}.nav-mobile a{display:flex;align-items:center;justify-content:space-between;min-height:60px;border-bottom:1px solid rgba(246,241,230,.12);color:var(--ivory);text-decoration:none;font-family:var(--f-display);text-transform:uppercase;font-size:26px;letter-spacing:.06em}.nav-mobile a span{color:var(--gold);font-family:var(--f-text);font-size:18px}.nav-mobile .status{display:flex;margin-top:22px;font-size:15px}@media (min-width:900px){.nav-desktop,.status{display:flex}.menu-toggle,.nav-mobile,.nav-mobile.is-open{display:none}}.framed{position:relative;background:var(--green-2)}.framed img{width:100%;height:100%;object-fit:cover}.framed::after{content:"";position:absolute;inset:14px;border:1px solid rgba(214,179,106,.45);pointer-events:none}.section-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 32px}.section-head > div:first-child{display:flex;flex-direction:column;gap:10px}.site-footer{background:var(--black);color:var(--ivory)}.footer-inner{padding-block:clamp(56px,7vw,88px) 28px;display:flex;flex-direction:column;gap:40px}.footer-top{display:flex;flex-wrap:wrap;gap:40px 64px;justify-content:space-between}.footer-brand{flex:1 1 240px;max-width:340px;display:flex;flex-direction:column;gap:16px}.footer-brand img{width:180px;height:auto}.footer-brand p{font-family:var(--f-italic);font-size:19px;line-height:1.4;color:var(--gold)}.footer-cols{flex:2 1 480px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:28px}.footer-col{display:flex;flex-direction:column;gap:10px;font-size:15px;line-height:1.5;color:#D9D4C8}.footer-col h3{font-family:var(--f-text);font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:400;color:var(--gold)}.footer-col a{color:var(--ivory);text-decoration:none}.footer-col a:hover{color:var(--gold)}.footer-divider{display:flex;align-items:center;gap:10px}.footer-divider::before,.footer-divider::after{content:"";flex:1 1 auto;height:1px;background:rgba(214,179,106,.4)}.footer-divider i{width:8px;height:8px;background:var(--gold);transform:rotate(45deg)}.footer-bottom{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;font-size:13px;color:#A8A397}.footer-bottom a{color:#D9D4C8}.footer-bottom a:hover{color:var(--gold)}.nav-desktop a[aria-current="page"]{color:var(--gold);padding:6px 0;border-bottom:1px solid var(--gold)}.nav-mobile a[aria-current="page"]{color:var(--gold)}@media (max-width:600px){.footer-col:first-child{grid-column:1/-1}}.hero{position:relative;overflow:hidden;background:var(--green);color:var(--ivory)}.hero-watermark{position:absolute;right:-8%;top:8%;width:70%;max-width:760px;opacity:.05;pointer-events:none}.hero-inner{position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:clamp(40px,6vw,72px);padding-block:clamp(48px,8vw,112px) clamp(56px,9vw,120px)}.hero-copy{flex:1 1 520px;min-width:0;display:flex;flex-direction:column;gap:28px}.hero-tag{display:flex;align-items:center;gap:12px}.hero-tag::before{content:"";width:32px;height:1px;background:var(--gold)}.hero-tag i{width:7px;height:7px;background:var(--gold);transform:rotate(45deg)}.hero-tag span{font-family:var(--f-italic);font-size:19px;color:var(--gold)}.hero h1{font-family:var(--f-display);font-weight:400;text-transform:uppercase;font-size:clamp(40px,5.6vw,74px);line-height:1.04;letter-spacing:.03em;color:var(--ivory)}.hero h1 em{font-style:normal;color:var(--gold)}.hero-text{max-width:34em;font-size:clamp(17px,1.5vw,19px);line-height:1.6;color:var(--muted-dark)}.hero-actions{display:flex;flex-wrap:wrap;gap:12px}.hero-actions .btn{flex:1 1 auto;max-width:260px}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:8px;border-top:1px solid rgba(214,179,106,.3)}.stat{padding:18px 12px 0}.stat:first-child{padding-left:0}.stat+.stat{border-left:1px solid rgba(214,179,106,.3)}.stat strong{display:block;font-family:var(--f-italic);font-weight:300;font-size:clamp(30px,3vw,40px);line-height:1;color:var(--gold)}.stat span{display:block;margin-top:6px;font-size:13px;letter-spacing:.06em;color:var(--muted-dark-2)}.hero-photo{flex:1 1 360px;min-width:0}.hero-photo .framed{aspect-ratio:4/5;max-height:640px}.quick{background:var(--ivory)}.quick-inner{padding-block:clamp(56px,8vw,104px);display:flex;flex-direction:column;gap:32px}.quick-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.quick-card{display:flex;flex-direction:column;justify-content:space-between;gap:28px;min-height:168px;padding:20px;background:var(--paper);border:1px solid var(--line);border-radius:2px;color:var(--ink);text-decoration:none}.quick-card:hover{border-color:var(--gold);color:var(--ink)}.quick-card .icon{width:46px;height:46px;display:flex;align-items:center;justify-content:center;border:1px solid var(--gold);border-radius:50%;color:var(--green)}.quick-card b{display:block;font-weight:400;font-size:18px;line-height:1.25}.quick-card small{display:block;margin-top:6px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-ink)}.quick-card--dark{background:var(--green);border-color:var(--green);color:var(--ivory)}.quick-card--dark:hover{color:var(--ivory);border-color:var(--gold)}.quick-card--dark .icon{color:var(--gold)}.quick-card--dark small{color:var(--gold)}@media (min-width:900px){.quick-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}.story{background:var(--paper);border-top:1px solid var(--line)}.story-inner{display:flex;flex-wrap:wrap;align-items:center;gap:clamp(40px,6vw,88px);padding-block:clamp(64px,9vw,128px)}.story-photos{flex:1 1 380px;min-width:0;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:12px;align-items:end}.story-photos img{width:100%;height:100%;object-fit:cover;background:#E9E1CF}.story-photo-1{aspect-ratio:3/4}.story-col{display:flex;flex-direction:column;gap:12px}.story-photo-2{aspect-ratio:1/1}.year-card{background:var(--green);color:var(--ivory);padding:clamp(16px,2.4vw,28px);display:flex;flex-direction:column;gap:4px}.year-card strong{font-family:var(--f-italic);font-weight:300;font-size:clamp(36px,4.4vw,56px);line-height:1;color:var(--gold)}.year-card span{font-size:13px;line-height:1.35;letter-spacing:.04em;color:var(--muted-dark)}.story-copy{flex:1 1 440px;min-width:0;display:flex;flex-direction:column;gap:22px}.story-copy > p{font-size:17px;line-height:1.7;color:var(--muted)}.diamond-list{margin-top:4px;border-top:1px solid var(--line)}.diamond-list li{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--line);font-size:16px}.diamond-list li::before{content:"";flex:none;width:7px;height:7px;margin-top:8px;background:var(--gold);transform:rotate(45deg)}.story-copy .btn{align-self:flex-start;min-height:50px;padding:0 26px}.menu{background:var(--ivory)}.menu-inner{padding-block:clamp(64px,9vw,128px);display:flex;flex-direction:column;gap:clamp(32px,4vw,52px)}.menu-head{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}.menu-head p{max-width:36em;font-size:17px;line-height:1.65;color:var(--muted)}.menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}.menu-card{display:flex;flex-direction:column;gap:18px;padding:clamp(24px,3vw,36px);background:var(--paper);border:1px solid var(--line);border-radius:2px}.menu-card-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.menu-card-num{font-family:var(--f-display);font-size:28px;color:var(--gold-ink);letter-spacing:.08em}.menu-card-time{font-family:var(--f-italic);font-size:17px;color:var(--gold-ink)}.menu-card h3{font-family:var(--f-display);font-weight:400;text-transform:uppercase;font-size:26px;line-height:1.1;letter-spacing:.05em;color:var(--green)}.menu-card p{flex:1 1 auto;font-size:16px;line-height:1.65;color:var(--muted)}.menu-card .btn{min-height:52px;padding:0 20px}.menu-card .btn svg{stroke:var(--gold)}.playroom{background:var(--green);color:var(--ivory)}.playroom-inner{display:flex;flex-wrap:wrap-reverse;align-items:center;gap:clamp(40px,6vw,80px);padding-block:clamp(64px,9vw,128px)}.playroom-photo{flex:1 1 400px;min-width:0}.playroom-photo .framed{aspect-ratio:4/3}.playroom-copy{flex:1 1 440px;min-width:0;display:flex;flex-direction:column;gap:22px}.playroom-copy > p{font-size:17px;line-height:1.7;color:var(--muted-dark)}.features{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:rgba(214,179,106,.3);border:1px solid rgba(214,179,106,.3)}.features li{display:flex;align-items:center;gap:12px;padding:16px;background:var(--green);font-size:15px;line-height:1.3}.features svg{flex:none}.price{display:flex;align-items:baseline;gap:12px}.price span{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-dark-2)}.price strong{font-family:var(--f-italic);font-weight:300;font-size:34px;line-height:1;color:var(--gold)}.playroom-actions{display:flex;flex-wrap:wrap;gap:12px}.playroom-actions .btn{flex:1 1 auto;max-width:300px}.playroom-actions .btn--ghost{max-width:220px}.allies{background:var(--paper);border-bottom:1px solid var(--line)}.allies-head{padding-block:clamp(56px,8vw,96px) 32px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}.allies-head h2{font-size:clamp(28px,3.6vw,40px)}.allies-head p{margin-bottom:18px;max-width:34em;font-size:16px;line-height:1.6;color:var(--muted)}.marquee{overflow:hidden;border-block:1px solid var(--line);margin-bottom:clamp(56px,8vw,96px);-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}.marquee-track{display:flex;width:max-content;animation:marquee 40s linear infinite}.marquee:hover .marquee-track{animation-play-state:paused}.marquee-track li{flex:none;width:200px;height:104px;display:flex;align-items:center;justify-content:center;padding:0 24px}.marquee-track img{max-height:44px;width:auto;max-width:100%;object-fit:contain;filter:grayscale(1);opacity:.7;transition:opacity .3s}.marquee-track img:hover{opacity:1}@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}@media (prefers-reduced-motion:reduce){.marquee-track{animation:none}html{scroll-behavior:auto}}.visit{background:var(--ivory)}.visit-inner{display:flex;flex-wrap:wrap;gap:clamp(40px,6vw,72px);padding-block:clamp(64px,9vw,128px)}.visit-copy{flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:22px}.visit-copy > p{font-size:17px;line-height:1.65;color:var(--muted)}.contact-list{border-top:1px solid var(--line)}.contact-list a{display:flex;align-items:center;gap:16px;min-height:68px;border-bottom:1px solid var(--line);color:var(--ink);text-decoration:none}.contact-list a:hover .contact-value{color:var(--gold-ink)}.contact-list .icon{flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:var(--green);color:var(--gold);border-radius:50%}.contact-label{display:block;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-ink)}.contact-value{display:block;font-size:18px;overflow-wrap:anywhere}.visit-side{flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:12px}.info-card{background:var(--green);color:var(--ivory);padding:clamp(24px,3vw,36px);display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:22px 28px}.info-card dt{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}.info-card dd{margin:4px 0 0;font-size:16px;line-height:1.45}.map{aspect-ratio:16/10;background:#E9E1CF;border:1px solid var(--line)}.map iframe{width:100%;height:100%;border:0;display:block}.visit-side .btn{min-height:56px;padding:0 22px}.visit-side .btn svg{stroke:var(--gold)}.popup-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,47,42,.8);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .4s ease,visibility 0s .4s;z-index:9999}.popup-overlay.activo{opacity:1;visibility:visible;pointer-events:all;transition-delay:0s}.popup-contenido{position:relative;max-width:92vw;max-height:85vh;animation:popupEntrada .4s ease;display:flex;align-items:center;justify-content:center}.popup-imagen{width:auto;max-width:100%;height:auto;max-height:85vh;border:1px solid var(--gold);border-radius:2px;object-fit:contain}.popup-cerrar{position:absolute;top:-15px;right:-15px;background:var(--gold);color:var(--green);border:none;width:32px;height:32px;border-radius:2px;font-size:20px;line-height:1;cursor:pointer;transition:background .2s ease}.popup-cerrar:hover{background:var(--ivory)}@keyframes popupEntrada{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}@media (max-width:600px){.popup-contenido{max-width:95vw;max-height:80vh}.popup-imagen{max-height:80vh}.popup-cerrar{top:6px;right:6px}}</style>
+  <!-- inline-css:end -->
 
-    :root{
-      --beige:#F7F2E8;
-      --beige-mid:#EDE5D0;
-      --beige-deep:#DDD0B3;
-      --sage-pale:#D4E4D0;
-      --sage:#8BB89A;
-      --sage-mid:#6A9E7B;
-      --sage-deep:#3D6B4F;
-      --green-dark:#244033;
-      --white:#FDFAF5;
-      --text:#1E2E23;
-      --text-muted:#5C7A65;
-      --radius:12px;
-    }
-
-
-    /* ── NAV ── */
-    .navbar{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5vw;height:80px;display:flex;align-items:center;justify-content:space-between;transition:background .3s,box-shadow .3s}
-    .navbar.scrolled,.navbar.solid{background:rgba(36,64,51,.97);box-shadow:0 2px 20px rgba(0,0,0,.15)}
-
-    .nav-links a:hover{background:rgba(255,255,255,.1);color:#fff}
-    .nav-cta:hover{background:var(--sage-deep)!important}
-
-    
-    .mobile-menu a{color:rgba(255,255,255,.8);text-decoration:none;font-size:1.15rem;font-weight:300;padding:.9rem 0;border-bottom:1px solid rgba(255,255,255,.08);display:block}
-
-    /* ── FOOTER ── */
-
-
-
-    /* ── UTILS ── */
-
-    
-    .btn-outline-sage{border:1.5px solid var(--sage);color:var(--sage-deep);padding:.85rem 1.8rem;border-radius:30px;text-decoration:none;font-weight:500;font-size:.88rem;transition:border-color .2s,background .2s;display:inline-flex;align-items:center;gap:.5rem}
-    .btn-outline-sage:hover{border-color:var(--sage-mid);background:var(--sage-pale)}
-
-    .mob-close{background:none;border:none;color:rgba(255,255,255,.7);font-size:1.8rem;cursor:pointer;align-self:flex-end;padding:.25rem .5rem;margin-bottom:.5rem;line-height:1;transition:color .2s}
-    .mob-close:hover{color:var(--white)}
-   @media(max-width:768px){
-      .nav-links{display:none}
-      .hamburger{display:flex}
-      .site-footer{flex-direction:column;align-items:flex-start}
-      .footer-right{text-align:left}
-    }
-
-    /* ── HERO ── */
-    .hero{height:100svh;min-height:700px;position:relative;display:flex;flex-direction:column;justify-content:flex-start;overflow:hidden;background:var(--green-dark)}
-    .hero-bg{position:absolute;inset:0;background-image:linear-gradient(105deg,rgba(36,64,51,.92) 38%,rgba(36,64,51,.42) 100%),url('img/hero.webp');background-size:cover;background-position:center}
-    .hero-circle{position:absolute;right:-5vw;top:50%;transform:translateY(-50%);width:min(55vw,580px);height:min(55vw,580px);border-radius:50%;border:1px solid rgba(212,228,208,.15);pointer-events:none}
-    .hero-circle::before{content:'';position:absolute;inset:2rem;border-radius:50%;border:1px solid rgba(212,228,208,.08)}
-    .hero-content{position:relative;z-index:2;padding:calc(80px + 2rem) 5vw 0;max-width:680px;flex-shrink:0}
-    .hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(212,228,208,.12);border:1px solid rgba(212,228,208,.25);border-radius:30px;padding:.35rem 1rem;font-size:.78rem;color:var(--sage-pale);letter-spacing:.08em;margin-bottom:1rem}
-    .badge-dot{width:6px;height:6px;border-radius:50%;background:var(--sage);animation:badgePulse 2s ease-in-out infinite;flex-shrink:0}
-    @keyframes badgePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
-    .hero h1{font-family:'DM Serif Display',serif;font-size:clamp(3rem,6vw,5rem);color:var(--white);line-height:1.05;margin-bottom:1.25rem}
-    .hero h1 .green{color:var(--sage-pale);font-style:italic}
-    .hero p{font-size:1rem;color:rgba(255,255,255,.62);margin-bottom:2.5rem;max-width:420px;font-weight:300;line-height:1.7}
-    .hero-actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:1.5rem}
-    .btn-hero-primary{background:var(--sage-mid);color:var(--white);padding:.9rem 2rem;border-radius:30px;text-decoration:none;font-weight:500;font-size:.9rem;transition:background .2s,transform .1s;display:inline-flex;align-items:center;gap:.5rem}
-    .btn-hero-primary:hover{background:var(--sage-deep);transform:translateY(-1px)}
-    .btn-hero-outline{border:1.5px solid rgba(255,255,255,.25);color:rgba(255,255,255,.85);padding:.9rem 2rem;border-radius:30px;text-decoration:none;font-weight:400;font-size:.9rem;transition:border-color .2s,background .2s;display:inline-flex;align-items:center;gap:.5rem}
-    .btn-hero-outline:hover{border-color:var(--sage-pale);background:rgba(212,228,208,.08)}
-    .hero-stats{position:relative;padding:1.5rem 5vw 2.5rem;display:flex;gap:3rem;z-index:2;flex-wrap:wrap;margin-top:auto;flex-shrink:0}
-    .stat-num{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--white);line-height:1;display:block}
-    .stat-label{font-size:.72rem;color:rgba(255,255,255,.5);letter-spacing:.08em;text-transform:uppercase;font-weight:300;display:block;margin-top:.2rem;white-space:nowrap}
-    @media(max-width:600px){.hero-stats{gap:1.5rem;padding-bottom:2rem}.stat-num{font-size:1.4rem}.stat-label{font-size:.72rem;color:rgba(255,255,255,.5);letter-spacing:.08em;text-transform:uppercase;font-weight:300;display:block;margin-top:.2rem;white-space:nowrap}}
-
-    /* ── ACCESOS ── */
-    .quick-access{background:var(--sage-pale);padding:4rem 5vw}
-    .qa-head{margin-bottom:2rem}
-    .qa-head h2{font-family:'DM Serif Display',serif;font-size:1.5rem;font-weight:400;color:var(--green-dark)}
-    .qa-sub{font-size:.85rem;color:var(--text-muted);font-weight:300;margin-top:.25rem}
-    .qa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem}
-    .qa-card{background:var(--white);border:1px solid rgba(107,158,123,.18);border-radius:var(--radius);padding:1.5rem;text-decoration:none;display:flex;flex-direction:column;gap:.6rem;transition:border-color .2s,transform .2s,box-shadow .2s;position:relative;overflow:hidden}
-    .qa-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--sage-mid);transform:scaleX(0);transform-origin:left;transition:transform .25s}
-    .qa-card:hover{border-color:var(--sage-mid);transform:translateY(-2px);box-shadow:0 8px 24px rgba(107,158,123,.12)}
-    .qa-card:hover::before{transform:scaleX(1)}
-    .qa-icon-wrap{width:44px;height:44px;border-radius:10px;background:var(--sage-pale);display:flex;align-items:center;justify-content:center;font-size:1.3rem}
-    .qa-title{font-weight:500;font-size:.95rem;color:var(--green-dark)}
-    .qa-desc{font-size:.82rem;color:var(--text-muted);font-weight:300;flex:1;line-height:1.5}
-    .qa-link{font-size:.8rem;color:var(--sage-mid);font-weight:500}
-
-    /* ── ABOUT ── */
-    .about{background:var(--beige);padding:7rem 5vw;display:grid;grid-template-columns:1fr 1fr;gap:6vw;align-items:center}
-    .about-imgs{position:relative;height:460px}
-    .ai-main{position:absolute;top:0;left:0;width:75%;height:80%;border-radius:var(--radius);overflow:hidden;background:var(--sage-pale)}
-    .ai-main img{width:100%;height:100%;object-fit:cover}
-    .ai-accent{position:absolute;bottom:0;right:0;width:55%;height:52%;border-radius:var(--radius);overflow:hidden;background:var(--sage-mid);border:6px solid var(--beige)}
-    .ai-accent img{width:100%;height:100%;object-fit:cover}
-    .ai-badge{position:absolute;top:28%;right:-1rem;background:var(--green-dark);color:var(--sage-pale);border-radius:10px;padding:1rem;text-align:center;font-size:.73rem;line-height:1.4;min-width:90px}
-    .ai-badge strong{display:block;font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--sage-pale);font-weight:400;margin-bottom:.2rem}
-    .about-text p{color:var(--text-muted);font-size:.93rem;margin-bottom:1rem;font-weight:300}
-    .feat-list{list-style:none;margin:1.5rem 0;display:flex;flex-direction:column;gap:.7rem}
-    .feat-list li{display:flex;align-items:center;gap:.75rem;font-size:.88rem;color:var(--text)}
-    .feat-check{width:20px;height:20px;border-radius:50%;background:var(--sage-pale);border:1.5px solid var(--sage-mid);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;color:var(--sage-deep)}
-    @media(max-width:768px){.about{grid-template-columns:1fr;padding:5rem 5vw}.about-imgs{height:300px;margin-bottom:3rem}.ai-badge{right:.5rem}}
-
-    /* ── MENÚ PREVIEW ── */
-    .menu-section{background:var(--green-dark);padding:7rem 5vw}
-    .menu-section .section-title{color:var(--white)}
-    .menu-section .section-label{color:var(--sage-pale)}
-    .menu-intro{color:rgba(255,255,255,.5);font-size:.93rem;max-width:500px;margin-bottom:3rem;font-weight:300}
-    .menu-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem}
-    .menu-card{background:rgba(255,255,255,.05);border:1px solid rgba(139,184,154,.12);border-radius:var(--radius);overflow:hidden;transition:transform .25s,border-color .25s;text-decoration:none;display:flex;flex-direction:column}
-    .menu-card:hover{transform:translateY(-4px);border-color:rgba(139,184,154,.3)}
-    .menu-card-img{height:180px;overflow:hidden;background:var(--sage-deep)}
-    .menu-card-img img{width:100%;height:100%;object-fit:cover;display:block}
-    .menu-card-body{padding:1.25rem;flex:1;display:flex;flex-direction:column}
-    .menu-tag{font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sage-pale);opacity:.7;margin-bottom:.4rem;display:block}
-    .menu-card h3{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--white);font-weight:400;margin-bottom:.4rem}
-    .menu-card p{font-size:.83rem;color:rgba(255,255,255,.48);font-weight:300;margin-bottom:1rem;flex:1;line-height:1.6}
-    .menu-card-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--sage-pale);font-size:.82rem;font-weight:500;transition:color .2s;margin-top:auto}
-    .menu-card-link:hover{color:var(--sage)}
-    .tacc-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(139,184,154,.15);border:1px solid rgba(139,184,154,.25);border-radius:20px;padding:.2rem .75rem;font-size:.72rem;color:var(--sage-pale);margin-bottom:.6rem;width:fit-content}
-
-    /* ── PLAYROOM PREVIEW ── */
-    .playroom{background:var(--beige-mid);padding:7rem 5vw}
-    .playroom-inner{display:grid;grid-template-columns:1fr 1fr;gap:6vw;align-items:center}
-    .play-vis{position:relative;padding-bottom:1.5rem}
-    .play-main{background:var(--sage-pale);border-radius:16px;overflow:hidden;aspect-ratio:4/3}
-    .play-main img{width:100%;height:100%;object-fit:cover;display:block}
-    .play-mini{position:absolute;bottom:0;left:-1rem;background:var(--white);border:1px solid rgba(107,158,123,.15);border-radius:12px;padding:.9rem 1.1rem;display:flex;align-items:center;gap:.75rem;box-shadow:0 4px 20px rgba(0,0,0,.07)}
-    .pm-icon{width:38px;height:38px;border-radius:8px;background:var(--sage-pale);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
-    .pm-label{font-size:.75rem;color:var(--text-muted);font-weight:300}
-    .pm-val{font-size:.88rem;font-weight:500;color:var(--green-dark)}
-    .play-ring{position:absolute;top:-1.5rem;right:-1.5rem;width:100px;height:100px;border-radius:50%;border:1.5px dashed var(--sage-pale);pointer-events:none;animation:ringRotate 20s linear infinite}
-    @keyframes ringRotate{to{transform:rotate(360deg)}}
-    .playroom-text p{color:var(--text-muted);font-size:.93rem;font-weight:300;margin-bottom:1rem}
-    .play-feats{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:1.5rem 0}
-    .pf{background:var(--white);border-radius:8px;padding:.8rem 1rem;font-size:.85rem;color:var(--green-dark);display:flex;align-items:center;gap:.5rem;border:1px solid rgba(107,158,123,.15)}
-    .play-actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.5rem}
-    @media(max-width:768px){.playroom-inner{grid-template-columns:1fr}.play-vis{padding-bottom:2.5rem}.play-mini{left:1rem}}
-
-    /* ── ALIADOS ── */
-    .aliados{background:var(--sage-pale);padding:4.5rem 5vw;text-align:center}
-    .aliados h2{font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--green-dark);font-weight:400;margin-bottom:.4rem}
-    .aliados-sub{font-size:.87rem;color:var(--text-muted);margin-bottom:2.5rem;font-weight:300}
-    .aliados-wrap{overflow:hidden;mask-image:linear-gradient(to right,transparent 0%,black 12%,black 88%,transparent 100%)}
-    .aliados-track{display:flex;align-items:center;gap:3rem;animation:scrollAliados 22s linear infinite;width:max-content}
-    .aliados-track:hover{animation-play-state:paused}
-    .aliados-track img{height:36px;width:auto;object-fit:contain;filter:saturate(0) opacity(.5);transition:filter .3s}
-    .aliados-track img:hover{filter:saturate(1) opacity(1)}
-    @keyframes scrollAliados{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-
-    /* ── CONTACTO ── */
-    .contact{background:var(--green-dark);padding:6rem 5vw;display:grid;grid-template-columns:1fr 1fr;gap:6vw;align-items:start}
-    .contact-l h2{font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,3vw,2.5rem);color:var(--white);font-weight:400;margin-bottom:1rem;line-height:1.2}
-    .contact-l>p{color:rgba(255,255,255,.45);font-size:.9rem;font-weight:300;margin-bottom:2rem}
-    .ci-list{display:flex;flex-direction:column;gap:1rem}
-    .ci{display:flex;align-items:center;gap:1rem;text-decoration:none;color:rgba(255,255,255,.72);transition:color .2s}
-    .ci:hover{color:var(--sage)}
-    .ci-ico{width:40px;height:40px;border-radius:10px;background:rgba(212,228,208,.1);border:1px solid rgba(212,228,208,.15);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
-    .ci-lbl{font-size:.75rem;color:rgba(255,255,255,.35);margin-bottom:.1rem}
-    .ci-val{font-size:.88rem}
-    .contact-r{background:rgba(255,255,255,.04);border:1px solid rgba(139,184,154,.12);border-radius:16px;padding:2rem}
-    .info-row{display:flex;justify-content:space-between;align-items:flex-start;padding:.75rem 0;border-bottom:1px solid rgba(139,184,154,.08);font-size:.87rem}
-    .info-row:last-child{border-bottom:none}
-    .ir-lbl{color:rgba(255,255,255,.38);font-weight:300}
-    .ir-val{color:rgba(255,255,255,.82);text-align:right}
-    @media(max-width:768px){.contact{grid-template-columns:1fr}}
-
-        /* ── POPUP EVENTO ESPECIAL ── */
-    .popup-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(58,71,63,.75);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s ease;z-index:9999}
-    .popup-overlay.activo{opacity:1;pointer-events:all}
-    .popup-contenido{position:relative;max-width:92vw;max-height:85vh;animation:popupEntrada .4s ease;display:flex;align-items:center;justify-content:center}
-    .popup-imagen{width:auto;max-width:100%;height:auto;max-height:85vh;border-radius:14px;box-shadow:0 10px 25px rgba(0,0,0,.35);object-fit:contain}
-    .popup-cerrar{position:absolute;top:-15px;right:-15px;background:var(--sage-mid);color:var(--white);border:none;width:36px;height:36px;border-radius:50%;font-size:22px;font-weight:bold;cursor:pointer;box-shadow:0 4px 8px rgba(0,0,0,.3);transition:transform .2s ease,background .3s ease}
-    .popup-cerrar:hover{background:var(--sage-deep);transform:scale(1.1)}
-    @keyframes popupEntrada{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
-    @media(max-width:600px){.popup-contenido{max-width:95vw;max-height:80vh}.popup-imagen{max-height:80vh}.popup-cerrar{top:-12px;right:-12px;width:34px;height:34px;font-size:20px}}
-  </style>
-
-    <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9T928H6DX1"></script>
+  <!-- Google tag (gtag.js): se carga tras la primera interacción para no competir con el contenido -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-9T928H6DX1');
+    // Se carga ante la primera interacción (scroll, toque, tecla) o, a más tardar, a los 8 s.
+    (function () {
+      var listo = false;
+      function cargar() {
+        if (listo) return;
+        listo = true;
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-9T928H6DX1';
+        document.head.appendChild(s);
+      }
+      ['scroll', 'pointerdown', 'keydown', 'touchstart'].forEach(function (e) {
+        window.addEventListener(e, cargar, { once: true, passive: true });
+      });
+      setTimeout(cargar, 8000);
+    })();
   </script>
 
   <!-- Datos estructurados para Google (Schema.org) -->
@@ -215,7 +167,7 @@
     "description": "Restaurante en La Plata con platos caseros, opciones sin TACC y playroom infantil. Abierto todos los días de 08:00 a 02:00 hs.",
     "url": "https://www.greengarden.com.ar/",
     "image": "https://www.greengarden.com.ar/img/hero.webp",
-    "logo": "https://www.greengarden.com.ar/img/logo.png",
+    "logo": "https://www.greengarden.com.ar/img/logo-dark.png",
     "telephone": "+542214895239",
     "email": "greengardenlaplata@gmail.com",
     "priceRange": "$$",
@@ -244,238 +196,273 @@
 <body>
 <a class="skip-link" href="#inicio">Saltar al contenido</a>
 
-<nav class="navbar" id="navbar">
-  <a href="index.html" class="navbar-logo-link"><img src="img/logo.png" alt="Green Garden" class="navbar-logo" width="194" height="72" decoding="async"></a>
-  
-  <ul class="nav-links"><li><a href="index.html">Inicio</a></li>
-<li><a href="menu.html">Menú</a></li>
-<li><a href="playroom.html">Playroom</a></li>
-<li><a href="nosotros.html">Nosotros</a></li><li><a href="tel:02214895239" class="nav-cta">Reservar</a></li></ul>
-  <div class="hamburger" id="ham"><span></span><span></span><span></span></div>
-</nav>
-<div class="mobile-menu" id="mobMenu">
-  <a href="index.html" onclick="closeMob()">Inicio</a>
-<a href="menu.html" onclick="closeMob()">Menú</a>
-<a href="playroom.html" onclick="closeMob()">Playroom</a>
-<a href="nosotros.html" onclick="closeMob()">Nosotros</a>
-  <a href="tel:02214895239" class="mob-cta">📞 Reservar: 0221-4895239</a>
-</div>
+<!-- HEADER -->
+<header class="site-header">
+  <div class="container header-bar">
+    <a class="header-logo" href="index.html" aria-label="Green Garden, ir al inicio"><img src="img/logo-light.webp" alt="Green Garden" width="108" height="54"></a>
+    <nav class="nav-desktop" aria-label="Principal">
+      <a href="index.html">Inicio</a>
+      <a href="menu.html">Menú</a>
+      <a href="playroom.html">Playroom</a>
+      <a href="nosotros.html">Nosotros</a>
+      <a href="#visitanos">Contacto</a>
+    </nav>
+    <div class="header-actions">
+      <div class="status" data-status><span class="status-dot"></span><span class="status-text">Abierto ahora</span></div>
+      <a class="header-cta" href="tel:02214895239"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>Reservar</a>
+      <button class="menu-toggle" type="button" id="menuToggle" aria-expanded="false" aria-controls="navMobile" aria-label="Abrir menú">
+        <svg class="ico-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        <svg class="ico-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </div>
+  <nav class="nav-mobile" id="navMobile" aria-label="Menú móvil">
+    <a href="index.html">Inicio <span aria-hidden="true">→</span></a>
+    <a href="menu.html">Menú <span aria-hidden="true">→</span></a>
+    <a href="playroom.html">Playroom <span aria-hidden="true">→</span></a>
+    <a href="nosotros.html">Nosotros <span aria-hidden="true">→</span></a>
+    <a href="#visitanos">Contacto <span aria-hidden="true">→</span></a>
+    <div class="status" data-status><span class="status-dot"></span><span class="status-text">Abierto ahora</span><span>· Todos los días 08:00 — 02:00</span></div>
+  </nav>
+</header>
 
+<main>
 <!-- HERO -->
 <section id="inicio" class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-circle"></div>
-  <div class="hero-content">
-    <div class="hero-badge" id="statusBadge"><div class="badge-dot"></div><span id="statusText">Abierto · 08:00 — 02:00 hs</span></div>
-    <h1>Nuestra casa,<br><span class="green">tu lugar.</span></h1>
-    <p>Gastronomía con alma casera. Platos pensados con los mejores ingredientes, en un espacio familiar único en La Plata.</p>
-    <div class="hero-actions">
-      <a href="menu.html" class="btn-hero-primary">Ver el Menú →</a>
-      <a href="playroom.html" class="btn-hero-outline">Playroom ↓</a>
+  <img class="hero-watermark" src="img/iso-gold.webp" alt="" aria-hidden="true">
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <div class="hero-tag"><i></i><span>Restaurant en La Plata, desde 2016</span></div>
+      <h1>Nuestra casa,<br><em>tu lugar.</em></h1>
+      <p class="hero-text">Gastronomía con estilo casero: platos hechos con buenos ingredientes, en un espacio familiar pensado para quedarse. Desayunos, almuerzos, meriendas y cenas, todos los días.</p>
+      <div class="hero-actions">
+        <a class="btn btn--gold" href="menu.html">Ver el menú <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn--ghost" href="playroom.html">Playroom</a>
+      </div>
+      <div class="stats">
+        <div class="stat"><strong>+10</strong><span>años en La Plata</span></div>
+        <div class="stat"><strong>08–02</strong><span>todos los días</span></div>
+        <div class="stat"><strong>3–10</strong><span>años, Playroom</span></div>
+      </div>
     </div>
-  </div>
-  <div class="hero-stats">
-    <div><span class="stat-num">+10</span><span class="stat-label">Años</span></div>
-    <div><span class="stat-num">08–02</span><span class="stat-label">Todos los días</span></div>
+    <div class="hero-photo">
+      <div class="framed"><img src="img/hero-frame.webp" alt="Salón principal de Green Garden" width="540" height="675" fetchpriority="high"></div>
+    </div>
   </div>
 </section>
 
-<!-- ACCESOS RÁPIDOS -->
-<div class="quick-access" id="accesos">
-  <div class="qa-head">
-    <h2>Acceso rápido</h2>
-    <p class="qa-sub">Todo lo que necesitás a un toque</p>
-  </div>
-  <div class="qa-grid">
-    <a href="menu.html#almuerzo" class="qa-card">
-      <div class="qa-icon-wrap">🍽️</div>
-      <div class="qa-title">Almuerzos & Cenas</div>
-      <div class="qa-desc">Nuestra carta completa de platos del día.</div>
-      <div class="qa-link">Ver carta →</div>
-    </a>
-    <a href="menu.html#merienda" class="qa-card">
-      <div class="qa-icon-wrap">☕</div>
-      <div class="qa-title">Desayunos & Meriendas</div>
-      <div class="qa-desc">Todo lo dulce para cualquier momento.</div>
-      <div class="qa-link">Ver carta →</div>
-    </a>
-    <a href="menu.html#sintacc" class="qa-card">
-      <div class="qa-icon-wrap">🌾</div>
-      <div class="qa-title">Menú Sin TACC</div>
-      <div class="qa-desc">Opciones libres de gluten para todos los horarios.</div>
-      <div class="qa-link">Ver carta →</div>
-    </a>
-    <a href="playroom.html#camaras" class="qa-card">
-      <div class="qa-icon-wrap">📷</div>
-      <div class="qa-title">Cámaras Playroom</div>
-      <div class="qa-desc">Mirá a los chicos en tiempo real desde tu mesa.</div>
-      <div class="qa-link">Conectarme →</div>
-    </a>
-  </div>
-</div>
-
-<!-- NOSOTROS PREVIEW -->
-<div class="about" id="nosotros">
-  <div class="about-imgs">
-    <div class="ai-main"><img src="img/nosotros1.webp" alt="Salón Green Garden"></div>
-    <div class="ai-accent"><img src="img/nosotros2.webp" alt="Green Garden equipo"></div>
-    <div class="ai-badge"><strong>2016</strong>Acompañándote<br>desde siempre</div>
-  </div>
-  <div class="about-text">
-    <span class="section-label">Nuestra historia</span>
-    <h2 class="section-title">Cocina con alma,<br>sabor de casa</h2>
-    <p>Desde 2016 diseñamos una experiencia gastronómica basada en la excelencia. Instalaciones en Diag. 74 e/49 y 50 con producción propia y tecnología de vanguardia.</p>
-    <ul class="feat-list">
-      <li><span class="feat-check">✓</span>Producción propia con cámaras de frío y envasado al vacío</li>
-      <li><span class="feat-check">✓</span>Hornos y sistemas de cocción industriales de primer nivel</li>
-      <li><span class="feat-check">✓</span>Menú para todos los horarios del día</li>
-      <li><span class="feat-check">✓</span>Playroom infantil con profes y cámaras en vivo</li>
-    </ul>
-    <a href="nosotros.html" class="btn-sage" style="margin-top:1.5rem">Conocer más →</a>
-  </div>
-</div>
-
-<!-- MENÚ PREVIEW -->
-<section id="menu" class="menu-section">
-  <span class="section-label">Lo que servimos</span>
-  <h2 class="section-title">Nuestro Menú</h2>
-  <p class="menu-intro">Platos caseros con los mejores ingredientes del mercado, disponibles en todos los horarios del día.</p>
-  <div class="menu-cards">
-    <a href="menu.html#almuerzo" class="menu-card">
-      <div class="menu-card-img"><img src="img/almuerzo.webp" alt="Almuerzos y Cenas"></div>
-      <div class="menu-card-body">
-        <span class="menu-tag">Mediodía & noche</span>
-        <h3>Almuerzos & Cenas</h3>
-        <p>Platos caseros, abundantes y con sabor único. La carta completa.</p>
-        <span class="menu-card-link">Ver carta completa →</span>
+<!-- ACCESO RÁPIDO -->
+<section class="quick" aria-labelledby="acceso-titulo">
+  <div class="container quick-inner">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Todo lo que necesitás, a un toque</span>
+        <h2 id="acceso-titulo" class="h-display h-section">Acceso rápido</h2>
       </div>
-    </a>
-    <a href="menu.html#merienda" class="menu-card">
-      <div class="menu-card-img"><img src="img/merienda.webp" alt="Desayunos y Meriendas"></div>
-      <div class="menu-card-body">
-        <span class="menu-tag">Mañana & tarde</span>
-        <h3>Desayunos & Meriendas</h3>
-        <p>Café de especialidad y lo mejor de la pastelería para el momento dulce.</p>
-        <span class="menu-card-link">Ver carta de merienda →</span>
+      <div class="divider" aria-hidden="true"><i></i></div>
+    </div>
+    <div class="quick-grid">
+      <a class="quick-card" href="menu.html#almuerzo">
+        <span class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v18M5 3v5a2 2 0 0 0 4 0V3M17 21V3c-2 0-3.5 2.5-3.5 6s1.5 4 3.5 4"/></svg></span>
+        <span><b>Almuerzos &amp; Cenas</b><small>Ver carta →</small></span>
+      </a>
+      <a class="quick-card" href="menu.html#merienda">
+        <span class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V9zM16 10h1.5a2.5 2.5 0 0 1 0 5H16M8 3v3M12 3v3"/></svg></span>
+        <span><b>Desayunos &amp; Meriendas</b><small>Ver carta →</small></span>
+      </a>
+      <a class="quick-card" href="menu.html#sintacc">
+        <span class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V8M12 8c-1.8-.8-2.8-2.6-2.8-4.5 1.8 0 2.8 1.2 2.8 2.7 0-1.5 1-2.7 2.8-2.7 0 1.9-1 3.7-2.8 4.5zM12 13c-1.8-1.2-3.6-1.2-4.8-2.8M12 13c1.8-1.2 3.6-1.2 4.8-2.8M12 17.5c-1.8-1.2-3.6-1.2-4.8-2.8M12 17.5c1.8-1.2 3.6-1.2 4.8-2.8M4 4l16 16"/></svg></span>
+        <span><b>Menú Sin TACC</b><small>Ver carta →</small></span>
+      </a>
+      <a class="quick-card quick-card--dark" href="playroom.html#camaras">
+        <span class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 10l5-3v10l-5-3M3 7h12v10H3z"/></svg></span>
+        <span><b>Cámaras Playroom</b><small>Conectarme →</small></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- NUESTRA HISTORIA -->
+<section id="nosotros" class="story" aria-labelledby="historia-titulo">
+  <div class="container story-inner">
+    <div class="story-photos">
+      <img class="story-photo-1" src="img/t/nosotros1-s.webp" alt="Salón de Green Garden" width="360" height="640" loading="lazy">
+      <div class="story-col">
+        <div class="year-card"><strong>2016</strong><span>Acompañándote desde siempre</span></div>
+        <img class="story-photo-2" src="img/t/nosotros2-s.webp" alt="El equipo de Green Garden" width="360" height="270" loading="lazy">
       </div>
-    </a>
-    <a href="menu.html#sintacc" class="menu-card">
-      <div class="menu-card-img"><img src="img/sintacc.webp" alt="Menú Sin TACC"></div> 
-      <div class="menu-card-body">
-        <span class="menu-tag">Todos los horarios</span>
-        <div class="tacc-badge">✓ Sin TACC</div>
+    </div>
+    <div class="story-copy">
+      <span class="eyebrow">Nuestra historia</span>
+      <h2 id="historia-titulo" class="h-display h-section">Cocina con alma, sabor de casa</h2>
+      <div class="divider divider--short" aria-hidden="true"><i></i></div>
+      <p>Desde 2016 trabajamos con un objetivo claro: ofrecer una experiencia basada en la excelencia. Hoy te recibimos en nuestras instalaciones de Diagonal 74 entre 49 y 50, en pleno corazón de La Plata.</p>
+      <ul class="diamond-list">
+        <li>Producción propia con cámaras de frío y envasado al vacío</li>
+        <li>Hornos y sistemas de cocción industriales de primer nivel</li>
+        <li>Menú para todos los horarios del día</li>
+        <li>Playroom infantil con profes y cámaras en vivo</li>
+      </ul>
+      <a class="btn btn--outline" href="nosotros.html">Conocer más <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- NUESTRO MENÚ -->
+<section id="menu" class="menu" aria-labelledby="menu-titulo">
+  <div class="container menu-inner">
+    <div class="menu-head">
+      <span class="eyebrow">Platos caseros, a toda hora</span>
+      <h2 id="menu-titulo" class="h-display h-section--lg">Nuestro menú</h2>
+      <div class="divider" aria-hidden="true"><i></i></div>
+      <p>Platos caseros con ingredientes de mercado, disponibles en todos los horarios del día.</p>
+    </div>
+    <div class="menu-grid">
+      <article class="menu-card">
+        <div class="menu-card-top"><span class="menu-card-num">I</span><span class="menu-card-time">Mediodía y noche</span></div>
+        <h3>Almuerzos y cenas</h3>
+        <p>Platos caseros, abundantes y con sabor propio, para el mediodía y la noche.</p>
+        <a class="btn btn--green" href="menu.html#almuerzo">Ver carta completa <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+      <article class="menu-card">
+        <div class="menu-card-top"><span class="menu-card-num">II</span><span class="menu-card-time">Mañana y tarde</span></div>
+        <h3>Desayunos y meriendas</h3>
+        <p>Café de especialidad y pastelería para tu momento dulce del día.</p>
+        <a class="btn btn--green" href="menu.html#merienda">Ver carta de merienda <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+      <article class="menu-card">
+        <div class="menu-card-top"><span class="menu-card-num">III</span><span class="pill">Apto celíacos</span></div>
         <h3>Menú Sin TACC</h3>
-        <p>Opciones libres de gluten para celíacos. Almuerzo, cena y merienda incluidos.</p>
-        <span class="menu-card-link">Ver opciones Sin TACC →</span>
-      </div>
-    </a>
+        <p>Opciones libres de gluten para almuerzo, cena y merienda, en todos los horarios.</p>
+        <a class="btn btn--green" href="menu.html#sintacc">Ver opciones Sin TACC <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </article>
+    </div>
   </div>
 </section>
 
-<!-- PLAYROOM PREVIEW -->
-<div class="playroom" id="playroom">
-  <div class="playroom-inner">
-    <div class="play-vis">
-      <div class="play-ring"></div>
-      <div class="play-main"><img src="img/playroom1.webp" alt="Playroom Green Garden"></div>
-      <div class="play-mini">
-        <div class="pm-icon">📷</div>
-        <div><div class="pm-label">Cámaras en vivo</div><div class="pm-val">Mirá desde la mesa</div></div>
-      </div>
+<!-- PLAYROOM -->
+<section id="playroom" class="playroom on-dark" aria-labelledby="playroom-titulo">
+  <div class="container playroom-inner">
+    <div class="playroom-photo">
+      <div class="framed"><img src="img/playroom1-hero.webp" alt="Playroom infantil de Green Garden" loading="lazy" width="800" height="640"></div>
     </div>
-    <div class="playroom-text">
-      <span class="section-label">Para los más chicos</span>
-      <h2 class="section-title">Playroom<br>Infantil</h2>
-      <p>Un espacio seguro con personal a cargo para que los chicos disfruten mientras los adultos se relajan.</p>
-      <div class="play-feats">
-        <div class="pf">👶 3 a 10 años</div>
-        <div class="pf">🧑‍💼 Personal a cargo</div>
-        <div class="pf">📹 Cámaras en vivo</div>
-        <div class="pf">🏠 Máx. 30 niños</div>
-      </div>
-      <div class="play-actions">
-        <a href="playroom.html#camaras" class="btn-sage">Ver cámaras en vivo →</a>
-        <a href="playroom.html#reglamento" class="btn-outline-sage">Reglamento</a>
+    <div class="playroom-copy">
+      <span class="eyebrow">Para los más chicos</span>
+      <h2 id="playroom-titulo" class="h-display h-section--lg">Playroom infantil</h2>
+      <p>Un espacio seguro, con personal a cargo, para que los chicos jueguen mientras los grandes disfrutan de la mesa con tranquilidad.</p>
+      <ul class="features">
+        <li><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d6b36a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14a4 4 0 0 0 7 0M9 9.5h.01M15 9.5h.01"/></svg>De 3 a 10 años</li>
+        <li><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d6b36a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Personal a cargo</li>
+        <li><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d6b36a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 10l5-3v10l-5-3M3 7h12v10H3z"/></svg>Cámaras en vivo</li>
+        <li><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d6b36a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 11a3 3 0 1 0 0-6M18 20c0-2.4-1-4.4-2.5-5.5"/></svg>Máximo 30 niños</li>
+      </ul>
+      <p class="price"><span>Entrada</span><strong>$3.800</strong></p>
+      <div class="playroom-actions">
+        <a class="btn btn--gold" href="playroom.html#camaras">Ver cámaras en vivo <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn--ghost" href="playroom.html#reglamento">Reglamento</a>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- ALIADOS -->
-<div class="aliados" id="aliados">
-  <h2>Nuestros Aliados</h2>
-  <p class="aliados-sub">Trabajamos con las mejores marcas para garantizar calidad en cada plato.</p>
-  <div class="aliados-wrap">
-    <div class="aliados-track">
-      <img src="img/aliados/cocacola.png" alt="Coca-Cola">
-      <img src="img/aliados/heineken.png" alt="Heineken">
-      <img src="img/aliados/segafredo.png" alt="Segafredo">
-      <img src="img/aliados/losprados.png" alt="Los Prados">
-      <img src="img/aliados/escorihuelagascon.png" alt="Escorihuela Gascón">
-      <img src="img/aliados/cocacola.png" alt="Coca-Cola">
-      <img src="img/aliados/heineken.png" alt="Heineken">
-      <img src="img/aliados/segafredo.png" alt="Segafredo">
-      <img src="img/aliados/losprados.png" alt="Los Prados">
-      <img src="img/aliados/escorihuelagascon.png" alt="Escorihuela Gascón">
-      <img src="img/aliados/cocacola.png" alt="Coca-Cola">
-      <img src="img/aliados/heineken.png" alt="Heineken">
-      <img src="img/aliados/segafredo.png" alt="Segafredo">
-      <img src="img/aliados/losprados.png" alt="Los Prados">
-      <img src="img/aliados/escorihuelagascon.png" alt="Escorihuela Gascón">
-      <img src="img/aliados/cocacola.png" alt="Coca-Cola">
-      <img src="img/aliados/heineken.png" alt="Heineken">
-      <img src="img/aliados/segafredo.png" alt="Segafredo">
-      <img src="img/aliados/losprados.png" alt="Los Prados">
-      <img src="img/aliados/escorihuelagascon.png" alt="Escorihuela Gascón">
+<!-- NUESTROS ALIADOS -->
+<section id="aliados" class="allies" aria-labelledby="aliados-titulo">
+  <div class="container allies-head">
+    <span class="eyebrow">Calidad que nos acompaña</span>
+    <h2 id="aliados-titulo" class="h-display">Nuestros aliados</h2>
+    <p>Trabajamos con marcas reconocidas para asegurar la calidad de cada plato y cada copa.</p>
+  </div>
+  <div class="marquee">
+    <ul class="marquee-track" aria-label="Marcas aliadas">
+        <li><img src="img/aliados/cocacola.png" alt="Coca-Cola" loading="lazy"></li>
+        <li><img src="img/aliados/heineken.png" alt="Heineken" loading="lazy"></li>
+        <li><img src="img/aliados/segafredo.png" alt="Segafredo" loading="lazy"></li>
+        <li><img src="img/aliados/losprados.png" alt="Los Prados" loading="lazy"></li>
+        <li><img src="img/aliados/escorihuelagascon.png" alt="Escorihuela Gascón" loading="lazy"></li>
+        <li aria-hidden="true"><img src="img/aliados/cocacola.png" alt="" loading="lazy"></li>
+        <li aria-hidden="true"><img src="img/aliados/heineken.png" alt="" loading="lazy"></li>
+        <li aria-hidden="true"><img src="img/aliados/segafredo.png" alt="" loading="lazy"></li>
+        <li aria-hidden="true"><img src="img/aliados/losprados.png" alt="" loading="lazy"></li>
+        <li aria-hidden="true"><img src="img/aliados/escorihuelagascon.png" alt="" loading="lazy"></li>
+        <li aria-hidden="true"><img src="img/aliados/cocacola.png" alt="" loading="lazy"></li>
+        <li aria-hidden="true"><img src="img/aliados/heineken.png" alt="" loading="lazy"></li>
+        <li aria-hidden="true"><img src="img/aliados/segafredo.png" alt="" loading="lazy"></li>
+        <li aria-hidden="true"><img src="img/aliados/losprados.png" alt="" loading="lazy"></li>
+        <li aria-hidden="true"><img src="img/aliados/escorihuelagascon.png" alt="" loading="lazy"></li>
+        <li aria-hidden="true"><img src="img/aliados/cocacola.png" alt="" loading="lazy"></li>
+        <li aria-hidden="true"><img src="img/aliados/heineken.png" alt="" loading="lazy"></li>
+        <li aria-hidden="true"><img src="img/aliados/segafredo.png" alt="" loading="lazy"></li>
+        <li aria-hidden="true"><img src="img/aliados/losprados.png" alt="" loading="lazy"></li>
+        <li aria-hidden="true"><img src="img/aliados/escorihuelagascon.png" alt="" loading="lazy"></li>
+    </ul>
+  </div>
+</section>
+
+<!-- VENÍ A VISITARNOS -->
+<section id="visitanos" class="visit" aria-labelledby="visita-titulo">
+  <div class="container visit-inner">
+    <div class="visit-copy">
+      <span class="eyebrow">Te esperamos</span>
+      <h2 id="visita-titulo" class="h-display h-section--lg">Vení a visitarnos</h2>
+      <p>Abiertos todos los días de 08:00 a 02:00 hs. Reservá tu mesa por teléfono o escribinos.</p>
+      <div class="contact-list">
+        <a href="tel:+542214895239"><span class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg></span><span><span class="contact-label">Reservas</span><span class="contact-value">0221 489-5239</span></span></a>
+        <a href="mailto:greengardenlaplata@gmail.com"><span class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18v12H3zM3 7l9 6 9-6"/></svg></span><span><span class="contact-label">Email</span><span class="contact-value">greengardenlaplata@gmail.com</span></span></a>
+        <a href="https://instagram.com/greengardenlaplata" target="_blank" rel="noopener"><span class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r=".6"/></svg></span><span><span class="contact-label">Instagram</span><span class="contact-value">@greengardenlaplata</span></span></a>
+      </div>
+    </div>
+    <div class="visit-side">
+      <dl class="info-card">
+        <div><dt>Dirección</dt><dd>Diag. 74 1618, La Plata<br>e/ 49 y 50</dd></div>
+        <div><dt>Horarios</dt><dd>Lunes a domingo<br>08:00 — 02:00 hs</dd></div>
+        <div><dt>Playroom</dt><dd>3 a 10 años · $3.800<br>Máximo 30 niños</dd></div>
+        <div><dt>WiFi</dt><dd>Green Garden</dd></div>
+      </dl>
+      <div class="map" id="mapa">
+        <iframe src="https://www.google.com/maps?q=Diag.+74+1618,+La+Plata,+Buenos+Aires&amp;output=embed" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" title="Mapa de Green Garden"></iframe>
+      </div>
+      <a class="btn btn--green" href="nosotros.html#mapa">Ver ubicación en el mapa <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
   </div>
-</div>
+</section>
+</main>
 
-<!-- CONTACTO -->
-<div class="contact" id="contacto">
-  <div class="contact-l">
-    <h2>Vení a<br>visitarnos</h2>
-    <p>Abiertos todos los días de 08:00 a 02:00 hs. Te esperamos.</p>
-    <div class="ci-list">
-      <a href="tel:02214895239" class="ci"><div class="ci-ico">📞</div><div><div class="ci-lbl">Reservas</div><div class="ci-val">0221-489-5239</div></div></a>
-      <a href="mailto:greengardenlaplata@gmail.com" class="ci"><div class="ci-ico">✉️</div><div><div class="ci-lbl">Email</div><div class="ci-val">greengardenlaplata@gmail.com</div></div></a>
-      <a href="https://instagram.com/greengardenlaplata" target="_blank" rel="noopener" class="ci"><div class="ci-ico">📸</div><div><div class="ci-lbl">Instagram</div><div class="ci-val">@greengardenlaplata</div></div></a>
-    </div>
-  </div>
-  <div class="contact-r">
-    <p style="color:rgba(255,255,255,.38);font-size:.73rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:1.5rem">Información</p>
-    <div class="info-row"><span class="ir-lbl">Dirección</span><span class="ir-val">Diag. 74 1618, La Plata</span></div>
-    <div class="info-row"><span class="ir-lbl">Horarios</span><span class="ir-val">Lun – Dom · 08:00 – 02:00</span></div>
-    <div class="info-row"><span class="ir-lbl">Playroom</span><span class="ir-val">3 a 10 años · $3.800</span></div>
-    <div class="info-row"><span class="ir-lbl">Capacidad máx.</span><span class="ir-val">30 niños</span></div>
-    <div class="info-row"><span class="ir-lbl">WiFi</span><span class="ir-val">Green Garden - Libre</span></div>
-    <a href="nosotros.html#mapa" class="btn-sage" style="margin-top:1.5rem;width:100%;justify-content:center">Ver ubicación en mapa →</a>
-  </div>
-</div>
-
-
+<!-- FOOTER -->
 <footer class="site-footer">
-  <div class="footer-contact">
-    <strong>Green Garden</strong>
-    <a href="tel:02214895239">📞 0221-489-5239</a>
-    <a href="mailto:greengardenlaplata@gmail.com">✉️ greengardenlaplata@gmail.com</a>
-    <a href="https://instagram.com/greengardenlaplata" target="_blank" rel="noopener">📷 @greengardenlaplata</a>
-  </div>
-  <div class="footer-right">
-    <p>Diag. 74 1618, La Plata, Buenos Aires</p>
-    <p>Lunes a Domingo · 08:00 — 02:00 hs</p>
-    <p style="margin-top:.5rem;font-size:.75rem">© <span data-year>2026</span> Green Garden · Desarrollado por <a href="https://www.martinromerostudio.com.ar" target="_blank" rel="noopener noreferrer">Martin Romero Studio</a></p>
+  <div class="container footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="img/logo-light.webp" alt="Green Garden" width="180" height="90" loading="lazy">
+        <p>Nuestra casa, tu lugar.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h3>Contacto</h3>
+          <a href="tel:+542214895239">0221 489-5239</a>
+          <a href="mailto:greengardenlaplata@gmail.com" style="overflow-wrap:anywhere">greengardenlaplata@gmail.com</a>
+          <a href="https://instagram.com/greengardenlaplata" target="_blank" rel="noopener">@greengardenlaplata</a>
+        </div>
+        <div class="footer-col"><h3>Dirección</h3><span>Diag. 74 1618<br>La Plata, Buenos Aires</span></div>
+        <div class="footer-col"><h3>Horarios</h3><span>Lunes a domingo<br>08:00 — 02:00 hs</span></div>
+      </div>
+    </div>
+    <div class="footer-divider" aria-hidden="true"><i></i></div>
+    <div class="footer-bottom">
+      <span>© <span data-year>2026</span> Green Garden. Todos los derechos reservados.</span>
+      <span>Desarrollado por <a href="https://www.martinromerostudio.com.ar" target="_blank" rel="noopener noreferrer">Martin Romero Studio</a></span>
+    </div>
   </div>
 </footer>
 
 <!-- ══ POPUP EVENTOS PROGRAMADOS ══ -->
-<div id="popup-evento" class="popup-overlay" aria-hidden="true">
+<div id="popup-evento" class="popup-overlay" role="dialog" aria-modal="true" aria-label="Promoción" aria-hidden="true">
   <div class="popup-contenido">
     <button class="popup-cerrar" aria-label="Cerrar popup">&times;</button>
-    <img id="popup-imagen" src="" alt="Promoción especial" class="popup-imagen">
+    <img id="popup-imagen" src="" alt="Promoción especial" class="popup-imagen" width="1080" height="1920">
   </div>
 </div>
 
+<<<<<<< HEAD
 <script>
 window.addEventListener("load", () => {
   const popup = document.getElementById("popup-evento");
@@ -504,7 +491,7 @@ window.addEventListener("load", () => {
       days: [0,1,2,3,4,5,6],
       start: 3, end: 2,
       startDate: "2026-06-25", endDate: null,
-      image: "img/proximamente.png",
+      image: "img/proximamente.webp",
       priority: 9
     },
 
@@ -564,31 +551,8 @@ window.addEventListener("load", () => {
   });
 });
 </script>
-
-<script>
-window.addEventListener('scroll',()=>{
-  document.getElementById('navbar').classList.toggle('scrolled',scrollY>60);
-});
-document.getElementById('ham').addEventListener('click',()=>{
-  document.getElementById('mobMenu').classList.toggle('open');
-});
-function closeMob(){
-  document.getElementById('mobMenu').classList.remove('open');
-}
-
-// Año dinámico del footer
-document.querySelectorAll('[data-year]').forEach(function(el){el.textContent=new Date().getFullYear();});
-
-// Estado abierto/cerrado en tiempo real (horario 08:00–02:00 todos los días)
-(function(){
-  var t=document.getElementById('statusText');
-  var dot=document.querySelector('#statusBadge .badge-dot');
-  if(!t) return;
-  var m=new Date().getHours()*60+new Date().getMinutes();
-  var abierto = m>=480 || m<120;
-  t.textContent = abierto ? 'Abierto ahora · hasta las 02:00 hs' : 'Cerrado ahora · Abrimos 08:00 hs';
-  if(dot) dot.style.background = abierto ? 'var(--sage)' : '#C98A2B';
-})();
-</script>
+=======
+>>>>>>> 735c9e8b12d42bf671491f752e0b304fa6a176ec
+<script src="site.js" defer></script>
 </body>
 </html>

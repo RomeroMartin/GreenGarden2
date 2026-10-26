@@ -4,275 +4,197 @@
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Green Garden — Playroom Infantil</title>
   <meta name="description" content="Playroom infantil de Green Garden en La Plata. Espacio seguro con personal a cargo y cámaras en vivo.">
-  <link rel="icon" href="img/favicon.jpeg" type="image/x-icon">
+  <meta name="theme-color" content="#002f2a">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="img/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="img/favicon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
   <link rel="canonical" href="https://www.greengarden.com.ar/playroom.html">
+  <link rel="preload" as="font" type="font/woff2" href="fonts/GreenFont-Regular.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="fonts/MyriadPro-Regular.woff2" crossorigin>
   <meta property="og:type" content="website">
   <meta property="og:title" content="Green Garden — Playroom Infantil">
   <meta property="og:description" content="Espacio de juegos seguro para chicos de 3 a 10 años, con personal a cargo y cámaras en vivo.">
   <meta property="og:url" content="https://www.greengarden.com.ar/playroom.html">
-  <meta property="og:image" content="https://www.greengarden.com.ar/img/playroom1.webp">
+  <meta property="og:image" content="https://www.greengarden.com.ar/img/og-playroom.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:locale" content="es_AR">
   <meta property="og:site_name" content="Green Garden">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://www.greengarden.com.ar/img/playroom1.webp">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
-  <link rel="stylesheet" href="styles.css">
-  <style>
-
-    :root{
-      --beige:#F7F2E8;--beige-mid:#EDE5D0;--beige-deep:#DDD0B3;
-      --sage-pale:#D4E4D0;--sage:#8BB89A;--sage-mid:#6A9E7B;--sage-deep:#3D6B4F;
-      --green-dark:#244033;--white:#FDFAF5;--text:#1E2E23;--text-muted:#5C7A65;--radius:12px;
-    }
-
-
-    .navbar{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5vw;height:68px;display:flex;align-items:center;justify-content:space-between;background:rgba(36,64,51,.97);box-shadow:0 2px 20px rgba(0,0,0,.15)}
-
-    .nav-links a:hover,.nav-links a.active{background:rgba(255,255,255,.12);color:#fff}
-    .nav-cta:hover{background:var(--sage-deep)!important}
-
-    
-    .mobile-menu a{color:rgba(255,255,255,.8);text-decoration:none;font-size:1.1rem;font-weight:300;padding:.85rem 0;border-bottom:1px solid rgba(255,255,255,.08);display:block}
-
-
-
-    
-    .btn-outline-sage{border:1.5px solid var(--sage);color:var(--sage-deep);padding:.85rem 1.8rem;border-radius:30px;text-decoration:none;font-weight:500;font-size:.88rem;transition:border-color .2s,background .2s;display:inline-flex;align-items:center;gap:.5rem}
-    .btn-outline-sage:hover{border-color:var(--sage-mid);background:var(--sage-pale)}
-    @media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}.site-footer{flex-direction:column;align-items:flex-start}.footer-right{text-align:left}}
-
-    /* PAGE HEADER */
-    .page-header{background:var(--green-dark);padding:8rem 5vw 5rem;position:relative;overflow:hidden}
-    .ph-bg{position:absolute;inset:0;background-image:linear-gradient(to right,rgba(36,64,51,.97) 45%,rgba(36,64,51,.6) 100%),url('img/playroom1.webp');background-size:cover;background-position:center}
-    .ph-content{position:relative;z-index:2;max-width:580px}
-    .ph-content h1{font-family:'DM Serif Display',serif;font-size:clamp(2.2rem,5vw,3.8rem);color:var(--white);font-weight:400;margin-bottom:.75rem;line-height:1.1}
-    .ph-content h1 span{color:var(--sage-pale);font-style:italic}
-    .ph-content p{color:rgba(255,255,255,.55);font-size:.95rem;font-weight:300;max-width:440px;margin-bottom:2rem}
-    .ph-stats{display:flex;gap:2rem;flex-wrap:wrap}
-    .ph-stat{text-align:left}
-    .ph-stat-num{font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--white);line-height:1;display:block}
-    .ph-stat-label{font-size:.73rem;color:rgba(255,255,255,.4);letter-spacing:.1em;text-transform:uppercase;font-weight:300}
-
-    /* FOTOS GALERÍA */
-    .gallery-section{background:var(--beige);padding:5rem 5vw}
-    .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem;margin-top:2rem}
-    .gallery-grid a{border-radius:10px;overflow:hidden;display:block;aspect-ratio:4/3}
-    .gallery-grid a img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
-    .gallery-grid a:hover img{transform:scale(1.04)}
-
-    /* REGLAMENTO */
-    .reglamento-section{background:var(--white);padding:5rem 5vw}
-    .reglamento-inner{display:grid;grid-template-columns:1fr 1fr;gap:5vw;align-items:start}
-    .reglamento-img{border-radius:var(--radius);overflow:hidden;aspect-ratio:4/3}
-    .reglamento-img img{width:100%;height:100%;object-fit:cover;display:block}
-    .regl-intro{color:var(--text-muted);font-size:.93rem;font-weight:300;margin-bottom:2rem;line-height:1.7}
-    .regl-list{list-style:none;display:flex;flex-direction:column;gap:.75rem;margin-bottom:2rem}
-    .regl-list li{display:flex;align-items:flex-start;gap:.85rem;font-size:.88rem;color:var(--text);line-height:1.55}
-    .regl-num{min-width:26px;height:26px;border-radius:50%;background:var(--sage-pale);border:1.5px solid var(--sage);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:500;color:var(--sage-deep);flex-shrink:0;margin-top:.1rem}
-    .costo-badge{display:inline-flex;align-items:center;gap:.5rem;background:var(--sage-pale);border-radius:10px;padding:.85rem 1.25rem;font-size:.88rem;color:var(--green-dark);font-weight:500;margin-top:.5rem}
-    @media(max-width:768px){.reglamento-inner{grid-template-columns:1fr}.reglamento-img{order:-1}}
-
-    /* CÁMARAS */
-    .camaras-section{background:var(--green-dark);padding:5rem 5vw}
-    .camaras-inner{display:grid;grid-template-columns:1fr 1fr;gap:5vw;align-items:center}
-    .cam-text h2{font-family:'DM Serif Display',serif;font-size:clamp(1.8rem,3vw,2.5rem);color:var(--white);font-weight:400;margin-bottom:1rem;line-height:1.2}
-    .cam-text>p{color:rgba(255,255,255,.5);font-size:.9rem;font-weight:300;margin-bottom:2rem}
-    .cam-steps{display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem}
-    .cam-step{display:flex;align-items:flex-start;gap:1rem}
-    .cs-num{min-width:36px;height:36px;border-radius:50%;background:rgba(139,184,154,.15);border:1.5px solid rgba(139,184,154,.3);display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--sage-pale);flex-shrink:0}
-    .cs-content{padding-top:.2rem}
-    .cs-title{font-size:.9rem;font-weight:500;color:var(--white);margin-bottom:.2rem}
-    .cs-desc{font-size:.83rem;color:rgba(255,255,255,.48);font-weight:300;line-height:1.5}
-    .cs-code{display:inline-block;background:rgba(212,228,208,.1);border:1px solid rgba(212,228,208,.2);border-radius:6px;padding:.15rem .5rem;font-family:monospace;font-size:.85rem;color:var(--sage-pale);margin-top:.25rem}
-    .cam-card{background:rgba(255,255,255,.04);border:1px solid rgba(139,184,154,.12);border-radius:16px;padding:2rem;display:flex;flex-direction:column;gap:1.5rem}
-    .cam-status{display:flex;align-items:center;gap:.6rem;font-size:.85rem;color:var(--sage-pale)}
-    .cam-dot{width:8px;height:8px;border-radius:50%;background:var(--sage);animation:camPulse 2s ease-in-out infinite}
-    @keyframes camPulse{0%,100%{opacity:1}50%{opacity:.4}}
-    .cam-wifi{background:rgba(255,255,255,.04);border-radius:10px;padding:1rem;border:1px solid rgba(139,184,154,.1)}
-    .cam-wifi-label{font-size:.73rem;color:rgba(255,255,255,.38);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem}
-    .cam-wifi-row{display:flex;justify-content:space-between;align-items:center;font-size:.88rem;padding:.35rem 0;border-bottom:1px solid rgba(139,184,154,.08)}
-    .cam-wifi-row:last-child{border-bottom:none}
-    .cwl{color:rgba(255,255,255,.45);font-weight:300}
-    .cwv{color:rgba(255,255,255,.85);font-family:monospace}
-    @media(max-width:768px){.camaras-inner{grid-template-columns:1fr}}
-  .mob-close{background:none;border:none;color:rgba(255,255,255,.7);font-size:1.8rem;cursor:pointer;align-self:flex-end;padding:.25rem .5rem;margin-bottom:.5rem;line-height:1;transition:color .2s}
-.mob-close:hover{color:var(--white)}
-
-    </style>
+  <meta name="twitter:title" content="Green Garden — Playroom Infantil">
+  <meta name="twitter:description" content="Espacio de juegos seguro para chicos de 3 a 10 años, con personal a cargo y cámaras en vivo.">
+  <meta name="twitter:image" content="https://www.greengarden.com.ar/img/og-playroom.jpg">
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="pages.css">
 </head>
 <body>
-<a class="skip-link" href="#galeria">Saltar al contenido</a>
-
-<nav class="navbar" id="navbar">
-  <a href="index.html" class="navbar-logo-link"><img src="img/logo.png" alt="Green Garden" class="navbar-logo" width="194" height="72" decoding="async"></a>
-  
-  <ul class="nav-links">
-    <li><a href="index.html">Inicio</a></li>
-    <li><a href="menu.html">Menú</a></li>
-    <li><a href="playroom.html" class="active">Playroom</a></li>
-    <li><a href="nosotros.html">Nosotros</a></li>
-    <li><a href="tel:02214895239" class="nav-cta">Reservar</a></li>
-  </ul>
-  <div class="hamburger" id="ham"><span></span><span></span><span></span></div>
-</nav>
-<div class="mobile-menu" id="mobMenu">
-  <a href="index.html" onclick="closeMob()">Inicio</a>
-  <a href="menu.html" onclick="closeMob()">Menú</a>
-  <a href="playroom.html" onclick="closeMob()">Playroom</a>
-  <a href="nosotros.html" onclick="closeMob()">Nosotros</a>
-  <a href="tel:02214895239" class="mob-cta">📞 Reservar: 0221-4895239</a>
-</div>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
 
 <!-- HEADER -->
-<div class="page-header">
-  <div class="ph-bg"></div>
-  <div class="ph-content">
-    <span class="section-label" style="color:var(--sage-pale)">Para los más chicos</span>
-    <h1>Playroom<br><span>Infantil</span></h1>
-    <p>Un espacio seguro y divertido donde los chicos juegan mientras los adultos disfrutan de su comida.</p>
-    <div class="ph-stats">
-      <div class="ph-stat"><span class="ph-stat-num">3–10</span><span class="ph-stat-label">Años</span></div>
-      <div class="ph-stat"><span class="ph-stat-num">30</span><span class="ph-stat-label">Niños máx.</span></div>
-      <div class="ph-stat"><span class="ph-stat-num">📹</span><span class="ph-stat-label">Cámaras en vivo</span></div>
+<header class="site-header">
+  <div class="container header-bar">
+    <a class="header-logo" href="index.html" aria-label="Green Garden, ir al inicio"><img src="img/logo-light.webp" alt="Green Garden" width="108" height="54"></a>
+    <nav class="nav-desktop" aria-label="Principal">
+      <a href="index.html">Inicio</a>
+      <a href="menu.html">Menú</a>
+      <a href="playroom.html" aria-current="page">Playroom</a>
+      <a href="nosotros.html">Nosotros</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <div class="header-actions">
+      <div class="status" data-status><span class="status-dot"></span><span class="status-text">Abierto ahora</span></div>
+      <a class="header-cta" href="tel:02214895239"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>Reservar</a>
+      <button class="menu-toggle" type="button" id="menuToggle" aria-expanded="false" aria-controls="navMobile" aria-label="Abrir menú">
+        <svg class="ico-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        <svg class="ico-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
     </div>
   </div>
-</div>
+  <nav class="nav-mobile" id="navMobile" aria-label="Menú móvil">
+    <a href="index.html">Inicio <span aria-hidden="true">→</span></a>
+    <a href="menu.html">Menú <span aria-hidden="true">→</span></a>
+    <a href="playroom.html" aria-current="page">Playroom <span aria-hidden="true">●</span></a>
+    <a href="nosotros.html">Nosotros <span aria-hidden="true">→</span></a>
+    <a href="#contacto">Contacto <span aria-hidden="true">→</span></a>
+    <div class="status" data-status><span class="status-dot"></span><span class="status-text">Abierto ahora</span><span>· Todos los días 08:00 — 02:00</span></div>
+  </nav>
+</header>
 
-<!-- GALERÍA -->
-<div class="gallery-section" id="galeria">
-  <span class="section-label">Así es el espacio</span>
-  <h2 class="section-title">Nuestro Playroom</h2>
-  <div class="gallery-grid">
-    <a href="img/playroom1.webp" class="glightbox" data-gallery="playroom">
-      <img src="img/playroom1.webp" alt="Playroom Green Garden">
-    </a>
-    <a href="img/playroom2.webp" class="glightbox" data-gallery="playroom">
-      <img src="img/playroom2.webp" alt="Playroom Green Garden">
-    </a>
-    <a href="img/playroom3.webp" class="glightbox" data-gallery="playroom">
-      <img src="img/playroom3.webp" alt="Playroom Green Garden">
-    </a>
-    <a href="img/playroom4.webp" class="glightbox" data-gallery="playroom">
-      <img src="img/playroom4.webp" alt="Playroom Green Garden">
-    </a>
-    <a href="img/playroom5.webp" class="glightbox" data-gallery="playroom">
-      <img src="img/playroom5.webp" alt="Playroom Green Garden">
-    </a>
-    <a href="img/playroom6.webp" class="glightbox" data-gallery="playroom">
-      <img src="img/playroom6.webp" alt="Playroom Green Garden">
-    </a>
-    <a href="img/playroom7.webp" class="glightbox" data-gallery="playroom">
-      <img src="img/playroom7.webp" alt="Playroom Green Garden">
-    </a>
-    <a href="img/playroom8.webp" class="glightbox" data-gallery="playroom">
-      <img src="img/playroom8.webp" alt="Playroom Green Garden">
-    </a>
-    <a href="img/playroom9.webp" class="glightbox" data-gallery="playroom">
-      <img src="img/playroom9.webp" alt="Playroom Green Garden">
-    </a>
-    <a href="img/playroom10.webp" class="glightbox" data-gallery="playroom">
-      <img src="img/playroom10.webp" alt="Playroom Green Garden">
-    </a>
-    <a href="img/playroom11.webp" class="glightbox" data-gallery="playroom">
-      <img src="img/playroom11.webp" alt="Playroom Green Garden">
-    </a>
-  </div>
-</div>
-
-<!-- REGLAMENTO -->
-<div class="reglamento-section" id="reglamento">
-  <div class="reglamento-inner">
-    <div>
-      <span class="section-label">Normas del espacio</span>
-      <h2 class="section-title">Reglamento</h2>
-      <p class="regl-intro">Para garantizar la seguridad y la diversión de todos los niños, les pedimos que lean nuestras normas antes de ingresar.</p>
-      <ol class="regl-list">
-        <li><span class="regl-num">1</span>Los niños ingresan solo acompañados por un adulto responsable que debe estar ocupando una mesa.</li>
-        <li><span class="regl-num">2</span>Pueden ingresar chicos de 3 a 10 años de edad.</li>
-        <li><span class="regl-num">3</span>Los niños serán ingresados y retirados por el adulto con identificación (pulsera), sin excepción.</li>
-        <li><span class="regl-num">4</span>No se permite ingresar juguetes, comida, bebida ni elementos ajenos a la sala.</li>
-        <li><span class="regl-num">5</span>Los niños que deseen ir al baño deben estar acompañados por sus padres.</li>
-        <li><span class="regl-num">6</span>Las actividades dentro de la sala son reguladas para garantizar la seguridad de todos.</li>
-        <li><span class="regl-num">7</span>Los responsables serán llamados si los niños no respetan las normas de convivencia.</li>
-        <li><span class="regl-num">8</span>La capacidad máxima es de 30 niños. Si se supera, deberán esperar su turno.</li>
-        <li><span class="regl-num">9</span>No se puede retirar a un niño sin su pulsera de identificación.</li>
-      </ol>
-      <div class="costo-badge">💰 El valor del Servicio del Playroom es $3.800 por niño</div>
-    </div>
-  </div>
-</div>
-
-<!-- CÁMARAS -->
-<div class="camaras-section" id="camaras">
-  <div class="camaras-inner">
-    <div class="cam-text">
-      <span class="section-label" style="color:var(--sage-pale)">Sin perderte nada</span>
-      <h2>Seguí a los chicos<br>desde tu mesa</h2>
-      <p>Conectate a las cámaras del playroom en tiempo real y disfrutá tu comida tranquilo.</p>
-      <div class="cam-steps">
-        <div class="cam-step">
-          <div class="cs-num">1</div>
-          <div class="cs-content">
-            <div class="cs-title">Conectate al WiFi</div>
-            <div class="cs-desc">Buscá la red en tu celular:<br><span class="cs-code">Green Garden</span></div>
-          </div>
-        </div>
-        <div class="cam-step">
-          <div class="cs-num">2</div>
-          <div class="cs-content">
-            <div class="cs-title">Tocá el botón de acceso</div>
-            <div class="cs-desc">Usá el botón que aparece más abajo para abrir el sistema.</div>
-          </div>
-        </div>
-        <div class="cam-step">
-          <div class="cs-num">3</div>
-          <div class="cs-content">
-            <div class="cs-title">Ingresá tus credenciales</div>
-            <div class="cs-desc">Usuario: <span class="cs-code">camaras</span> · Contraseña: <span class="cs-code">green</span></div>
-          </div>
-        </div>
-        <div class="cam-step">
-          <div class="cs-num">4</div>
-          <div class="cs-content">
-            <div class="cs-title">Tocá el ícono cuadrado</div>
-            <div class="cs-desc">Arriba a la izquierda para ver todas las cámaras en pantalla.</div>
-          </div>
-        </div>
+<main id="contenido">
+<section class="pr-hero">
+  <div class="container pr-hero-inner">
+    <div class="pr-hero-copy">
+      <div class="hero-tag"><i></i><span>Para los más chicos</span></div>
+      <h1>Playroom<br><em>infantil</em></h1>
+      <p class="pr-hero-text">Un espacio seguro y divertido, con personal a cargo, para que los chicos jueguen mientras los grandes disfrutan de la mesa.</p>
+      <div class="pr-stats">
+        <div><strong>3–10</strong><span>años</span></div>
+        <div><strong>30</strong><span>niños máximo</span></div>
+        <div><strong>$3.800</strong><span>por niño</span></div>
       </div>
-      <a href="http://camaras.greengarden.com/" target="_blank" rel="noopener noreferrer" class="btn-sage">📷 Conectarse a las Cámaras →</a>
+      <div class="pr-actions">
+        <a class="btn btn--gold" href="#camaras">Cámaras en vivo <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
+        <a class="btn btn--ghost" href="#reglamento">Reglamento</a>
+      </div>
+    </div>
+    <div class="pr-hero-photo">
+      <div class="framed"><img src="img/playroom1-hero.webp" alt="Playroom infantil de Green Garden" width="800" height="640" fetchpriority="high"></div>
     </div>
   </div>
-</div>
+</section>
 
-<footer class="site-footer">
-  <div class="footer-contact">
-    <strong>Green Garden</strong>
-    <a href="tel:02214895239">📞 0221-489-5239</a>
-    <a href="mailto:greengardenlaplata@gmail.com">✉️ greengardenlaplata@gmail.com</a>
-    <a href="https://instagram.com/greengardenlaplata" target="_blank" rel="noopener">📷 @greengardenlaplata</a>
+<section id="galeria" class="gallery" aria-labelledby="galeria-titulo">
+  <div class="container gallery-inner">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Así es el espacio</span>
+        <h2 id="galeria-titulo" class="h-display h-section">Nuestro playroom</h2>
+      </div>
+      <p class="gallery-note">11 fotos · tocá una para ampliarla</p>
+    </div>
+    <ul class="gallery-grid">
+      <li class="is-feature"><a href="img/playroom1.webp" data-viewer="playroom" data-viewer-title="Nuestro playroom" data-viewer-unit="Foto" aria-label="Ampliar foto 1 del playroom"><img src="img/t/playroom1.webp" alt="Playroom de Green Garden, foto 1" width="480" height="853" loading="lazy"></a></li>
+      <li><a href="img/playroom2.webp" data-viewer="playroom" data-viewer-title="Nuestro playroom" data-viewer-unit="Foto" aria-label="Ampliar foto 2 del playroom"><img src="img/t/playroom2.webp" alt="Playroom de Green Garden, foto 2" width="480" height="853" loading="lazy"></a></li>
+      <li><a href="img/playroom3.webp" data-viewer="playroom" data-viewer-title="Nuestro playroom" data-viewer-unit="Foto" aria-label="Ampliar foto 3 del playroom"><img src="img/t/playroom3.webp" alt="Playroom de Green Garden, foto 3" width="480" height="853" loading="lazy"></a></li>
+      <li><a href="img/playroom4.webp" data-viewer="playroom" data-viewer-title="Nuestro playroom" data-viewer-unit="Foto" aria-label="Ampliar foto 4 del playroom"><img src="img/t/playroom4.webp" alt="Playroom de Green Garden, foto 4" width="480" height="853" loading="lazy"></a></li>
+      <li><a href="img/playroom5.webp" data-viewer="playroom" data-viewer-title="Nuestro playroom" data-viewer-unit="Foto" aria-label="Ampliar foto 5 del playroom"><img src="img/t/playroom5.webp" alt="Playroom de Green Garden, foto 5" width="480" height="853" loading="lazy"></a></li>
+      <li><a href="img/playroom6.webp" data-viewer="playroom" data-viewer-title="Nuestro playroom" data-viewer-unit="Foto" aria-label="Ampliar foto 6 del playroom"><img src="img/t/playroom6.webp" alt="Playroom de Green Garden, foto 6" width="480" height="853" loading="lazy"></a></li>
+      <li><a href="img/playroom7.webp" data-viewer="playroom" data-viewer-title="Nuestro playroom" data-viewer-unit="Foto" aria-label="Ampliar foto 7 del playroom"><img src="img/t/playroom7.webp" alt="Playroom de Green Garden, foto 7" width="480" height="853" loading="lazy"></a></li>
+      <li><a href="img/playroom8.webp" data-viewer="playroom" data-viewer-title="Nuestro playroom" data-viewer-unit="Foto" aria-label="Ampliar foto 8 del playroom"><img src="img/t/playroom8.webp" alt="Playroom de Green Garden, foto 8" width="480" height="853" loading="lazy"></a></li>
+      <li><a href="img/playroom9.webp" data-viewer="playroom" data-viewer-title="Nuestro playroom" data-viewer-unit="Foto" aria-label="Ampliar foto 9 del playroom"><img src="img/t/playroom9.webp" alt="Playroom de Green Garden, foto 9" width="480" height="853" loading="lazy"></a></li>
+      <li><a href="img/playroom10.webp" data-viewer="playroom" data-viewer-title="Nuestro playroom" data-viewer-unit="Foto" aria-label="Ampliar foto 10 del playroom"><img src="img/t/playroom10.webp" alt="Playroom de Green Garden, foto 10" width="480" height="853" loading="lazy"></a></li>
+      <li><a href="img/playroom11.webp" data-viewer="playroom" data-viewer-title="Nuestro playroom" data-viewer-unit="Foto" aria-label="Ampliar foto 11 del playroom"><img src="img/t/playroom11.webp" alt="Playroom de Green Garden, foto 11" width="480" height="853" loading="lazy"></a></li>
+    </ul>
   </div>
-  <div class="footer-right">
-    <p>Diag. 74 1618, La Plata, Buenos Aires</p>
-    <p>Lunes a Domingo · 08:00 — 02:00 hs</p>
-    <p style="margin-top:.5rem;font-size:.75rem">© <span data-year>2026</span> Green Garden · Desarrollado por <a href="https://www.martinromerostudio.com.ar" target="_blank" rel="noopener noreferrer">Martin Romero Studio</a></p>
+</section>
+
+<section id="camaras" class="cameras on-dark" aria-labelledby="camaras-titulo">
+  <div class="container cameras-inner">
+    <div class="cameras-copy">
+      <span class="eyebrow">Cámaras en vivo</span>
+      <h2 id="camaras-titulo">Seguí a los chicos desde tu mesa</h2>
+      <p>Conectate a las cámaras del playroom en tiempo real mientras comés. Funciona desde tu celular, conectado al WiFi del local.</p>
+      <dl class="credentials">
+        <div><dt>Usuario</dt><dd>camaras</dd></div>
+        <div><dt>Contraseña</dt><dd>green</dd></div>
+      </dl>
+      <a class="btn btn--gold" href="http://camaras.greengarden.com/" target="_blank" rel="noopener noreferrer">Ingresar a las cámaras <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </div>
+    <ol class="steps">
+      <li><span class="step-num">I</span><div><b>Conectate al WiFi</b><span>Elegí la red «Green Garden» en tu celular.</span></div></li>
+      <li><span class="step-num">II</span><div><b>Abrí el sistema</b><span>Tocá «Ingresar a las cámaras».</span></div></li>
+      <li><span class="step-num">III</span><div><b>Iniciá sesión</b><span>Usá el usuario y la contraseña indicados.</span></div></li>
+      <li><span class="step-num">IV</span><div><b>Mirá todas a la vez</b><span>Tocá el ícono cuadrado arriba a la izquierda para ver todas las cámaras en una pantalla.</span></div></li>
+    </ol>
+  </div>
+</section>
+
+<section id="reglamento" class="rules" aria-labelledby="reglas-titulo">
+  <div class="container rules-inner">
+    <div class="center-head">
+      <span class="eyebrow">Normas del espacio</span>
+      <h2 id="reglas-titulo" class="h-display h-section--lg">Reglamento</h2>
+      <div class="divider" aria-hidden="true"><i></i></div>
+      <p>Te pedimos leerlo antes de ingresar, para que todos los chicos estén seguros y felices.</p>
+    </div>
+    <ol class="rules-list">
+      <li><span class="num">I</span><span>Los chicos ingresan únicamente acompañados por un adulto responsable, que debe estar ubicado en una mesa del salón.</span></li>
+      <li><span class="num">II</span><span>Se aceptan niños y niñas de 3 a 10 años.</span></li>
+      <li><span class="num">III</span><span>El ingreso y el retiro de cada niño los hace solo el adulto que tiene la pulsera, sin excepciones.</span></li>
+      <li><span class="num">IV</span><span>No se permite ingresar juguetes, comida, bebidas ni objetos de afuera.</span></li>
+      <li><span class="num">V</span><span>Si un niño necesita ir al baño, debe acompañarlo su padre, madre o adulto a cargo.</span></li>
+      <li><span class="num">VI</span><span>Las actividades dentro del espacio están reguladas para la seguridad de todos.</span></li>
+      <li><span class="num">VII</span><span>Si un niño no respeta las normas de convivencia, se llamará a sus padres.</span></li>
+      <li><span class="num">VIII</span><span>La capacidad es de 30 niños. Si se completa, los chicos esperan su turno.</span></li>
+      <li><span class="num">IX</span><span>No se puede retirar a un niño sin la pulsera identificatoria.</span></li>
+    </ol>
+  </div>
+</section>
+
+<section class="cta-band cta-band--light" aria-labelledby="cta-titulo">
+  <div class="container cta-inner">
+    <div class="cta-copy">
+      <span class="eyebrow">Vení en familia</span>
+      <h2 id="cta-titulo">Reservá tu mesa</h2>
+      <p>Playroom: $3.800 por niño · Capacidad máxima 30 niños.</p>
+    </div>
+    <div class="cta-actions">
+      <a class="btn btn--green" href="tel:02214895239" style="justify-content:center">Llamar · 0221 489-5239</a>
+      <a class="btn btn--outline" href="menu.html">Ver el menú</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer" id="contacto">
+  <div class="container footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="img/logo-light.webp" alt="Green Garden" width="180" height="90" loading="lazy">
+        <p>Nuestra casa, tu lugar.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h3>Contacto</h3>
+          <a href="tel:+542214895239">0221 489-5239</a>
+          <a href="mailto:greengardenlaplata@gmail.com" style="overflow-wrap:anywhere">greengardenlaplata@gmail.com</a>
+          <a href="https://instagram.com/greengardenlaplata" target="_blank" rel="noopener">@greengardenlaplata</a>
+        </div>
+        <div class="footer-col"><h3>Dirección</h3><span>Diag. 74 1618<br>La Plata, Buenos Aires</span></div>
+        <div class="footer-col"><h3>Horarios</h3><span>Lunes a domingo<br>08:00 — 02:00 hs</span></div>
+      </div>
+    </div>
+    <div class="footer-divider" aria-hidden="true"><i></i></div>
+    <div class="footer-bottom">
+      <span>© <span data-year>2026</span> Green Garden. Todos los derechos reservados.</span>
+      <span>Desarrollado por <a href="https://www.martinromerostudio.com.ar" target="_blank" rel="noopener noreferrer">Martin Romero Studio</a></span>
+    </div>
   </div>
 </footer>
-<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  GLightbox({selector:'.glightbox', loop:true, touchNavigation:true, keyboardNavigation:true});
-});
 
-document.getElementById('ham').addEventListener('click',()=>{
-  document.getElementById('mobMenu').classList.toggle('open');
-});
-function closeMob(){
-  document.getElementById('mobMenu').classList.remove('open');
-}
-document.querySelectorAll('[data-year]').forEach(function(el){el.textContent=new Date().getFullYear();});
-</script>
+<script src="site.js" defer></script>
+<script src="viewer.js" defer></script>
 </body>
 </html>

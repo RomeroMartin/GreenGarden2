@@ -4,269 +4,273 @@
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Green Garden — Menú</title>
   <meta name="description" content="Menú de Green Garden La Plata — Almuerzos, cenas, desayunos, meriendas y opciones sin TACC.">
-  <link rel="icon" href="img/favicon.jpeg" type="image/x-icon">
+  <meta name="theme-color" content="#002f2a">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="img/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="img/favicon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
   <link rel="canonical" href="https://www.greengarden.com.ar/menu.html">
+  <link rel="preload" as="font" type="font/woff2" href="fonts/GreenFont-Regular.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="fonts/MyriadPro-Regular.woff2" crossorigin>
   <meta property="og:type" content="website">
   <meta property="og:title" content="Green Garden — Menú">
   <meta property="og:description" content="Almuerzos, cenas, desayunos, meriendas y opciones sin TACC en La Plata.">
   <meta property="og:url" content="https://www.greengarden.com.ar/menu.html">
-  <meta property="og:image" content="https://www.greengarden.com.ar/img/almuerzo.webp">
+  <meta property="og:image" content="https://www.greengarden.com.ar/img/og-menu.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:locale" content="es_AR">
   <meta property="og:site_name" content="Green Garden">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://www.greengarden.com.ar/img/almuerzo.webp">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
-  <link rel="stylesheet" href="styles.css">
-  <style>
-
-    :root{
-      --beige:#F7F2E8;--beige-mid:#EDE5D0;--beige-deep:#DDD0B3;
-      --sage-pale:#D4E4D0;--sage:#8BB89A;--sage-mid:#6A9E7B;--sage-deep:#3D6B4F;
-      --green-dark:#244033;--white:#FDFAF5;--text:#1E2E23;--text-muted:#5C7A65;--radius:12px;
-    }
-
-
-    .navbar{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5vw;height:68px;display:flex;align-items:center;justify-content:space-between;transition:background .3s,box-shadow .3s}
-    .navbar.solid{background:rgba(36,64,51,.97);box-shadow:0 2px 20px rgba(0,0,0,.15)}
-
-    .nav-links a:hover,.nav-links a.active{background:rgba(255,255,255,.12);color:#fff}
-    .nav-cta:hover{background:var(--sage-deep)!important}
-
-    
-    .mobile-menu a{color:rgba(255,255,255,.8);text-decoration:none;font-size:1.1rem;font-weight:300;padding:.85rem 0;border-bottom:1px solid rgba(255,255,255,.08);display:block}
-
-
-
-    
-    @media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}.site-footer{flex-direction:column;align-items:flex-start}.footer-right{text-align:left}}
-
-    /* PAGE HEADER */
-    .page-header{background:var(--green-dark);padding:8rem 5vw 4rem;text-align:center;position:relative;overflow:hidden}
-    .ph-bg{position:absolute;inset:0;background-image:linear-gradient(to bottom,rgba(36,64,51,.88) 0%,rgba(36,64,51,.70) 100%),url('img/almuerzo.webp');background-size:cover;background-position:center}
-    .ph-content-wrap{position:relative;z-index:2}
-    .page-header h1{font-family:'DM Serif Display',serif;font-size:clamp(2.2rem,5vw,3.8rem);color:var(--white);font-weight:400;margin-bottom:.75rem}
-    .page-header p{color:rgba(255,255,255,.5);font-size:.95rem;font-weight:300;max-width:500px;margin:0 auto}
-
-    /* TABS */
-    .menu-tabs-wrap{background:var(--green-dark);padding:0 5vw 2rem;position:sticky;top:68px;z-index:50}
-    .menu-tabs{display:flex;gap:.5rem;flex-wrap:wrap;border-bottom:1px solid rgba(139,184,154,.12);padding-bottom:0}
-    .tab-btn{background:transparent;border:none;border-bottom:2px solid transparent;color:rgba(255,255,255,.5);font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:400;padding:.75rem 1.25rem;cursor:pointer;transition:color .2s,border-color .2s;margin-bottom:-1px;display:flex;align-items:center;gap:.5rem}
-    .tab-btn:hover{color:rgba(255,255,255,.85)}
-    .tab-btn.active{color:var(--white);border-bottom-color:var(--sage)}
-    .tab-pill{background:rgba(139,184,154,.15);border-radius:20px;padding:.1rem .55rem;font-size:.72rem;color:var(--sage-pale)}
-    .tab-pill.tacc{background:rgba(212,228,208,.12);color:var(--sage-pale)}
-
-    /* GALLERY SECTIONS */
-    .menu-content{padding:3rem 5vw 5rem}
-    .menu-section-block{display:none}
-    .menu-section-block.active{display:block}
-
-    .section-intro{display:flex;align-items:center;gap:1.5rem;margin-bottom:2.5rem;padding:1.5rem;background:var(--white);border-radius:var(--radius);border:1px solid var(--beige-deep)}
-    .si-img{width:80px;height:80px;border-radius:10px;overflow:hidden;flex-shrink:0}
-    .si-img img{width:100%;height:100%;object-fit:cover}
-    .si-text h2{font-family:'DM Serif Display',serif;font-size:1.4rem;font-weight:400;color:var(--green-dark);margin-bottom:.3rem}
-    .si-text p{font-size:.85rem;color:var(--text-muted);font-weight:300}
-    .tacc-badge-large{display:inline-flex;align-items:center;gap:.4rem;background:var(--sage-pale);border-radius:20px;padding:.3rem .85rem;font-size:.78rem;color:var(--sage-deep);font-weight:500;margin-bottom:.5rem}
-
-    /* PHOTO GRID */
-    .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
-    @media(max-width:600px){.gallery-grid{grid-template-columns:1fr;gap:.75rem;max-width:420px;margin:0 auto}.gallery-grid.gallery-wide{grid-template-columns:1fr}}
-
-    .menu-thumb{position:relative;border-radius:10px;overflow:hidden;aspect-ratio:3/4;cursor:pointer;background:var(--beige-mid);display:block;text-decoration:none}
-    .menu-thumb--wide{aspect-ratio:3/2}
-    .menu-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
-    .menu-thumb:hover img{transform:scale(1.04)}
-    .menu-thumb-overlay{position:absolute;inset:0;background:rgba(36,64,51,0);display:flex;align-items:center;justify-content:center;transition:background .25s;opacity:0}
-    .menu-thumb:hover .menu-thumb-overlay{background:rgba(36,64,51,.45);opacity:1}
-    .menu-thumb-overlay span{font-size:2rem;color:var(--white);transform:scale(.7);transition:transform .25s}
-    .menu-thumb:hover .menu-thumb-overlay span{transform:scale(1)}
-    .menu-img-ph.tacc:hover{background:var(--sage-pale);border-color:var(--sage-mid)}
-
-    .menu-img-ph.tacc .ph-icon::after{content:''}
-
-    /* Real photos cuando se incrusten */
-    .gallery-grid a{display:block;border-radius:10px;overflow:hidden;aspect-ratio:3/4}
-    .gallery-grid a img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
-    .gallery-grid a:hover img{transform:scale(1.03)}
-
-    @media(max-width:600px){
-      .section-intro{flex-direction:column;text-align:center}
-      .si-img{width:60px;height:60px}
-      .menu-tabs-wrap{top:68px}
-    }
-  .mob-close{background:none;border:none;color:rgba(255,255,255,.7);font-size:1.8rem;cursor:pointer;align-self:flex-end;padding:.25rem .5rem;margin-bottom:.5rem;line-height:1;transition:color .2s}
-.mob-close:hover{color:var(--white)}
-
-    .menu-thumb{position:relative;border-radius:10px;overflow:hidden;aspect-ratio:3/4;cursor:pointer;background:var(--beige-mid);display:block;text-decoration:none}
-    .menu-thumb--wide{aspect-ratio:3/2}
-    .menu-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
-    .menu-thumb:hover img{transform:scale(1.04)}
-    .menu-thumb-overlay{position:absolute;inset:0;background:rgba(36,64,51,0);display:flex;align-items:center;justify-content:center;transition:background .25s;opacity:0}
-    .menu-thumb:hover .menu-thumb-overlay{background:rgba(36,64,51,.45);opacity:1}
-    .menu-thumb-overlay span{font-size:2rem;color:var(--white);transform:scale(.7);transition:transform .25s}
-    .menu-thumb:hover .menu-thumb-overlay span{transform:scale(1)}
-
-    </style>
+  <meta name="twitter:title" content="Green Garden — Menú">
+  <meta name="twitter:description" content="Almuerzos, cenas, desayunos, meriendas y opciones sin TACC en La Plata.">
+  <meta name="twitter:image" content="https://www.greengarden.com.ar/img/og-menu.jpg">
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="pages.css">
 </head>
 <body>
-<a class="skip-link" href="#almuerzo">Saltar al contenido</a>
-<nav class="navbar solid" id="navbar">
-  <a href="index.html" class="navbar-logo-link"><img src="img/logo.png" alt="Green Garden" class="navbar-logo" width="194" height="72" decoding="async"></a>
-  
-  <ul class="nav-links"><li><a href="index.html">Inicio</a></li>
-<li><a href="menu.html" class="active">Menú</a></li>
-<li><a href="playroom.html">Playroom</a></li>
-<li><a href="nosotros.html">Nosotros</a></li><li><a href="tel:02214895239" class="nav-cta">Reservar</a></li></ul>
-  <div class="hamburger" id="ham"><span></span><span></span><span></span></div>
-</nav>
-<div class="mobile-menu" id="mobMenu">
-  <a href="index.html" onclick="closeMob()">Inicio</a>
-<a href="menu.html" onclick="closeMob()">Menú</a>
-<a href="playroom.html" onclick="closeMob()">Playroom</a>
-<a href="nosotros.html" onclick="closeMob()">Nosotros</a>
-  <a href="tel:02214895239" class="mob-cta">📞 Reservar: 0221-4895239</a>
-</div>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-<div class="page-header">
-  <div class="ph-bg"></div>
-  <div class="ph-content-wrap">
-  <span class="section-label" style="color:var(--sage-pale)">Lo que servimos</span>
-  <h1>Nuestro Menú</h1>
-  <p>Platos caseros con los mejores ingredientes, disponibles en todos los horarios del día.</p>
+<!-- HEADER -->
+<header class="site-header">
+  <div class="container header-bar">
+    <a class="header-logo" href="index.html" aria-label="Green Garden, ir al inicio"><img src="img/logo-light.webp" alt="Green Garden" width="108" height="54"></a>
+    <nav class="nav-desktop" aria-label="Principal">
+      <a href="index.html">Inicio</a>
+      <a href="menu.html" aria-current="page">Menú</a>
+      <a href="playroom.html">Playroom</a>
+      <a href="nosotros.html">Nosotros</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <div class="header-actions">
+      <div class="status" data-status><span class="status-dot"></span><span class="status-text">Abierto ahora</span></div>
+      <a class="header-cta" href="tel:02214895239"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>Reservar</a>
+      <button class="menu-toggle" type="button" id="menuToggle" aria-expanded="false" aria-controls="navMobile" aria-label="Abrir menú">
+        <svg class="ico-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+        <svg class="ico-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </div>
+  <nav class="nav-mobile" id="navMobile" aria-label="Menú móvil">
+    <a href="index.html">Inicio <span aria-hidden="true">→</span></a>
+    <a href="menu.html" aria-current="page">Menú <span aria-hidden="true">●</span></a>
+    <a href="playroom.html">Playroom <span aria-hidden="true">→</span></a>
+    <a href="nosotros.html">Nosotros <span aria-hidden="true">→</span></a>
+    <a href="#contacto">Contacto <span aria-hidden="true">→</span></a>
+    <div class="status" data-status><span class="status-dot"></span><span class="status-text">Abierto ahora</span><span>· Todos los días 08:00 — 02:00</span></div>
+  </nav>
+</header>
+
+<main id="contenido">
+<section class="page-hero menu-hero">
+  <img class="watermark" src="img/iso-gold.webp" alt="" aria-hidden="true">
+  <div class="container page-hero-inner">
+    <span class="eyebrow">Platos caseros, a toda hora</span>
+    <h1>Nuestro menú</h1>
+    <div class="divider" aria-hidden="true"><i></i></div>
+    <p class="page-hero-text">Platos caseros con los mejores ingredientes, disponibles en todos los horarios del día.</p>
+    <div class="chips">
+      <span class="chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d6b36a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V8M12 8c-1.8-.8-2.8-2.6-2.8-4.5 1.8 0 2.8 1.2 2.8 2.7 0-1.5 1-2.7 2.8-2.7 0 1.9-1 3.7-2.8 4.5zM12 13c-1.8-1.2-3.6-1.2-4.8-2.8M12 13c1.8-1.2 3.6-1.2 4.8-2.8M4 4l16 16"/></svg>Sin TACC / sin gluten</span>
+      <span class="chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d6b36a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Apto celíacos</span>
+    </div>
+  </div>
+</section>
+
+<div class="menu-tabs-bar">
+  <div class="container">
+    <div class="menu-tabs" role="tablist" aria-label="Categorías del menú"><button type="button" class="tab" role="tab" id="tab-almuerzo" aria-controls="almuerzo" aria-selected="true">Almuerzos &amp; Cenas<small>17 pág.</small></button><button type="button" class="tab" role="tab" id="tab-merienda" aria-controls="merienda" aria-selected="false" tabindex="-1">Desayunos &amp; Meriendas<small>4 pág.</small></button><button type="button" class="tab" role="tab" id="tab-sintacc" aria-controls="sintacc" aria-selected="false" tabindex="-1">Sin TACC<small>2 pág.</small></button></div>
   </div>
 </div>
 
-<div class="menu-tabs-wrap">
-  <div class="menu-tabs" role="tablist">
-    <button class="tab-btn active" data-tab="almuerzo" role="tab">🍽️ Almuerzos & Cenas <span class="tab-pill">17 páginas</span></button>
-    <button class="tab-btn" data-tab="merienda" role="tab">☕ Desayunos & Meriendas <span class="tab-pill">4 páginas</span></button>
-    <button class="tab-btn" data-tab="sintacc" role="tab">🌾 Sin TACC <span class="tab-pill tacc">Sin gluten</span></button>
-  </div>
-</div>
-
-<main class="menu-content">
-
-  <div id="almuerzo" class="menu-section-block active">
-    <div class="section-intro">
-      <div class="si-img"><img src="img/almuerzo.webp" alt="Almuerzos"></div>
-      <div class="si-text">
-        <h2>Almuerzos & Cenas</h2>
-        
+<section class="menu-panel" id="almuerzo" role="tabpanel" aria-labelledby="tab-almuerzo">
+  <div class="container panel-inner">
+    <div class="cat-banner">
+      <div class="cat-banner-photo"><img src="img/almuerzo.webp" alt="Almuerzos y cenas" width="900" height="1116" fetchpriority="high"></div>
+      <div class="cat-banner-text">
+          <span class="eyebrow">Mediodía y noche</span>
+          <h2>Almuerzos &amp; Cenas</h2>
       </div>
     </div>
-    <div class="gallery-grid">
-<a href="img/menu/menu01.webp" class="glightbox menu-thumb" data-gallery="almuerzo"><img src="img/menu/menu01.webp" alt="Menú Almuerzos &amp; Cenas — pág. 1" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-<a href="img/menu/menu02.webp" class="glightbox menu-thumb" data-gallery="almuerzo"><img src="img/menu/menu02.webp" alt="Menú Almuerzos &amp; Cenas — pág. 2" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-<a href="img/menu/menu03.webp" class="glightbox menu-thumb" data-gallery="almuerzo"><img src="img/menu/menu03.webp" alt="Menú Almuerzos &amp; Cenas — pág. 3" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-<a href="img/menu/menu04.webp" class="glightbox menu-thumb" data-gallery="almuerzo"><img src="img/menu/menu04.webp" alt="Menú Almuerzos &amp; Cenas — pág. 4" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-<a href="img/menu/menu05.webp" class="glightbox menu-thumb" data-gallery="almuerzo"><img src="img/menu/menu05.webp" alt="Menú Almuerzos &amp; Cenas — pág. 5" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-<a href="img/menu/menu06.webp" class="glightbox menu-thumb" data-gallery="almuerzo"><img src="img/menu/menu06.webp" alt="Menú Almuerzos &amp; Cenas — pág. 6" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-<a href="img/menu/menu07.webp" class="glightbox menu-thumb" data-gallery="almuerzo"><img src="img/menu/menu07.webp" alt="Menú Almuerzos &amp; Cenas — pág. 7" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-<a href="img/menu/menu08.webp" class="glightbox menu-thumb" data-gallery="almuerzo"><img src="img/menu/menu08.webp" alt="Menú Almuerzos &amp; Cenas — pág. 8" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-<a href="img/menu/menu09.webp" class="glightbox menu-thumb" data-gallery="almuerzo"><img src="img/menu/menu09.webp" alt="Menú Almuerzos &amp; Cenas — pág. 9" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-<a href="img/menu/menu10.webp" class="glightbox menu-thumb" data-gallery="almuerzo"><img src="img/menu/menu10.webp" alt="Menú Almuerzos &amp; Cenas — pág. 10" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-<a href="img/menu/menu11.webp" class="glightbox menu-thumb" data-gallery="almuerzo"><img src="img/menu/menu11.webp" alt="Menú Almuerzos &amp; Cenas — pág. 11" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-<a href="img/menu/menu12.webp" class="glightbox menu-thumb" data-gallery="almuerzo"><img src="img/menu/menu12.webp" alt="Menú Almuerzos &amp; Cenas — pág. 12" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-<a href="img/menu/menu13.webp" class="glightbox menu-thumb" data-gallery="almuerzo"><img src="img/menu/menu13.webp" alt="Menú Almuerzos &amp; Cenas — pág. 13" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-<a href="img/menu/menu14.webp" class="glightbox menu-thumb" data-gallery="almuerzo"><img src="img/menu/menu14.webp" alt="Menú Almuerzos &amp; Cenas — pág. 14" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-<a href="img/menu/menu15.webp" class="glightbox menu-thumb" data-gallery="almuerzo"><img src="img/menu/menu15.webp" alt="Menú Almuerzos &amp; Cenas — pág. 15" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-<a href="img/menu/menu16.webp" class="glightbox menu-thumb" data-gallery="almuerzo"><img src="img/menu/menu16.webp" alt="Menú Almuerzos &amp; Cenas — pág. 16" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-<a href="img/menu/menu17.webp" class="glightbox menu-thumb" data-gallery="almuerzo"><img src="img/menu/menu17.webp" alt="Menú Almuerzos &amp; Cenas — pág. 17" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-</div>
+    <div class="cat-meta">
+      <p>17 páginas · Tocá una página para verla en grande.</p>
+      <p class="note">Precios sujetos a modificación</p>
+    </div>
+    <ol class="page-grid">
+        <li><a class="page-card" href="img/menu/menu01.webp" data-viewer="almuerzo" data-viewer-title="Almuerzos &amp; Cenas" data-viewer-unit="Página" aria-label="Página 01 de 17, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/menu01.webp" alt="Almuerzos &amp; Cenas, página 1" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>01</b></span>
+        </a></li>
+        <li><a class="page-card" href="img/menu/menu02.webp" data-viewer="almuerzo" data-viewer-title="Almuerzos &amp; Cenas" data-viewer-unit="Página" aria-label="Página 02 de 17, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/menu02.webp" alt="Almuerzos &amp; Cenas, página 2" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>02</b></span>
+        </a></li>
+        <li><a class="page-card" href="img/menu/menu03.webp" data-viewer="almuerzo" data-viewer-title="Almuerzos &amp; Cenas" data-viewer-unit="Página" aria-label="Página 03 de 17, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/menu03.webp" alt="Almuerzos &amp; Cenas, página 3" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>03</b></span>
+        </a></li>
+        <li><a class="page-card" href="img/menu/menu04.webp" data-viewer="almuerzo" data-viewer-title="Almuerzos &amp; Cenas" data-viewer-unit="Página" aria-label="Página 04 de 17, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/menu04.webp" alt="Almuerzos &amp; Cenas, página 4" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>04</b></span>
+        </a></li>
+        <li><a class="page-card" href="img/menu/menu05.webp" data-viewer="almuerzo" data-viewer-title="Almuerzos &amp; Cenas" data-viewer-unit="Página" aria-label="Página 05 de 17, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/menu05.webp" alt="Almuerzos &amp; Cenas, página 5" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>05</b></span>
+        </a></li>
+        <li><a class="page-card" href="img/menu/menu06.webp" data-viewer="almuerzo" data-viewer-title="Almuerzos &amp; Cenas" data-viewer-unit="Página" aria-label="Página 06 de 17, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/menu06.webp" alt="Almuerzos &amp; Cenas, página 6" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>06</b></span>
+        </a></li>
+        <li><a class="page-card" href="img/menu/menu07.webp" data-viewer="almuerzo" data-viewer-title="Almuerzos &amp; Cenas" data-viewer-unit="Página" aria-label="Página 07 de 17, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/menu07.webp" alt="Almuerzos &amp; Cenas, página 7" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>07</b></span>
+        </a></li>
+        <li><a class="page-card" href="img/menu/menu08.webp" data-viewer="almuerzo" data-viewer-title="Almuerzos &amp; Cenas" data-viewer-unit="Página" aria-label="Página 08 de 17, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/menu08.webp" alt="Almuerzos &amp; Cenas, página 8" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>08</b></span>
+        </a></li>
+        <li><a class="page-card" href="img/menu/menu09.webp" data-viewer="almuerzo" data-viewer-title="Almuerzos &amp; Cenas" data-viewer-unit="Página" aria-label="Página 09 de 17, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/menu09.webp" alt="Almuerzos &amp; Cenas, página 9" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>09</b></span>
+        </a></li>
+        <li><a class="page-card" href="img/menu/menu10.webp" data-viewer="almuerzo" data-viewer-title="Almuerzos &amp; Cenas" data-viewer-unit="Página" aria-label="Página 10 de 17, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/menu10.webp" alt="Almuerzos &amp; Cenas, página 10" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>10</b></span>
+        </a></li>
+        <li><a class="page-card" href="img/menu/menu11.webp" data-viewer="almuerzo" data-viewer-title="Almuerzos &amp; Cenas" data-viewer-unit="Página" aria-label="Página 11 de 17, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/menu11.webp" alt="Almuerzos &amp; Cenas, página 11" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>11</b></span>
+        </a></li>
+        <li><a class="page-card" href="img/menu/menu12.webp" data-viewer="almuerzo" data-viewer-title="Almuerzos &amp; Cenas" data-viewer-unit="Página" aria-label="Página 12 de 17, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/menu12.webp" alt="Almuerzos &amp; Cenas, página 12" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>12</b></span>
+        </a></li>
+        <li><a class="page-card" href="img/menu/menu13.webp" data-viewer="almuerzo" data-viewer-title="Almuerzos &amp; Cenas" data-viewer-unit="Página" aria-label="Página 13 de 17, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/menu13.webp" alt="Almuerzos &amp; Cenas, página 13" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>13</b></span>
+        </a></li>
+        <li><a class="page-card" href="img/menu/menu14.webp" data-viewer="almuerzo" data-viewer-title="Almuerzos &amp; Cenas" data-viewer-unit="Página" aria-label="Página 14 de 17, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/menu14.webp" alt="Almuerzos &amp; Cenas, página 14" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>14</b></span>
+        </a></li>
+        <li><a class="page-card" href="img/menu/menu15.webp" data-viewer="almuerzo" data-viewer-title="Almuerzos &amp; Cenas" data-viewer-unit="Página" aria-label="Página 15 de 17, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/menu15.webp" alt="Almuerzos &amp; Cenas, página 15" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>15</b></span>
+        </a></li>
+        <li><a class="page-card" href="img/menu/menu16.webp" data-viewer="almuerzo" data-viewer-title="Almuerzos &amp; Cenas" data-viewer-unit="Página" aria-label="Página 16 de 17, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/menu16.webp" alt="Almuerzos &amp; Cenas, página 16" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>16</b></span>
+        </a></li>
+        <li><a class="page-card" href="img/menu/menu17.webp" data-viewer="almuerzo" data-viewer-title="Almuerzos &amp; Cenas" data-viewer-unit="Página" aria-label="Página 17 de 17, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/menu17.webp" alt="Almuerzos &amp; Cenas, página 17" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>17</b></span>
+        </a></li>
+    </ol>
   </div>
-
-  <div id="merienda" class="menu-section-block">
-    <div class="section-intro">
-      <div class="si-img"><img src="img/merienda.webp" alt="Meriendas"></div>
-      <div class="si-text">
-        <h2>Desayunos & Meriendas</h2>
-        
+</section>
+<section class="menu-panel" id="merienda" role="tabpanel" aria-labelledby="tab-merienda" hidden>
+  <div class="container panel-inner">
+    <div class="cat-banner">
+      <div class="cat-banner-photo"><img src="img/merienda.webp" alt="Desayunos y meriendas" width="900" height="883" loading="lazy"></div>
+      <div class="cat-banner-text">
+          <span class="eyebrow">Mañana y tarde</span>
+          <h2>Desayunos &amp; Meriendas</h2>
       </div>
     </div>
-    <div class="gallery-grid">
-<a href="img/menu/merienda01.webp" class="glightbox menu-thumb" data-gallery="merienda"><img src="img/menu/merienda01.webp" alt="Desayunos &amp; Meriendas — pág. 1" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-<a href="img/menu/merienda02.webp" class="glightbox menu-thumb" data-gallery="merienda"><img src="img/menu/merienda02.webp" alt="Desayunos &amp; Meriendas — pág. 2" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-<a href="img/menu/merienda03.webp" class="glightbox menu-thumb" data-gallery="merienda"><img src="img/menu/merienda03.webp" alt="Desayunos &amp; Meriendas — pág. 3" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-<a href="img/menu/merienda04.webp" class="glightbox menu-thumb" data-gallery="merienda"><img src="img/menu/merienda04.webp" alt="Desayunos &amp; Meriendas — pág. 4" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-</div>
+    <div class="cat-meta">
+      <p>4 páginas · Tocá una página para verla en grande.</p>
+      <p class="note">Precios sujetos a modificación</p>
+    </div>
+    <ol class="page-grid">
+        <li><a class="page-card" href="img/menu/merienda01.webp" data-viewer="merienda" data-viewer-title="Desayunos &amp; Meriendas" data-viewer-unit="Página" aria-label="Página 01 de 4, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/merienda01.webp" alt="Desayunos &amp; Meriendas, página 1" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>01</b></span>
+        </a></li>
+        <li><a class="page-card" href="img/menu/merienda02.webp" data-viewer="merienda" data-viewer-title="Desayunos &amp; Meriendas" data-viewer-unit="Página" aria-label="Página 02 de 4, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/merienda02.webp" alt="Desayunos &amp; Meriendas, página 2" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>02</b></span>
+        </a></li>
+        <li><a class="page-card" href="img/menu/merienda03.webp" data-viewer="merienda" data-viewer-title="Desayunos &amp; Meriendas" data-viewer-unit="Página" aria-label="Página 03 de 4, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/merienda03.webp" alt="Desayunos &amp; Meriendas, página 3" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>03</b></span>
+        </a></li>
+        <li><a class="page-card" href="img/menu/merienda04.webp" data-viewer="merienda" data-viewer-title="Desayunos &amp; Meriendas" data-viewer-unit="Página" aria-label="Página 04 de 4, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/merienda04.webp" alt="Desayunos &amp; Meriendas, página 4" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>04</b></span>
+        </a></li>
+    </ol>
   </div>
-
-  <div id="sintacc" class="menu-section-block">
-    <div class="section-intro">
-      <div class="si-img"><img src="img/sintacc.webp" alt="Menú Sin TACC"></div>
-      <div class="si-text">
-        <div class="tacc-badge-large">✓ Apto Celíacos</div>
-        <h2>Menú Sin TACC</h2>
-        
+</section>
+<section class="menu-panel" id="sintacc" role="tabpanel" aria-labelledby="tab-sintacc" hidden>
+  <div class="container panel-inner">
+    <div class="cat-banner">
+      <div class="cat-banner-photo"><img src="img/sintacc.webp" alt="Menú sin TACC" width="900" height="1350" loading="lazy"></div>
+      <div class="cat-banner-text">
+          <span class="eyebrow">Todos los horarios</span>
+          <h2>Menú Sin TACC</h2>
+            <span class="badge">Apto celíacos</span>
       </div>
     </div>
-    <div class="gallery-grid">
-<a href="img/menu/menutacc01.webp" class="glightbox menu-thumb" data-gallery="sintacc"><img src="img/menu/menutacc01.webp" alt="Menú Sin TACC — pág. 1" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-<a href="img/menu/menutacc02.webp" class="glightbox menu-thumb" data-gallery="sintacc"><img src="img/menu/menutacc02.webp" alt="Menú Sin TACC — pág. 2" loading="lazy"><div class="menu-thumb-overlay"><span>⊕</span></div></a>
-</div>
+    <div class="cat-meta">
+      <p>2 páginas · Tocá una página para verla en grande.</p>
+      <p class="note">Precios sujetos a modificación</p>
+    </div>
+    <ol class="page-grid">
+        <li><a class="page-card" href="img/menu/menutacc01.webp" data-viewer="sintacc" data-viewer-title="Menú Sin TACC" data-viewer-unit="Página" aria-label="Página 01 de 2, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/menutacc01.webp" alt="Menú Sin TACC, página 1" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>01</b></span>
+        </a></li>
+        <li><a class="page-card" href="img/menu/menutacc02.webp" data-viewer="sintacc" data-viewer-title="Menú Sin TACC" data-viewer-unit="Página" aria-label="Página 02 de 2, ver en grande">
+          <span class="page-thumb"><img src="img/menu/t/menutacc02.webp" alt="Menú Sin TACC, página 2" width="420" height="594" loading="lazy"><span class="page-zoom"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8.5v5M8.5 11h5"/></svg></span></span>
+          <span class="page-label">Página <b>02</b></span>
+        </a></li>
+    </ol>
   </div>
+</section>
 
+<section class="cta-band" aria-labelledby="cta-titulo">
+  <div class="container cta-inner">
+    <div class="cta-copy">
+      <span class="eyebrow">¿Ya elegiste?</span>
+      <h2 id="cta-titulo">Reservá tu mesa</h2>
+      <p>Abiertos todos los días de 08:00 a 02:00 hs.</p>
+    </div>
+    <div class="cta-actions">
+      <a class="btn btn--gold" href="tel:02214895239">Llamar · 0221 489-5239</a>
+      <a class="btn btn--ghost" href="playroom.html">Ver Playroom</a>
+    </div>
+  </div>
+</section>
 </main>
 
-<footer class="site-footer">
-  <div class="footer-contact">
-    <strong>Green Garden</strong>
-    <a href="tel:02214895239">📞 0221-489-5239</a>
-    <a href="mailto:greengardenlaplata@gmail.com">✉️ greengardenlaplata@gmail.com</a>
-    <a href="https://instagram.com/greengardenlaplata" target="_blank" rel="noopener">📷 @greengardenlaplata</a>
-  </div>
-  <div class="footer-right">
-    <p>Diag. 74 1618, La Plata, Buenos Aires</p>
-    <p>Lunes a Domingo · 08:00 — 02:00 hs</p>
-    <p style="margin-top:.5rem;font-size:.75rem">© <span data-year>2026</span> Green Garden · Desarrollado por <a href="https://www.martinromerostudio.com.ar" target="_blank" rel="noopener noreferrer">Martin Romero Studio</a></p>
+<!-- FOOTER -->
+<footer class="site-footer" id="contacto">
+  <div class="container footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="img/logo-light.webp" alt="Green Garden" width="180" height="90" loading="lazy">
+        <p>Nuestra casa, tu lugar.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h3>Contacto</h3>
+          <a href="tel:+542214895239">0221 489-5239</a>
+          <a href="mailto:greengardenlaplata@gmail.com" style="overflow-wrap:anywhere">greengardenlaplata@gmail.com</a>
+          <a href="https://instagram.com/greengardenlaplata" target="_blank" rel="noopener">@greengardenlaplata</a>
+        </div>
+        <div class="footer-col"><h3>Dirección</h3><span>Diag. 74 1618<br>La Plata, Buenos Aires</span></div>
+        <div class="footer-col"><h3>Horarios</h3><span>Lunes a domingo<br>08:00 — 02:00 hs</span></div>
+      </div>
+    </div>
+    <div class="footer-divider" aria-hidden="true"><i></i></div>
+    <div class="footer-bottom">
+      <span>© <span data-year>2026</span> Green Garden. Todos los derechos reservados.</span>
+      <span>Desarrollado por <a href="https://www.martinromerostudio.com.ar" target="_blank" rel="noopener noreferrer">Martin Romero Studio</a></span>
+    </div>
   </div>
 </footer>
-<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
-<script>
-let lightbox = GLightbox({selector:'.glightbox',loop:true,touchNavigation:true,keyboardNavigation:true,closeOnOutsideClick:true});
 
-const tabs = document.querySelectorAll('.tab-btn');
-const blocks = document.querySelectorAll('.menu-section-block');
-
-tabs.forEach(btn => {
-  btn.addEventListener('click', () => {
-    tabs.forEach(t => t.classList.remove('active'));
-    blocks.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById(btn.dataset.tab).classList.add('active');
-    lightbox = GLightbox({selector:'.glightbox',loop:true,touchNavigation:true,keyboardNavigation:true,closeOnOutsideClick:true});
-  });
-});
-
-document.getElementById('ham').addEventListener('click',()=>{
-  document.getElementById('mobMenu').classList.toggle('open');
-});
-function closeMob(){
-  document.getElementById('mobMenu').classList.remove('open');
-}
-
-// Activar tab según hash de la URL (ej: menu.html#merienda)
-function activarTabPorHash() {
-  const hash = window.location.hash.replace('#', '');
-  const validTabs = ['almuerzo', 'merienda', 'sintacc'];
-  if (hash && validTabs.includes(hash)) {
-    tabs.forEach(t => t.classList.remove('active'));
-    blocks.forEach(b => b.classList.remove('active'));
-    const targetBtn = document.querySelector('.tab-btn[data-tab="' + hash + '"]');
-    const targetBlock = document.getElementById(hash);
-    if (targetBtn) targetBtn.classList.add('active');
-    if (targetBlock) {
-      targetBlock.classList.add('active');
-      targetBlock.scrollIntoView({behavior: 'smooth', block: 'start'});
-    }
-    lightbox = GLightbox({selector:'.glightbox',loop:true,touchNavigation:true,keyboardNavigation:true,closeOnOutsideClick:true});
-  }
-}
-document.addEventListener('DOMContentLoaded', activarTabPorHash);
-document.querySelectorAll('[data-year]').forEach(function(el){el.textContent=new Date().getFullYear();});
-</script>
+<script src="site.js" defer></script>
+<script src="viewer.js" defer></script>
+<script src="menu.js" defer></script>
 </body>
 </html>
