@@ -36,11 +36,11 @@
       priority: 9 
      },*/
     {
-      nombre: "proximamente",
+      nombre: "abrimos",
       days: [0,1,2,3,4,5,6],
-      start: 3, end: 2,
-      startDate: "2026-06-25", endDate: null,
-      image: "img/proximamente.webp",
+      start: 0, end: 24,
+      startDate: "2026-10-29T00:00:00-03:00", endDate: "2026-12-01T23:59:59-03:00",
+      image: "img/abrimos.webp",
       priority: 9
     },
 
@@ -462,89 +462,6 @@
   </div>
 </div>
 
-<<<<<<< HEAD
-<script>
-window.addEventListener("load", () => {
-  const popup = document.getElementById("popup-evento");
-  const botonCerrar = document.querySelector(".popup-cerrar");
-  const popupImg = document.getElementById("popup-imagen");
-  const ahora = new Date();
-  const dia = ahora.getDay();
-  const hora = ahora.getHours();
-
-  const intervalo = 30 * 60 * 1000;
-  const ultimaVez = localStorage.getItem("popupLastClosed");
-  const ahoraMs = Date.now();
-  if (ultimaVez && (ahoraMs - ultimaVez) < intervalo) return;
-
-  const promociones = [
-     {
-      nombre: "abrimos",
-      days: [0,1,2,3,4,5,6],
-      start: 3, end: 2,
-      startDate: "2026-10-29", "2026-11-30",
-      image: "img/abrimos.webp",
-      priority: 9
-     },
-
-    {
-      nombre: "mama",
-      days: [0,1,2,3,4,5,6],
-      start: 7, end: 2,
-      startDate: "2027-10-17", endDate: "2027-10-18",
-      image: "img/felizdiamama.webp",
-      priority: 10              // le gana a todos
-    }
-  ];
-
-  function horarioValido(start, end, horaActual) {
-    if (start < end) return horaActual >= start && horaActual < end;
-    else return horaActual >= start || horaActual < end;
-  }
-
-  function fechaValida(startDate, endDate) {
-    const hoy = new Date();
-    const inicio = startDate ? new Date(startDate) : null;
-    const fin = endDate ? new Date(endDate) : null;
-    if (inicio && hoy < inicio) return false;
-    if (fin && hoy > fin) return false;
-    return true;
-  }
-
-  let promoActiva = null;
-  promociones.forEach(promo => {
-    if (promo.days.includes(dia) && horarioValido(promo.start, promo.end, hora) && fechaValida(promo.startDate, promo.endDate)) {
-      if (!promoActiva || promo.priority > promoActiva.priority) promoActiva = promo;
-    }
-  });
-
-  if (!promoActiva) return;
-
-  popupImg.src = promoActiva.image;
-  popup.classList.add("activo");
-  popup.setAttribute("aria-hidden", "false");
-  const focoPrevio = document.activeElement;
-  botonCerrar.focus();
-
-  function cerrarPopup() {
-    popup.classList.remove("activo");
-    popup.setAttribute("aria-hidden", "true");
-    localStorage.setItem("popupLastClosed", Date.now());
-    document.removeEventListener("keydown", onKey);
-    if (focoPrevio && focoPrevio.focus) focoPrevio.focus();
-  }
-
-  function onKey(e) { if (e.key === "Escape") cerrarPopup(); }
-  document.addEventListener("keydown", onKey);
-
-  botonCerrar.addEventListener("click", cerrarPopup);
-  popup.addEventListener("click", (e) => {
-    if (e.target.id === "popup-evento") cerrarPopup();
-  });
-});
-</script>
-=======
->>>>>>> 735c9e8b12d42bf671491f752e0b304fa6a176ec
 <script src="site.js" defer></script>
 </body>
 </html>
