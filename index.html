@@ -21,7 +21,7 @@
   const dia = ahora.getDay();
   const hora = ahora.getHours();
 
-  const intervalo = 30 * 60 * 1000;
+  const intervalo = 20 * 60 * 1000;
   const ultimaVez = localStorage.getItem("popupLastClosed");
   const ahoraMs = Date.now();
   if (ultimaVez && (ahoraMs - ultimaVez) < intervalo) return;
