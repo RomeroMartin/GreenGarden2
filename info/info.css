@@ -1,0 +1,46 @@
+/* Green Garden — /info/ (preguntas frecuentes). Requiere base.css y pages.css. Solo usa las variables del sitio. */
+
+.info-hero .watermark{right:-10%;top:-20%}
+.info-call{margin-top:6px;width:100%;max-width:340px}
+
+/* Estado Abierto / Cerrado */
+.info-status{display:inline-flex;align-items:center;gap:10px;font-size:16px;color:var(--muted-dark)}
+.info-status-dot{flex:none;width:10px;height:10px;border-radius:50%;background:#C9A24E}
+.info-status.is-open .info-status-dot{background:#6FCF97}
+.info-status--inline{color:var(--muted)}
+
+/* Acordeón */
+.info-list{background:var(--ivory)}
+.info-wrap{max-width:720px;margin:0 auto;padding:clamp(28px,5vw,56px) var(--pad) clamp(40px,6vw,72px);display:flex;flex-direction:column;gap:10px}
+.info-item{background:var(--paper);border:1px solid var(--line);border-radius:2px}
+.info-item[open]{border-color:var(--gold)}
+.info-item summary{display:flex;align-items:center;gap:14px;min-height:64px;padding:8px 18px;cursor:pointer;list-style:none;color:var(--green)}
+.info-item summary::-webkit-details-marker{display:none}
+.info-item summary::after{content:"";flex:none;margin-left:auto;width:9px;height:9px;border-right:1.5px solid var(--gold-ink);border-bottom:1.5px solid var(--gold-ink);transform:rotate(-45deg);transition:transform .2s}
+.info-item[open] summary::after{transform:rotate(45deg)}
+.info-item summary:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.info-emoji{flex:none;font-size:22px;line-height:1}
+.info-title{font-family:var(--f-display);text-transform:uppercase;font-size:22px;letter-spacing:.05em;line-height:1.15}
+.info-body{display:flex;flex-direction:column;align-items:flex-start;gap:14px;padding:4px 18px 22px;font-size:17px;line-height:1.6;color:var(--muted)}
+.info-body strong{color:var(--ink);font-weight:400;border-bottom:1px solid var(--gold)}
+.info-body .btn{width:100%;min-height:52px}
+.info-facts{display:flex;flex-direction:column;gap:8px;width:100%}
+.info-facts li{display:flex;gap:12px}
+.info-facts li::before{content:"";flex:none;width:7px;height:7px;margin-top:10px;background:var(--gold);transform:rotate(45deg)}
+.info-actions{display:flex;flex-direction:column;gap:10px;width:100%}
+.info-horarios{display:flex;flex-direction:column;gap:2px;width:100%}
+.info-horarios li{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding:4px 0}
+.info-veganos{display:flex;flex-direction:column;gap:6px}
+.info-veganos li::before{content:"· "}
+
+@media (min-width:600px){
+  .info-body .btn{width:auto}
+  .info-actions{flex-direction:row}
+  .info-actions .btn{flex:0 1 auto}
+  .info-call{width:auto}
+}
+
+@media (prefers-reduced-motion:no-preference){
+  .info-item[open] .info-body{animation:infoIn .25s ease}
+  @keyframes infoIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+}
