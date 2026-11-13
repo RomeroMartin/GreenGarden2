@@ -18,7 +18,7 @@
 .stat{padding:18px 12px 0}
 .stat:first-child{padding-left:0}
 .stat+.stat{border-left:1px solid rgba(214,179,106,.3)}
-.stat strong{display:block;font-family:var(--f-italic);font-weight:300;font-size:clamp(30px,3vw,40px);line-height:1;color:var(--gold)}
+.stat strong{display:block;font-family:var(--f-display);font-weight:400;letter-spacing:.04em;font-size:clamp(30px,3vw,40px);line-height:1;color:var(--gold)}
 .stat span{display:block;margin-top:6px;font-size:13px;letter-spacing:.06em;color:var(--muted-dark-2)}
 .hero-photo{flex:1 1 360px;min-width:0}
 .hero-photo .framed{aspect-ratio:4/5;max-height:640px}
@@ -47,7 +47,7 @@
 .story-col{display:flex;flex-direction:column;gap:12px}
 .story-photo-2{aspect-ratio:1/1}
 .year-card{background:var(--green);color:var(--ivory);padding:clamp(16px,2.4vw,28px);display:flex;flex-direction:column;gap:4px}
-.year-card strong{font-family:var(--f-italic);font-weight:300;font-size:clamp(36px,4.4vw,56px);line-height:1;color:var(--gold)}
+.year-card strong{font-family:var(--f-display);font-weight:400;letter-spacing:.04em;font-size:clamp(36px,4.4vw,56px);line-height:1;color:var(--gold)}
 .year-card span{font-size:13px;line-height:1.35;letter-spacing:.04em;color:var(--muted-dark)}
 .story-copy{flex:1 1 440px;min-width:0;display:flex;flex-direction:column;gap:22px}
 .story-copy > p{font-size:17px;line-height:1.7;color:var(--muted)}
@@ -83,7 +83,7 @@
 .features svg{flex:none}
 .price{display:flex;align-items:baseline;gap:12px}
 .price span{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-dark-2)}
-.price strong{font-family:var(--f-italic);font-weight:300;font-size:34px;line-height:1;color:var(--gold)}
+.price strong{font-family:var(--f-display);font-weight:400;letter-spacing:.04em;font-size:34px;line-height:1;color:var(--gold)}
 .playroom-actions{display:flex;flex-wrap:wrap;gap:12px}
 .playroom-actions .btn{flex:1 1 auto;max-width:300px}
 .playroom-actions .btn--ghost{max-width:220px}
