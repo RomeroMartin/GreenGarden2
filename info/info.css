@@ -25,8 +25,8 @@
 .info-body strong{color:var(--ink);font-weight:400;border-bottom:1px solid var(--gold)}
 .info-body .btn{width:100%;min-height:52px}
 .info-facts{display:flex;flex-direction:column;gap:8px;width:100%}
-.info-facts li{display:flex;gap:12px}
-.info-facts li::before{content:"";flex:none;width:7px;height:7px;margin-top:10px;background:var(--gold);transform:rotate(45deg)}
+.info-facts li{position:relative;padding-left:19px}
+.info-facts li::before{content:"";position:absolute;left:0;top:.62em;width:7px;height:7px;background:var(--gold);transform:rotate(45deg)}
 .info-actions{display:flex;flex-direction:column;gap:10px;width:100%}
 .info-horarios{display:flex;flex-direction:column;gap:2px;width:100%}
 .info-horarios li{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding:4px 0}
