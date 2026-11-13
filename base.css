@@ -1,6 +1,8 @@
 /* Green Garden — estilos base compartidos (tokens, tipografía, header, botones, footer). */
 
 @font-face{font-family:"Green Font";src:url("fonts/GreenFont-Regular.woff2") format("woff2");font-weight:400;font-display:swap}
+/* Números 0-9 en Green Font: misma familia, solo se usa para dígitos */
+@font-face{font-family:"Green Font";src:url("fonts/GreenFont-Numeros.woff2") format("woff2");font-weight:400;font-display:swap;unicode-range:U+0030-0039}
 @font-face{font-family:"Myriad";src:url("fonts/MyriadPro-Regular.woff2") format("woff2");font-weight:400;font-display:swap}
 @font-face{font-family:"Myriad Italic";src:url("fonts/MyriadPro-LightSemiCnIt.woff2") format("woff2");font-weight:300;font-display:swap}
 
