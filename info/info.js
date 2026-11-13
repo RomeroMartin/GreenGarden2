@@ -29,7 +29,7 @@
       precio: 3800 // ← actualizar acá cuando cambie
     },
     // Texto, o lista de platos adaptables: ['Plato 1', 'Plato 2']. PENDIENTE: texto definitivo del chef.
-    veganos: 'Por ahora no tenemos platos veganos en la carta, pero varias opciones se pueden adaptar. Consultá con tu mozo al llegar o llamanos y te contamos 🌱'
+    veganos: 'Por ahora no tenemos platos veganos en la carta, pero varias opciones se pueden adaptar. Consultá con tu mozo al llegar o llamanos y te contamos.'
   };
 
   var DIAS = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
