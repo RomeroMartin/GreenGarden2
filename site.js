@@ -98,6 +98,14 @@
   pintarEstado();
   setInterval(pintarEstado, 60000);
 
+  // Clic en el banner de La Panadería (evento propio en GA4)
+  var ctaPanaderia = document.querySelector('.bakery-cta');
+  if (ctaPanaderia) {
+    ctaPanaderia.addEventListener('click', function () {
+      if (typeof gtag === 'function') gtag('event', 'click_panaderia', { ubicacion: 'home_banner' });
+    });
+  }
+
   // Año del footer
   document.querySelectorAll('[data-year]').forEach(function (el) {
     el.textContent = new Date().getFullYear();
