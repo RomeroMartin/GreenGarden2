@@ -118,6 +118,10 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 .footer-col h3{font-family:var(--f-text);font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:400;color:var(--gold)}
 .footer-col a{color:var(--ivory);text-decoration:none}
 .footer-col a:hover{color:var(--gold)}
+.footer-bakery{display:flex;flex-direction:column;align-items:center;gap:10px;text-decoration:none}
+.footer-bakery-label{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.footer-bakery img{width:170px;height:auto;transition:opacity .2s}
+.footer-bakery:hover img{opacity:.8}
 .footer-divider{display:flex;align-items:center;gap:10px}
 .footer-divider::before,.footer-divider::after{content:"";flex:1 1 auto;height:1px;background:rgba(214,179,106,.4)}
 .footer-divider i{width:8px;height:8px;background:var(--gold);transform:rotate(45deg)}
