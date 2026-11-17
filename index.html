@@ -289,7 +289,7 @@
     <div class="bakery-card">
       <img class="bakery-logo" src="img/panaderia/pan-logo-light.webp" alt="La Panadería de Green Garden" width="420" height="296" loading="lazy">
       <div class="bakery-copy">
-        <div class="bakery-tag">
+        <div class="bakery-tag" data-hasta="2027-03-29">
           <span class="bakery-pill">Nuevo</span>
           <span class="bakery-eyebrow">Recién salido del horno</span>
         </div>
@@ -306,6 +306,16 @@
     </div>
   </div>
 </section>
+<script>
+  // "Nuevo · Recién salido del horno": se quita solo desde la fecha de data-hasta (AAAA-MM-DD, hora de Argentina).
+  // Hoy: 29/03/2027, el día después de Semana Santa. Para cambiarlo, editá data-hasta arriba.
+  (function () {
+    var t = document.querySelector('.bakery-tag[data-hasta]');
+    if (!t) return;
+    var hoy = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Argentina/Buenos_Aires' }).format(new Date());
+    if (hoy >= t.getAttribute('data-hasta')) t.remove();
+  })();
+</script>
 
 <!-- NUESTRA HISTORIA -->
 <section id="nosotros" class="story" aria-labelledby="historia-titulo">
