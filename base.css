@@ -109,19 +109,19 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 /* ── Footer ── */
 .site-footer{background:var(--black);color:var(--ivory)}
 .footer-inner{padding-block:clamp(56px,7vw,88px) 28px;display:flex;flex-direction:column;gap:40px}
-.footer-top{display:flex;flex-wrap:wrap;gap:40px 64px;justify-content:space-between}
-.footer-brand{flex:1 1 240px;max-width:340px;display:flex;flex-direction:column;gap:16px}
-.footer-brand img{width:180px;height:auto}
+.footer-top{display:flex;flex-direction:column;align-items:center;text-align:center;gap:36px}
+.footer-brand{display:flex;flex-direction:column;align-items:center;gap:14px}
+.footer-brand img{width:200px;height:auto}
 .footer-brand p{font-family:var(--f-italic);font-size:19px;line-height:1.4;color:var(--gold)}
-.footer-cols{flex:2 1 480px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:28px}
-.footer-col{display:flex;flex-direction:column;gap:10px;font-size:15px;line-height:1.5;color:#D9D4C8}
+.footer-cols{width:100%;max-width:760px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:32px 48px}
+.footer-col{display:flex;flex-direction:column;align-items:center;gap:10px;font-size:15px;line-height:1.5;color:#D9D4C8}
 .footer-col h3{font-family:var(--f-text);font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:400;color:var(--gold)}
 .footer-col a{color:var(--ivory);text-decoration:none}
 .footer-col a:hover{color:var(--gold)}
 .footer-divider{display:flex;align-items:center;gap:10px}
 .footer-divider::before,.footer-divider::after{content:"";flex:1 1 auto;height:1px;background:rgba(214,179,106,.4)}
 .footer-divider i{width:8px;height:8px;background:var(--gold);transform:rotate(45deg)}
-.footer-bottom{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;font-size:13px;color:#A8A397}
+.footer-bottom{display:flex;flex-wrap:wrap;justify-content:center;text-align:center;gap:8px 24px;font-size:13px;color:#A8A397}
 .footer-bottom a{color:#D9D4C8}
 .footer-bottom a:hover{color:var(--gold)}
 
@@ -129,4 +129,3 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 /* Página actual en la navegación */
 .nav-desktop a[aria-current="page"]{color:var(--gold);padding:6px 0;border-bottom:1px solid var(--gold)}
 .nav-mobile a[aria-current="page"]{color:var(--gold)}
-@media (max-width:600px){.footer-col:first-child{grid-column:1/-1}}
