@@ -307,13 +307,17 @@
   </div>
 </section>
 <script>
-  // "Nuevo · Recién salido del horno": se quita solo desde la fecha de data-hasta (AAAA-MM-DD, hora de Argentina).
+  // "Nuevo · Recién salido del horno" se quita y el título pasa a "Conocé nuestra panadería" desde la fecha de data-hasta (AAAA-MM-DD, hora de Argentina).
   // Hoy: 29/03/2027, el día después de Semana Santa. Para cambiarlo, editá data-hasta arriba.
   (function () {
     var t = document.querySelector('.bakery-tag[data-hasta]');
     if (!t) return;
     var hoy = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Argentina/Buenos_Aires' }).format(new Date());
-    if (hoy >= t.getAttribute('data-hasta')) t.remove();
+    if (hoy >= t.getAttribute('data-hasta')) {
+      t.remove();
+      var h = document.getElementById('panaderia-titulo');
+      if (h) h.innerHTML = 'Conocé nuestra <em>panadería</em>';
+    }
   })();
 </script>
 
