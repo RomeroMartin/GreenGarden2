@@ -1,0 +1,103 @@
+/* Green Garden — /trabaja-con-nosotros/ (formulario de postulación). Requiere base.css y pages.css. */
+
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+.job-hero .watermark{right:-10%;top:-20%}
+.job-section{background:var(--ivory)}
+.job-wrap{max-width:720px;margin:0 auto;padding:clamp(24px,5vw,56px) var(--pad) clamp(48px,7vw,88px);display:flex;flex-direction:column;gap:16px}
+
+.job-card{background:var(--paper);border:1px solid var(--line);border-radius:2px;padding:clamp(20px,4vw,36px)}
+.job-notice{padding:14px 18px;background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--gold);font-size:16px;line-height:1.5;color:var(--muted)}
+.job-notice--warn{border-left-color:#B3402F}
+
+/* Progreso */
+.job-progress{height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+.job-progress-bar{height:100%;width:0;background:var(--gold);transition:width .3s ease}
+.job-step-label{margin-top:10px;font-family:var(--f-italic);font-size:17px;color:var(--gold-ink)}
+
+/* Pasos */
+.job-step{border:0;margin:18px 0 0;padding:0;min-width:0;display:flex;flex-direction:column;gap:18px}
+.job-step[hidden]{display:none}
+.job-step legend{padding:0;font-family:var(--f-display);text-transform:uppercase;letter-spacing:.05em;font-size:clamp(24px,3.4vw,32px);line-height:1.1;color:var(--green)}
+.job-step > legend{float:left;width:100%;margin-bottom:0}
+.job-step > legend + *{clear:both}
+
+.field{display:flex;flex-direction:column;gap:6px}
+.field > label,.field-title{font-size:15px;color:var(--ink)}
+.opt{color:var(--muted);font-size:14px}
+.hint{font-size:14px;color:var(--muted)}
+input[type=text],input[type=tel],input[type=email],select,textarea{width:100%;min-height:48px;padding:10px 14px;font:inherit;font-size:16px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:2px}
+textarea{resize:vertical;min-height:110px}
+input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:1px;border-color:var(--gold)}
+[aria-invalid="true"]{border-color:#B3402F!important}
+
+/* Casillas y radios como opciones táctiles */
+.check{display:flex;align-items:flex-start;gap:12px;min-height:44px;cursor:pointer;font-size:16px;line-height:1.4}
+.check input{flex:none;width:22px;height:22px;margin:1px 0 0;accent-color:var(--green)}
+.check--consent{padding:14px 16px;background:#fff;border:1px solid var(--line)}
+
+.opciones{display:flex;flex-wrap:wrap;gap:8px}
+.opcion{position:relative}
+.opcion input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.opcion span{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;background:#fff;border:1px solid var(--line);border-radius:999px;font-size:15px;color:var(--ink);transition:background .15s,border-color .15s,color .15s}
+.opcion input:checked + span{background:var(--green);border-color:var(--green);color:var(--ivory)}
+.opcion input:focus-visible + span{outline:2px solid var(--gold);outline-offset:2px}
+.opcion input:disabled + span{opacity:.45}
+
+.puestos-sector{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.puestos-sector h3{font-family:var(--f-text);font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:400;color:var(--gold-ink)}
+
+.pregunta{display:flex;flex-direction:column;gap:8px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.pregunta:last-child{border-bottom:0}
+.pregunta .field-title{font-size:16px}
+
+/* Grilla de disponibilidad */
+.grilla-wrap{overflow-x:auto;border:1px solid var(--line);background:#fff}
+.grilla{width:100%;border-collapse:collapse;font-size:14px}
+.grilla th,.grilla td{padding:6px 4px;text-align:center;border-bottom:1px solid var(--line)}
+.grilla tbody tr:last-child th,.grilla tbody tr:last-child td{border-bottom:0}
+.grilla thead th{font-weight:400;color:var(--muted);font-size:13px;line-height:1.25}
+.grilla thead th small{display:block;color:var(--gold-ink)}
+.grilla tbody th{text-align:left;padding-left:12px;font-weight:400;color:var(--ink);white-space:nowrap}
+.grilla input{width:24px;height:24px;accent-color:var(--green);cursor:pointer}
+.grilla td label{display:flex;align-items:center;justify-content:center;min-height:40px;cursor:pointer}
+
+/* Trabajos anteriores */
+.trabajo{display:grid;grid-template-columns:1fr;gap:10px;padding:14px;background:#fff;border:1px solid var(--line)}
+.trabajo-titulo{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-ink)}
+@media (min-width:640px){.trabajo{grid-template-columns:1.4fr 1fr 1fr}.trabajo-titulo{grid-column:1/-1}}
+.trabajo label{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--muted)}
+
+/* Resumen final */
+.resumen{display:grid;grid-template-columns:1fr;gap:2px 16px;margin:0;padding:14px 16px;background:#fff;border:1px solid var(--line);font-size:15px}
+.resumen dt{margin-top:10px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-ink)}
+.resumen dt:first-child{margin-top:0}
+.resumen dd{margin:0;color:var(--ink);overflow-wrap:anywhere}
+
+.privacidad{background:#fff;border:1px solid var(--line)}
+.privacidad summary{min-height:48px;display:flex;align-items:center;padding:0 16px;cursor:pointer;color:var(--green);font-size:15px}
+.privacidad > div{display:flex;flex-direction:column;gap:10px;padding:4px 16px 16px;font-size:14.5px;line-height:1.55;color:var(--muted)}
+.privacidad strong{font-weight:400;color:var(--ink);border-bottom:1px solid var(--gold)}
+
+/* Trampa para bots: fuera de pantalla, no display:none (algunos bots lo detectan) */
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+/* Errores */
+.job-errors{margin-top:16px;padding:12px 16px;background:#fbeeea;border:1px solid #B3402F;color:#7a2418;font-size:15px}
+.job-errors[hidden]{display:none}
+.job-errors ul{margin:6px 0 0;padding-left:18px;list-style:disc}
+
+/* Navegación */
+.job-nav{display:flex;gap:10px;margin-top:28px}
+.job-nav .btn{flex:1}
+.job-nav [hidden]{display:none}
+.job-nav .btn[disabled]{opacity:.6;cursor:wait}
+
+/* Éxito */
+.job-ok{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}
+.job-ok[hidden]{display:none}
+.job-ok-ico{width:60px;height:60px;display:flex;align-items:center;justify-content:center;border:1px solid var(--gold);border-radius:50%;color:var(--green)}
+.job-ok h2{font-family:var(--f-display);font-weight:400;text-transform:uppercase;letter-spacing:.05em;font-size:clamp(26px,4vw,36px);color:var(--green)}
+.job-ok p{max-width:30em;color:var(--muted);font-size:17px}
+
+@media (prefers-reduced-motion:reduce){.job-progress-bar{transition:none}}

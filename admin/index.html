@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Bolsa de trabajo · Green Garden</title>
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="theme-color" content="#002f2a">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/img/favicon-192.png" type="image/png" sizes="192x192">
+  <link rel="stylesheet" href="/base.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+
+<header class="adm-top">
+  <div class="adm-top-in">
+    <a class="adm-logo" href="/" aria-label="Ir al sitio de Green Garden"><img src="/img/logo-light.webp" alt="Green Garden" width="86" height="43"></a>
+    <span class="adm-title">Bolsa de trabajo</span>
+    <div class="adm-user" id="admUser" hidden>
+      <span id="admUserTxt"></span>
+      <button type="button" class="adm-btn adm-btn--ghost" id="btnSalir">Salir</button>
+    </div>
+  </div>
+</header>
+
+<main class="adm-main">
+
+  <div class="adm-aviso" id="admMant" hidden>Falta configurar Firebase: completá <code>firebase-config.js</code>.</div>
+
+  <!-- Login -->
+  <section class="adm-card adm-login" id="vistaLogin" hidden aria-labelledby="loginTit">
+    <h1 id="loginTit">Ingresar</h1>
+    <p class="adm-hint">Acceso solo para encargados de Green Garden.</p>
+    <form id="formLogin" novalidate>
+      <label>Email <input type="email" id="lEmail" autocomplete="username" required></label>
+      <label>Contraseña <input type="password" id="lPass" autocomplete="current-password" required></label>
+      <p class="adm-error" id="lError" role="alert" hidden></p>
+      <button type="submit" class="adm-btn adm-btn--main" id="btnLogin">Ingresar</button>
+      <button type="button" class="adm-link" id="btnReset">Olvidé mi contraseña</button>
+      <p class="adm-ok" id="lOk" role="status" hidden></p>
+    </form>
+  </section>
+
+  <!-- Panel -->
+  <section id="vistaApp" hidden>
+
+    <div class="adm-bar">
+      <h1 class="adm-h1">Postulaciones <span class="adm-count" id="cuenta"></span></h1>
+      <div class="adm-acciones">
+        <button type="button" class="adm-btn" id="btnActualizar">Actualizar</button>
+        <button type="button" class="adm-btn" id="btnExcel">Excel</button>
+        <button type="button" class="adm-btn" id="btnImprimirLista">Imprimir listado</button>
+        <button type="button" class="adm-btn adm-btn--danger" id="btnDepurar" hidden>Eliminar +12 meses</button>
+      </div>
+    </div>
+
+    <form class="adm-filtros" id="filtros" role="search" onsubmit="return false">
+      <label class="f-busca">Buscar <input type="search" id="fQ" placeholder="Nombre, teléfono, mail o zona"></label>
+      <label>Sector <select id="fSector"></select></label>
+      <label>Puesto <select id="fPuesto"></select></label>
+      <label>Estado <select id="fEstado"></select></label>
+      <label>Puede los <select id="fDia"></select></label>
+      <label>Desde <input type="date" id="fDesde"></label>
+      <button type="button" class="adm-link" id="btnLimpiar">Limpiar filtros</button>
+    </form>
+
+    <p class="adm-hint" id="avisoSector" hidden></p>
+    <p class="adm-error" id="appError" role="alert" hidden></p>
+
+    <ul class="adm-lista" id="lista" aria-live="polite"></ul>
+    <p class="adm-vacio" id="vacio" hidden>No hay postulaciones con estos filtros.</p>
+  </section>
+</main>
+
+<!-- Detalle de una postulación -->
+<dialog id="detalle" class="adm-dialog" aria-labelledby="detNombre">
+  <div class="adm-dialog-in">
+    <div class="adm-dialog-bar">
+      <button type="button" class="adm-btn adm-btn--ghost" id="detCerrar">← Volver al listado</button>
+      <div class="adm-acciones">
+        <a class="adm-btn" id="detWhats" target="_blank" rel="noopener">WhatsApp</a>
+        <a class="adm-btn" id="detMail">Email</a>
+        <button type="button" class="adm-btn" id="detImprimir">Imprimir / PDF</button>
+        <button type="button" class="adm-btn adm-btn--danger" id="detBorrar" hidden>Eliminar</button>
+      </div>
+    </div>
+    <div id="detalleBody"></div>
+    <section class="adm-gestion" aria-label="Gestión">
+      <h3>Estado de la postulación</h3>
+      <div class="adm-estado-row">
+        <select id="detEstado" aria-label="Estado"></select>
+        <span class="adm-hint" id="detEstadoInfo"></span>
+      </div>
+      <h3>Notas internas</h3>
+      <ul class="adm-notas" id="detNotas"></ul>
+      <form id="formNota" class="adm-nota-form">
+        <label class="sr-only" for="notaTexto">Nueva nota</label>
+        <textarea id="notaTexto" rows="2" maxlength="1000" placeholder="Ej: Entrevista el jueves 16 hs con el jefe de cocina"></textarea>
+        <button type="submit" class="adm-btn adm-btn--main">Agregar nota</button>
+      </form>
+      <p class="adm-error" id="detError" role="alert" hidden></p>
+    </section>
+  </div>
+</dialog>
+
+<!-- Ficha solo para imprimir -->
+<div id="fichaPrint" aria-hidden="true"></div>
+
+<script type="module" src="/admin/admin.js"></script>
+</body>
+</html>
