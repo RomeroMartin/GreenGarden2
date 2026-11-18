@@ -7,12 +7,12 @@
 // Copiá cada valor entre las comillas.
 
 export const firebaseConfig = {
-  apiKey: 'REEMPLAZAR',
-  authDomain: 'REEMPLAZAR',
-  projectId: 'REEMPLAZAR',
-  storageBucket: 'REEMPLAZAR',
-  messagingSenderId: 'REEMPLAZAR',
-  appId: 'REEMPLAZAR'
+  apiKey: 'AIzaSyCG8jfnxfPMLNDaV6f3gBCJqiPWjKtTo-g',
+  authDomain: 'bd-greengarden.firebaseapp.com',
+  projectId: 'bd-greengarden',
+  storageBucket: 'bd-greengarden.firebasestorage.app',
+  messagingSenderId: '1084702399382',
+  appId: '1:1084702399382:web:2c7540874192620dac1bb7'
 };
 
 export const configurado = !Object.values(firebaseConfig).some(v => !v || v === 'REEMPLAZAR');
