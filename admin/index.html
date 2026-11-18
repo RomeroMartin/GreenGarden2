@@ -50,6 +50,7 @@
         <button type="button" class="adm-btn" id="btnActualizar">Actualizar</button>
         <button type="button" class="adm-btn" id="btnExcel">Excel</button>
         <button type="button" class="adm-btn" id="btnImprimirLista">Imprimir listado</button>
+        <button type="button" class="adm-btn" id="btnUsuarios" hidden>Usuarios</button>
         <button type="button" class="adm-btn adm-btn--danger" id="btnDepurar" hidden>Eliminar +12 meses</button>
       </div>
     </div>
@@ -100,6 +101,38 @@
       </form>
       <p class="adm-error" id="detError" role="alert" hidden></p>
     </section>
+  </div>
+</dialog>
+
+<!-- Usuarios del panel (solo admin) -->
+<dialog id="usuarios" class="adm-dialog adm-dialog--chico" aria-labelledby="usuTit">
+  <div class="adm-dialog-in">
+    <div class="adm-dialog-bar">
+      <button type="button" class="adm-btn adm-btn--ghost" id="usuCerrar">← Volver al listado</button>
+    </div>
+    <h2 class="adm-h2" id="usuTit">Usuarios del panel</h2>
+    <p class="adm-hint">Todos los usuarios ven todas las postulaciones. El sector solo define con qué filtro les abre el panel.</p>
+
+    <form id="formUsuario" class="adm-card adm-form" novalidate>
+      <h3>Crear usuario</h3>
+      <label>Nombre <input id="uNombre" type="text" maxlength="80" autocomplete="off" required></label>
+      <label>Email <input id="uEmail" type="email" maxlength="120" autocomplete="off" required></label>
+      <label>Rol
+        <select id="uRol">
+          <option value="encargado">Encargado de sector</option>
+          <option value="admin">Administrador (puede crear usuarios y eliminar)</option>
+        </select>
+      </label>
+      <label id="uSectorBox">Sector <select id="uSector"></select></label>
+      <p class="adm-error" id="uError" role="alert" hidden></p>
+      <button type="submit" class="adm-btn adm-btn--main" id="btnCrearUsuario">Crear usuario</button>
+    </form>
+
+    <div class="adm-ok adm-clave" id="uResultado" role="status" hidden></div>
+
+    <h3 class="adm-h3">Usuarios con acceso</h3>
+    <p class="adm-error" id="uListaError" role="alert" hidden></p>
+    <ul class="adm-usuarios" id="listaUsuarios"></ul>
   </div>
 </dialog>
 

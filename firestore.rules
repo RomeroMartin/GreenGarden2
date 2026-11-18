@@ -10,7 +10,7 @@ rules_version = '2';
 //
 // "Staff" = usuario cuyo mail tiene un documento en la colección `staff` (el ID del documento es el mail en minúsculas):
 //   staff/<mail>  →  { rol: "admin" | "encargado", sector: "cocina" | "panaderia" | "barra" | "salon" | "playroom", nombre: "..." }
-// Esos documentos se crean a mano desde la consola; las reglas no permiten escribirlos desde la web.
+// El primer admin se crea a mano desde la consola; después, los admin crean y quitan usuarios desde el panel.
 
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -25,10 +25,36 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/staff/$(mail())).data.rol == 'admin';
     }
 
-    // ── Staff: cada usuario puede leer solo su propio documento (para saber su sector).
+    // ── Staff: cada usuario lee su propio documento (para saber su sector); el admin gestiona a todos.
     match /staff/{email} {
-      allow get: if request.auth != null && request.auth.token.email != null && email == mail();
-      allow list, write: if false;
+
+      function sectorValido(s) { return s in ['', 'cocina', 'panaderia', 'barra', 'salon', 'playroom']; }
+
+      function staffNuevoValido(d) {
+        return d.keys().hasOnly(['rol', 'sector', 'nombre', 'creadoPor', 'creadoEn'])
+          && d.keys().hasAll(['rol', 'sector', 'nombre', 'creadoPor', 'creadoEn'])
+          && d.rol in ['admin', 'encargado']
+          && d.sector is string && sectorValido(d.sector)
+          && (d.rol == 'admin' || d.sector != '')
+          && d.nombre is string && d.nombre.size() >= 2 && d.nombre.size() <= 80
+          && d.creadoPor == mail()
+          && d.creadoEn == request.time;
+      }
+
+      function staffEdicionValida(d) {
+        return d.diff(resource.data).affectedKeys().hasOnly(['rol', 'sector', 'nombre'])
+          && d.rol in ['admin', 'encargado']
+          && d.sector is string && sectorValido(d.sector)
+          && (d.rol == 'admin' || d.sector != '')
+          && d.nombre is string && d.nombre.size() >= 2 && d.nombre.size() <= 80
+          && (email != mail() || d.rol == 'admin');
+      }
+
+      allow get: if request.auth != null && request.auth.token.email != null && (email == mail() || esAdmin());
+      allow list: if esAdmin();
+      allow create: if esAdmin() && email == email.lower() && staffNuevoValido(request.resource.data);
+      allow update: if esAdmin() && staffEdicionValida(request.resource.data);
+      allow delete: if esAdmin() && email != mail();
     }
 
     // ── Postulaciones

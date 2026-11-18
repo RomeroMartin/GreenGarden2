@@ -1,12 +1,12 @@
 // Green Garden — panel de la bolsa de trabajo (/admin/).
 // Todo el contenido que viene de la base se inserta con textContent (nunca innerHTML): los datos los carga el público.
 
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+import { initializeApp, deleteApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
 import {
-  getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail
+  getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail, createUserWithEmailAndPassword
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {
-  getFirestore, collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc,
+  getFirestore, collection, doc, getDoc, getDocs, addDoc, setDoc, updateDoc, deleteDoc,
   query, orderBy, limit, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { firebaseConfig, configurado } from '/firebase-config.js';
@@ -93,6 +93,7 @@ async function entrar(user) {
   $('admUser').hidden = false;
   $('admUserTxt').textContent = perfil.nombre + (perfil.rol === 'admin' ? ' · Admin' : perfil.sector && SECTORES[perfil.sector] ? ' · ' + SECTORES[perfil.sector].nombre : '');
   $('btnDepurar').hidden = perfil.rol !== 'admin';
+  $('btnUsuarios').hidden = perfil.rol !== 'admin';
   $('detBorrar').hidden = perfil.rol !== 'admin';
   armarFiltros();
   await cargar();
@@ -128,6 +129,156 @@ $('btnReset').addEventListener('click', async () => {
 });
 
 $('btnSalir').addEventListener('click', () => signOut(auth));
+
+// ── Usuarios del panel (solo admin) ─────────────────────────
+// Crear una cuenta con el SDK de cliente inicia sesión como la cuenta nueva. Para no perder la sesión del admin,
+// la cuenta se crea con una segunda conexión a Firebase (app secundaria, separada y temporal).
+// El permiso real lo da el documento staff/<mail>, que solo un admin puede escribir (ver firestore.rules).
+const usu = $('usuarios');
+let usuariosCargados = [];
+
+const rolTexto = (u) => u.rol === 'admin' ? 'Administrador' : 'Encargado · ' + (SECTORES[u.sector] ? SECTORES[u.sector].nombre : 'sin sector');
+
+function claveTemporal() {
+  const abc = 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // sin 0/O ni 1/l/I, para evitar confusiones
+  const n = new Uint32Array(12);
+  crypto.getRandomValues(n);
+  return Array.from(n, v => abc[v % abc.length]).join('');
+}
+
+function armarFormUsuario() {
+  opciones($('uSector'), Object.keys(SECTORES).map(id => [id, SECTORES[id].nombre]), 'Elegí un sector');
+  $('uSectorBox').hidden = $('uRol').value === 'admin';
+}
+$('uRol').addEventListener('change', () => { $('uSectorBox').hidden = $('uRol').value === 'admin'; });
+
+$('btnUsuarios').addEventListener('click', async () => {
+  armarFormUsuario();
+  mostrar($('uError'), ''); $('uResultado').hidden = true;
+  if (!usu.open) usu.showModal();
+  usu.scrollTop = 0;
+  await cargarUsuarios();
+});
+$('usuCerrar').addEventListener('click', () => usu.close());
+
+async function cargarUsuarios() {
+  mostrar($('uListaError'), '');
+  try {
+    const snap = await getDocs(collection(db, 'staff'));
+    usuariosCargados = snap.docs.map(d => Object.assign({ email: d.id }, d.data()))
+      .sort((a, b) => (a.nombre || a.email).localeCompare(b.nombre || b.email, 'es'));
+    pintarUsuarios();
+  } catch (err) {
+    console.error(err);
+    mostrar($('uListaError'), 'No pudimos cargar los usuarios. ¿Publicaste las reglas nuevas de Firestore?');
+  }
+}
+
+function pintarUsuarios() {
+  $('listaUsuarios').replaceChildren(...usuariosCargados.map(u => {
+    const yo = u.email === perfil.email;
+    const fila = h('li', { class: 'adm-usuario' },
+      h('div', { class: 'adm-usuario-datos' },
+        h('strong', { text: (u.nombre || u.email) + (yo ? ' (vos)' : '') }),
+        h('span', { text: u.email }),
+        h('span', { text: rolTexto(u) })
+      )
+    );
+    if (!yo && u.rol !== 'admin') {
+      const sel = h('select', { 'aria-label': 'Sector de ' + (u.nombre || u.email) },
+        ...Object.keys(SECTORES).map(id => h('option', Object.assign({ value: id }, id === u.sector ? { selected: '' } : {}), SECTORES[id].nombre)));
+      sel.addEventListener('change', async () => {
+        sel.disabled = true;
+        try {
+          await updateDoc(doc(db, 'staff', u.email), { sector: sel.value });
+          u.sector = sel.value; pintarUsuarios();
+        } catch (err) { console.error(err); mostrar($('uListaError'), 'No pudimos cambiar el sector.'); sel.value = u.sector; sel.disabled = false; }
+      });
+      fila.append(sel);
+    }
+    const mail = h('button', { type: 'button', class: 'adm-btn', text: 'Enviar mail de contraseña' });
+    mail.addEventListener('click', async () => {
+      mail.disabled = true;
+      try { await sendPasswordResetEmail(auth, u.email); mostrar($('uListaError'), ''); mail.textContent = 'Mail enviado ✓'; }
+      catch (err) { console.error(err); mostrar($('uListaError'), 'No pudimos enviar el mail a ' + u.email + '.'); mail.disabled = false; }
+    });
+    fila.append(mail);
+    if (!yo) {
+      const quitar = h('button', { type: 'button', class: 'adm-btn adm-btn--danger', text: 'Quitar acceso' });
+      quitar.addEventListener('click', async () => {
+        if (!confirm('¿Quitar el acceso de ' + (u.nombre || u.email) + ' al panel? Ya no podrá ver las postulaciones.')) return;
+        try { await deleteDoc(doc(db, 'staff', u.email)); await cargarUsuarios(); }
+        catch (err) { console.error(err); mostrar($('uListaError'), 'No pudimos quitar el acceso.'); }
+      });
+      fila.append(quitar);
+    }
+    return fila;
+  }));
+}
+
+const ERRORES_ALTA = {
+  'auth/invalid-email': 'El email no es válido.',
+  'auth/weak-password': 'La contraseña generada es débil. Probá de nuevo.',
+  'auth/operation-not-allowed': 'En Firebase falta habilitar el acceso con correo y contraseña (Authentication → Sign-in method).',
+  'auth/network-request-failed': 'No hay conexión. Revisá tu internet.',
+  'auth/too-many-requests': 'Demasiados intentos. Esperá unos minutos.',
+  'permission-denied': 'Firestore rechazó el alta. ¿Publicaste las reglas nuevas?'
+};
+
+$('formUsuario').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  mostrar($('uError'), ''); $('uResultado').hidden = true;
+  const nombre = $('uNombre').value.replace(/\s+/g, ' ').trim();
+  const email = $('uEmail').value.trim().toLowerCase();
+  const rol = $('uRol').value;
+  const sector = rol === 'admin' ? '' : $('uSector').value;
+  if (nombre.length < 2) { mostrar($('uError'), 'Escribí el nombre.'); return; }
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { mostrar($('uError'), 'Escribí un email válido.'); return; }
+  if (rol === 'encargado' && !sector) { mostrar($('uError'), 'Elegí el sector del encargado.'); return; }
+  const btn = $('btnCrearUsuario'); btn.disabled = true; btn.textContent = 'Creando…';
+  try {
+    if ((await getDoc(doc(db, 'staff', email))).exists()) {
+      mostrar($('uError'), 'Ese email ya tiene acceso al panel. Podés cambiarle el sector en la lista de abajo.');
+      return;
+    }
+    const clave = claveTemporal();
+    let cuentaNueva = true;
+    const sec = initializeApp(firebaseConfig, 'alta-' + Date.now());
+    try {
+      const auth2 = getAuth(sec);
+      try { await createUserWithEmailAndPassword(auth2, email, clave); }
+      catch (e) { if (e.code === 'auth/email-already-in-use') cuentaNueva = false; else throw e; }
+      finally { try { await signOut(auth2); } catch (_) { /* nada */ } }
+    } finally { try { await deleteApp(sec); } catch (_) { /* nada */ } }
+    await setDoc(doc(db, 'staff', email), { rol, sector, nombre, creadoPor: perfil.email, creadoEn: serverTimestamp() });
+    mostrarResultado({ nombre, email, clave: cuentaNueva ? clave : null });
+    $('formUsuario').reset(); armarFormUsuario();
+    await cargarUsuarios();
+  } catch (err) {
+    console.error(err);
+    mostrar($('uError'), ERRORES_ALTA[err.code] || 'No pudimos crear el usuario. Probá de nuevo.');
+  } finally { btn.disabled = false; btn.textContent = 'Crear usuario'; }
+});
+
+function mostrarResultado({ nombre, email, clave }) {
+  const url = location.origin + '/admin/';
+  const caja = $('uResultado');
+  const texto = 'Panel de la bolsa de trabajo de Green Garden\n' + url + '\nUsuario: ' + email + (clave ? '\nContraseña: ' + clave : '');
+  const copiar = h('button', { type: 'button', class: 'adm-btn', text: 'Copiar datos' });
+  copiar.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(texto); copiar.textContent = 'Copiado ✓'; } catch (_) { copiar.textContent = 'No se pudo copiar'; }
+  });
+  caja.replaceChildren(
+    h('strong', { text: clave ? 'Listo: ' + nombre + ' ya puede entrar.' : nombre + ' ya tenía una cuenta; ahora tiene acceso al panel.' }),
+    h('span', { text: 'Dirección: ' + url }),
+    h('span', { text: 'Usuario: ' + email }),
+    clave ? h('span', null, 'Contraseña temporal: ', h('code', { text: clave })) : h('span', { text: 'Conserva su contraseña. Si no la recuerda, usá “Enviar mail de contraseña”.' }),
+    clave ? h('span', { class: 'adm-hint', text: 'Esta contraseña se muestra una sola vez. Pasásela por un canal privado; puede cambiarla desde “Olvidé mi contraseña” en el login.' }) : null,
+    h('div', { class: 'adm-clave-acciones' }, copiar)
+  );
+  caja.hidden = false;
+  caja.scrollIntoView({ block: 'nearest' });
+}
 
 // ── Carga ───────────────────────────────────────────────────
 async function cargar() {
