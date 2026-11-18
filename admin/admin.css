@@ -52,11 +52,14 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
 
 /* Listado */
 .adm-lista{display:flex;flex-direction:column;gap:8px;margin-top:14px}
-.adm-fila{display:grid;grid-template-columns:1fr;gap:6px;width:100%;padding:14px 16px;text-align:left;font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--line);cursor:pointer}
+.adm-fila{display:flex;align-items:flex-start;gap:14px;width:100%;padding:14px 16px;text-align:left;font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--line);cursor:pointer}
 .adm-fila:hover{border-color:var(--gold)}
 .adm-fila[data-estado="nuevo"]{border-left-color:var(--gold)}
 .adm-fila[data-estado="contratado"]{border-left-color:#4f8a5b}
 .adm-fila[data-estado="descartado"]{opacity:.65}
+.adm-fila-cuerpo{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;flex:1;min-width:0}
+.adm-fila-foto{flex:none;width:54px;height:72px;object-fit:cover;border:1px solid var(--line);background:#fff}
+.adm-fila-foto--vacia{display:block;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237A5C22' stroke-width='1.2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='8.5' r='3.6'/%3E%3Cpath d='M4.5 20c.9-3.6 3.8-5.6 7.5-5.6s6.6 2 7.5 5.6'/%3E%3C/svg%3E") center/60% no-repeat;opacity:.55}
 .adm-fila-top{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
 .adm-fila-nombre{font-size:18px;color:var(--green)}
 .adm-fila-meta{font-size:14px;color:var(--muted)}
@@ -88,6 +91,8 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
 .ficha{background:var(--paper);border:1px solid var(--line);padding:clamp(16px,3vw,28px);display:flex;flex-direction:column;gap:18px}
 .ficha h2{font-family:var(--f-display);font-weight:400;text-transform:uppercase;letter-spacing:.05em;font-size:clamp(26px,4vw,36px);color:var(--green);line-height:1.1}
 .ficha-sub{font-size:14px;color:var(--muted)}
+.ficha-cabecera{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.ficha-foto{flex:none;width:112px;height:150px;object-fit:cover;border:1px solid var(--line);background:#fff}
 .ficha h3{font-family:var(--f-text);font-weight:400;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-ink);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--line)}
 .ficha dl{display:grid;grid-template-columns:max-content 1fr;gap:4px 16px;margin:0;font-size:15px}
 .ficha dt{color:var(--muted)}
@@ -120,7 +125,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
   .adm-top,.adm-bar,.adm-filtros,.adm-hint,.adm-error,.adm-aviso,#vistaLogin,#detalle,.adm-vacio{display:none!important}
   .adm-main{padding:16mm;max-width:none;width:auto;box-sizing:border-box} /* Ctrl+P directo */
   .adm-lista{display:block}
-  .adm-fila{display:block;width:100%;break-inside:avoid;border:0;border-bottom:1px solid #999;border-left:0;padding:6px 0;background:none;margin:0}
+  .adm-fila{display:flex;width:100%;break-inside:avoid;border:0;border-bottom:1px solid #999;border-left:0;padding:6px 0;background:none;margin:0}
   .adm-badge,.adm-chip{border:1px solid #999;background:none!important;color:#000!important}
 
   /* Impresión desde los botones: todo sale por #fichaPrint, envuelto en una tabla cuyo encabezado y pie
@@ -140,6 +145,8 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
   body[data-print="ficha"] .ficha > *{margin-bottom:14px}
   body[data-print="ficha"] .ficha section{break-inside:avoid;page-break-inside:avoid}
   body[data-print="ficha"] .ficha h2{color:#000;font-size:24pt}
+  .ficha-foto{width:34mm;height:45mm}
+  .adm-fila-foto{width:12mm;height:16mm}
   body[data-print="ficha"] .ficha h3{color:#444}
   body[data-print="ficha"] .ficha dl{grid-template-columns:minmax(0,45%) minmax(0,1fr)}
   body[data-print="ficha"] .ficha dt,body[data-print="ficha"] .ficha dd{overflow-wrap:anywhere}

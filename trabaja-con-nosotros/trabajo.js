@@ -91,6 +91,7 @@ function armarPreguntas() {
 function armarGrilla() {
   const head = $('grillaHead');
   TURNOS.forEach(t => head.append(h('th', { scope: 'col' }, t.nombre, h('small', { text: t.horas }))));
+  head.append(h('th', { scope: 'col' }, 'Todo el día'));
   const body = $('grillaBody');
   DIAS.forEach(d => {
     body.append(h('tr', null,
@@ -100,9 +101,46 @@ function armarGrilla() {
           h('span', { class: 'sr-only', text: d.nombre + ' ' + t.nombre }),
           h('input', { type: 'checkbox', name: 'grilla', value: d.id + '-' + t.id })
         )
-      ))
+      )),
+      // Un solo tilde marca los 3 turnos del día (sin "name": no se envía, solo es un atajo).
+      h('td', null,
+        h('label', null,
+          h('span', { class: 'sr-only', text: 'Todos los turnos del ' + d.nombre.toLowerCase() }),
+          h('input', { type: 'checkbox', 'data-dia': d.id })
+        )
+      )
     ));
   });
+  $('grilla').addEventListener('change', (ev) => {
+    const el = ev.target;
+    if (el.dataset && el.dataset.dia) {
+      form.querySelectorAll('input[name="grilla"]').forEach(c => { if (c.value.startsWith(el.dataset.dia + '-')) c.checked = el.checked; });
+    }
+    sincronizarGrilla();
+    guardarBorrador();
+  });
+  $('grillaTodos').addEventListener('change', (ev) => {
+    form.querySelectorAll('input[name="grilla"]').forEach(c => { c.checked = ev.target.checked; });
+    sincronizarGrilla();
+    guardarBorrador();
+  });
+}
+
+// Mantiene coherentes los atajos: "Todo el día" por fila y "Disponibilidad completa" general.
+function sincronizarGrilla() {
+  const celdas = Array.from(form.querySelectorAll('input[name="grilla"]'));
+  DIAS.forEach(d => {
+    const cs = celdas.filter(c => c.value.startsWith(d.id + '-'));
+    const n = cs.filter(c => c.checked).length;
+    const t = form.querySelector('input[data-dia="' + d.id + '"]');
+    if (!t) return;
+    t.checked = n === cs.length;
+    t.indeterminate = n > 0 && n < cs.length;
+  });
+  const marcadas = celdas.filter(c => c.checked).length;
+  const g = $('grillaTodos');
+  g.checked = marcadas === celdas.length;
+  g.indeterminate = marcadas > 0 && marcadas < celdas.length;
 }
 
 function llenarSelect(id, opciones) {
@@ -150,7 +188,8 @@ function leer() {
     trabajos,
     resumen: String(fd.get('resumen') || '').trim().slice(0, 800),
     referencias: limpiar(fd.get('referencias')).slice(0, 400),
-    consentimiento: fd.get('consentimiento') === '1'
+    consentimiento: fd.get('consentimiento') === '1',
+    foto: fotoValida(foto) ? foto : ''
   };
 }
 
@@ -256,6 +295,7 @@ function armarResumen() {
   const box = $('resumenBox');
   box.replaceChildren();
   filas.forEach(([k, v]) => { box.append(h('dt', { text: k }), h('dd', { text: v || '—' })); });
+  if (d.foto) box.append(h('dt', { text: 'Foto' }), h('dd', null, h('img', { src: d.foto, alt: 'Tu foto', class: 'resumen-foto' })));
 }
 
 // ── Borrador local (solo en este dispositivo) ───────────────
@@ -291,6 +331,7 @@ function restaurarBorrador() {
     aplicarDatos(datos);                 // 1) puestos y campos fijos
     armarPreguntas();                    // 2) preguntas según puestos
     aplicarDatos(datos);                 // 3) respuestas
+    sincronizarGrilla();
     $('puestosBox').dispatchEvent(new Event('change'));
     mostrarPaso(p);
     return true;
@@ -300,6 +341,95 @@ function restaurarBorrador() {
 form.addEventListener('input', (ev) => { ev.target.removeAttribute && ev.target.removeAttribute('aria-invalid'); guardarBorrador(); });
 form.addEventListener('change', (ev) => { ev.target.removeAttribute && ev.target.removeAttribute('aria-invalid'); guardarBorrador(); });
 
+// ── Foto: se achica en el navegador antes de guardarla ──────
+const FOTO_LADO = 480;          // píxeles del lado más largo
+const FOTO_MAX_CHARS = 80000;   // ~60 KB; las reglas aceptan hasta 90000
+const FOTO_ORIGEN_MAX = 40 * 1024 * 1024;
+const FOTO_KEY = 'gg-postulacion-foto';
+const FOTO_PREFIJO = 'data:image/jpeg;base64,';
+let foto = '';
+
+function fotoValida(s) { return typeof s === 'string' && s.startsWith(FOTO_PREFIJO) && s.length <= FOTO_MAX_CHARS; }
+
+async function abrirImagen(file) {
+  if (window.createImageBitmap) {
+    try { return await createImageBitmap(file, { imageOrientation: 'from-image' }); } catch (_) { /* cae al método clásico */ }
+  }
+  return new Promise((ok, mal) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => { URL.revokeObjectURL(url); ok(img); };
+    img.onerror = () => { URL.revokeObjectURL(url); mal(new Error('No se pudo leer la imagen')); };
+    img.src = url;
+  });
+}
+
+async function achicarFoto(file) {
+  const img = await abrirImagen(file);
+  const w0 = img.naturalWidth || img.width, h0 = img.naturalHeight || img.height;
+  if (!w0 || !h0) throw new Error('Imagen vacía');
+  let lado = FOTO_LADO;
+  for (let intento = 0; intento < 4; intento++) {
+    const esc = Math.min(1, lado / Math.max(w0, h0));
+    const c = document.createElement('canvas');
+    c.width = Math.max(1, Math.round(w0 * esc));
+    c.height = Math.max(1, Math.round(h0 * esc));
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#fff';                     // fondo blanco para PNG con transparencia
+    ctx.fillRect(0, 0, c.width, c.height);
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(img, 0, 0, c.width, c.height);
+    for (const q of [0.82, 0.72, 0.62, 0.5]) {
+      const url = c.toDataURL('image/jpeg', q);
+      if (url.length <= FOTO_MAX_CHARS) { if (img.close) img.close(); return url; }
+    }
+    lado = Math.round(lado * 0.75);
+  }
+  if (img.close) img.close();
+  throw new Error('No se pudo achicar lo suficiente');
+}
+
+function pintarFoto() {
+  const prev = $('fotoPreview');
+  const icono = prev.querySelector('svg');
+  prev.querySelectorAll('img').forEach(i => i.remove());
+  if (foto) {
+    if (icono) icono.style.display = 'none';
+    prev.append(h('img', { src: foto, alt: '' }));
+  } else if (icono) icono.style.display = '';
+  $('fotoQuitar').hidden = !foto;
+  $('fotoBtn').textContent = foto ? 'Cambiar foto' : 'Elegir o sacar una foto';
+}
+
+function errorFoto(txt) { $('fotoError').textContent = txt || ''; $('fotoError').hidden = !txt; }
+
+function guardarFoto() {
+  try { foto ? localStorage.setItem(FOTO_KEY, foto) : localStorage.removeItem(FOTO_KEY); } catch (_) { /* sin localStorage */ }
+}
+
+$('f-foto').addEventListener('change', async (ev) => {
+  const file = ev.target.files && ev.target.files[0];
+  ev.target.value = '';                        // permite volver a elegir el mismo archivo
+  if (!file) return;
+  errorFoto('');
+  if (file.size > FOTO_ORIGEN_MAX) { errorFoto('Esa foto es demasiado grande (más de 40 MB). Elegí otra.'); return; }
+  $('fotoPreview').classList.add('is-loading');
+  try {
+    foto = await achicarFoto(file);
+    pintarFoto();
+    guardarFoto();
+  } catch (err) {
+    console.error('Foto', err);
+    errorFoto('No pudimos leer esa foto. Probá con otra en formato JPG o PNG (o sacá una nueva con la cámara).');
+  } finally { $('fotoPreview').classList.remove('is-loading'); }
+});
+
+$('fotoQuitar').addEventListener('click', () => { foto = ''; errorFoto(''); pintarFoto(); guardarFoto(); });
+
+function restaurarFoto() {
+  try { const g = localStorage.getItem(FOTO_KEY); if (fotoValida(g)) { foto = g; pintarFoto(); } } catch (_) { /* nada */ }
+}
+
 // ── Envío ───────────────────────────────────────────────────
 let db = null;
 function conectar() {
@@ -308,7 +438,7 @@ function conectar() {
 }
 
 function exito(nombre) {
-  try { localStorage.removeItem(BORRADOR); localStorage.setItem(ENVIADA, String(Date.now())); } catch (_) {}
+  try { localStorage.removeItem(BORRADOR); localStorage.removeItem(FOTO_KEY); localStorage.setItem(ENVIADA, String(Date.now())); } catch (_) {}
   $('okNombre').textContent = nombre.split(' ')[0];
   form.hidden = true;
   $('jobOk').hidden = false;
@@ -350,4 +480,6 @@ llenarSelect('f-jornada', JORNADAS);
 llenarSelect('f-empieza', EMPIEZA);
 llenarSelect('f-anios', ANIOS);
 conectar();
+restaurarFoto();
+sincronizarGrilla();
 if (!restaurarBorrador()) mostrarPaso(1);

@@ -37,11 +37,11 @@ service cloud.firestore {
       function postulacionValida(d) {
         return d.keys().hasOnly([
             'nombre', 'telefono', 'email', 'zona', 'puestos', 'extras', 'disponibilidad',
-            'experienciaAnios', 'trabajos', 'resumen', 'referencias', 'consentimiento', 'estado', 'creadoEn'
+            'experienciaAnios', 'trabajos', 'resumen', 'referencias', 'consentimiento', 'foto', 'estado', 'creadoEn'
           ])
           && d.keys().hasAll([
             'nombre', 'telefono', 'email', 'zona', 'puestos', 'extras', 'disponibilidad',
-            'experienciaAnios', 'trabajos', 'resumen', 'referencias', 'consentimiento', 'estado', 'creadoEn'
+            'experienciaAnios', 'trabajos', 'resumen', 'referencias', 'consentimiento', 'foto', 'estado', 'creadoEn'
           ])
           && d.nombre is string && d.nombre.size() >= 2 && d.nombre.size() <= 80
           && d.telefono is string && d.telefono.matches('^[0-9]{10}$')
@@ -63,6 +63,8 @@ service cloud.firestore {
           && d.trabajos is list && d.trabajos.size() <= 3
           && d.resumen is string && d.resumen.size() <= 800
           && d.referencias is string && d.referencias.size() <= 400
+          && d.foto is string && d.foto.size() <= 90000
+          && (d.foto == '' || d.foto.matches('^data:image/jpeg;base64,.*$'))
           && d.consentimiento == true
           && d.estado == 'nuevo'
           && d.creadoEn == request.time;

@@ -40,6 +40,8 @@ function h(tag, attrs, ...hijos) {
 const fmt = new Intl.DateTimeFormat('es-AR', { dateStyle: 'short', timeStyle: 'short', timeZone: 'America/Argentina/Buenos_Aires' });
 const fmtFecha = (d) => (d ? fmt.format(d) : '—');
 const mostrar = (el, txt) => { el.textContent = txt || ''; el.hidden = !txt; };
+// Solo se usa como imagen si es un JPEG en data URL; cualquier otra cosa se ignora.
+const conFoto = (p) => typeof p.foto === 'string' && p.foto.startsWith('data:image/jpeg;base64,');
 const nombresPuestos = (p) => p.puestos.map(id => (puestoPorId[id] ? puestoPorId[id].nombre : id));
 const sectoresDe = (p) => [...new Set(p.puestos.map(id => puestoPorId[id] && puestoPorId[id].sector).filter(Boolean))];
 
@@ -221,6 +223,8 @@ function pintarLista() {
   $('lista').replaceChildren(...visibles.map(p => {
     const est = p.estado || 'nuevo';
     const fila = h('button', { type: 'button', class: 'adm-fila', 'data-estado': est },
+      conFoto(p) ? h('img', { class: 'adm-fila-foto', src: p.foto, alt: 'Foto de ' + p.nombre }) : h('span', { class: 'adm-fila-foto adm-fila-foto--vacia', 'aria-hidden': 'true' }),
+      h('span', { class: 'adm-fila-cuerpo' },
       h('span', { class: 'adm-fila-top' },
         h('span', { class: 'adm-fila-nombre', text: p.nombre }),
         h('span', { class: 'adm-badge', 'data-estado': est, text: estadoNombre[est] || est }),
@@ -236,6 +240,7 @@ function pintarLista() {
         p.ultimaNota.length > 140 ? p.ultimaNota.slice(0, 140) + '…' : p.ultimaNota,
         h('small', { text: ' — ' + (p.ultimaNotaPor || '') + (p.ultimaNotaEn ? ', ' + fmtFecha(p.ultimaNotaEn) : '') })
       ) : null
+      )
     );
     fila.addEventListener('click', () => abrirDetalle(p));
     return h('li', null, fila);
@@ -252,9 +257,12 @@ function dl(filas) {
 function renderFicha(p, notas, paraImprimir) {
   const est = p.estado || 'nuevo';
   const f = h('article', { class: 'ficha' });
-  f.append(h('div', null,
-    h('h2', paraImprimir ? { text: p.nombre } : { id: 'detNombre', text: p.nombre }),
-    h('p', { class: 'ficha-sub', text: 'Postulación del ' + fmtFecha(p.fecha) + ' · Estado: ' + (estadoNombre[est] || est) })
+  f.append(h('div', { class: 'ficha-cabecera' },
+    h('div', null,
+      h('h2', paraImprimir ? { text: p.nombre } : { id: 'detNombre', text: p.nombre }),
+      h('p', { class: 'ficha-sub', text: 'Postulación del ' + fmtFecha(p.fecha) + ' · Estado: ' + (estadoNombre[est] || est) })
+    ),
+    conFoto(p) ? h('img', { class: 'ficha-foto', src: p.foto, alt: 'Foto de ' + p.nombre }) : null
   ));
   f.append(h('section', null, h('h3', { text: 'Contacto' }), dl([
     ['WhatsApp', p.telefono], ['Email', p.email], ['Zona', p.zona]
@@ -471,6 +479,7 @@ $('btnExcel').addEventListener('click', async () => {
         'WhatsApp': p.telefono,
         'Email': p.email,
         'Zona': p.zona,
+        'Foto': conFoto(p) ? 'Sí' : 'No',
         'Puestos': nombresPuestos(p).join(', '),
         'Sectores': sectoresDe(p).map(s => SECTORES[s].nombre).join(', '),
         'Años de experiencia': p.experienciaAnios || '',
@@ -489,7 +498,7 @@ $('btnExcel').addEventListener('click', async () => {
       };
     });
     const ws = XLSX.utils.json_to_sheet(filas);
-    ws['!cols'] = [16, 24, 14, 28, 18, 28, 20, 16, 30, 40, 12, 14, 9, 50, 40, 30, 12, 26, 50, 10].map(w => ({ wch: w }));
+    ws['!cols'] = [16, 24, 14, 28, 18, 8, 28, 20, 16, 30, 40, 12, 14, 9, 50, 40, 30, 12, 26, 50, 10].map(w => ({ wch: w }));
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Postulaciones');
     const hoy = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Argentina/Buenos_Aires' });

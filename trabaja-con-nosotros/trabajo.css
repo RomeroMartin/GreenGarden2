@@ -62,11 +62,31 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
 .grilla input{width:24px;height:24px;accent-color:var(--green);cursor:pointer}
 .grilla td label{display:flex;align-items:center;justify-content:center;min-height:40px;cursor:pointer}
 
+/* Foto */
+.foto-row{display:flex;align-items:center;gap:16px}
+.foto-preview{flex:none;width:96px;height:128px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line);color:var(--gold-ink);overflow:hidden}
+.foto-preview img{width:100%;height:100%;object-fit:cover}
+.foto-acciones{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.foto-btn{min-height:48px;padding:0 20px;font-size:12px;cursor:pointer}
+.foto-acciones:focus-within .foto-btn{outline:2px solid var(--gold);outline-offset:3px}
+.foto-quitar{min-height:40px;padding:0;background:none;border:0;font:inherit;font-size:14px;color:var(--gold-ink);text-decoration:underline;cursor:pointer}
+.foto-quitar[hidden]{display:none}
+.foto-error{padding:8px 12px;background:#fbeeea;border:1px solid #B3402F;color:#7a2418;font-size:14px}
+.foto-error[hidden]{display:none}
+.foto-preview.is-loading{opacity:.5}
+
+/* Disponibilidad completa */
+.check--todo{padding:12px 14px;background:#fff;border:1px solid var(--gold)}
+.grilla th:last-child,.grilla td:last-child{border-left:1px solid var(--gold);background:#fcfaf4}
+.grilla input[data-dia]{accent-color:var(--gold-ink)}
+
 /* Trabajos anteriores */
 .trabajo{display:grid;grid-template-columns:1fr;gap:10px;padding:14px;background:#fff;border:1px solid var(--line)}
 .trabajo-titulo{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-ink)}
 @media (min-width:640px){.trabajo{grid-template-columns:1.4fr 1fr 1fr}.trabajo-titulo{grid-column:1/-1}}
 .trabajo label{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--muted)}
+
+.resumen-foto{width:72px;height:96px;object-fit:cover;border:1px solid var(--line)}
 
 /* Resumen final */
 .resumen{display:grid;grid-template-columns:1fr;gap:2px 16px;margin:0;padding:14px 16px;background:#fff;border:1px solid var(--line);font-size:15px}

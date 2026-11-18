@@ -108,6 +108,21 @@
           <label for="f-zona">Barrio o localidad donde vivís</label>
           <input id="f-zona" name="zona" type="text" maxlength="80" autocomplete="address-level2" placeholder="Ej: City Bell, Tolosa, Centro" required>
         </div>
+        <div class="field foto-field">
+          <span class="field-title">Foto <span class="opt">(opcional)</span></span>
+          <div class="foto-row">
+            <div class="foto-preview" id="fotoPreview" aria-hidden="true">
+              <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.5 20c.9-3.6 3.8-5.6 7.5-5.6s6.6 2 7.5 5.6"/></svg>
+            </div>
+            <div class="foto-acciones">
+              <label class="btn btn--outline foto-btn" for="f-foto" id="fotoBtn">Elegir o sacar una foto</label>
+              <input id="f-foto" type="file" accept="image/*" class="sr-only" aria-describedby="h-foto">
+              <button type="button" class="foto-quitar" id="fotoQuitar" hidden>Quitar foto</button>
+            </div>
+          </div>
+          <p class="hint" id="h-foto">Una foto de frente y con buena luz. Podés subirla de cualquier tamaño: la achicamos automáticamente.</p>
+          <p class="foto-error" id="fotoError" role="alert" hidden></p>
+        </div>
       </fieldset>
 
       <!-- Paso 2 -->
@@ -128,6 +143,10 @@
       <fieldset class="job-step" data-step="4" hidden>
         <legend>Disponibilidad</legend>
         <p class="hint">Marcá todos los días y turnos en los que podrías trabajar.</p>
+        <label class="check check--todo">
+          <input type="checkbox" id="grillaTodos">
+          <span>Tengo disponibilidad completa (todos los días, en los 3 turnos)</span>
+        </label>
         <div class="grilla-wrap">
           <table class="grilla" id="grilla">
             <thead><tr id="grillaHead"><th scope="col"><span class="sr-only">Día</span></th></tr></thead>
@@ -177,7 +196,7 @@
 
         <label class="check check--consent">
           <input type="checkbox" name="consentimiento" id="f-consent" value="1" required>
-          <span>Acepto que Green Garden guarde mis datos para evaluar mi postulación y contactarme por búsquedas laborales.</span>
+          <span>Acepto que Green Garden guarde mis datos (y mi foto, si la subí) para evaluar mi postulación y contactarme por búsquedas laborales.</span>
         </label>
 
         <details class="privacidad">
@@ -185,7 +204,7 @@
           <div>
             <p><strong>Responsable:</strong> Green Garden, Diag. 74 1618, La Plata, Buenos Aires.</p>
             <p><strong>Para qué los usamos:</strong> evaluar tu postulación y contactarte por búsquedas laborales de Green Garden. No los vendemos ni los cedemos a terceros.</p>
-            <p><strong>Quién los ve:</strong> los encargados de sector de Green Garden que participan de la selección.</p>
+            <p><strong>Quién los ve:</strong> los encargados de sector de Green Garden que participan de la selección. Si subís una foto, la guardamos junto con tu postulación y la ven las mismas personas.</p>
             <p><strong>Cuánto los guardamos:</strong> hasta 12 meses desde que completaste el formulario. Después los eliminamos.</p>
             <p><strong>Dónde se guardan:</strong> en servidores de Google (Firebase), que pueden estar fuera de Argentina.</p>
             <p><strong>Tus derechos:</strong> podés pedir acceder a tus datos, corregirlos o que los eliminemos cuando quieras, escribiendo a <a href="mailto:greengardenlaplata@gmail.com">greengardenlaplata@gmail.com</a>. Sos titular de los datos y tenés los derechos que reconoce la Ley 25.326 de Protección de Datos Personales. La Agencia de Acceso a la Información Pública (AAIP) es el órgano de control y atiende denuncias y reclamos por incumplimientos.</p>
