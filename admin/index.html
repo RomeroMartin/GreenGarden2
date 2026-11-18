@@ -83,14 +83,14 @@
         <button type="button" class="adm-btn" id="detImprimir">Imprimir / PDF</button>
         <button type="button" class="adm-btn adm-btn--danger" id="detBorrar" hidden>Eliminar</button>
       </div>
-    </div>
-    <div id="detalleBody"></div>
-    <section class="adm-gestion" aria-label="Gestión">
-      <h3>Estado de la postulación</h3>
       <div class="adm-estado-row">
-        <select id="detEstado" aria-label="Estado"></select>
+        <label class="adm-estado-label" for="detEstado">Estado de la postulación</label>
+        <select id="detEstado"></select>
         <span class="adm-hint" id="detEstadoInfo"></span>
       </div>
+    </div>
+    <div id="detalleBody"></div>
+    <section class="adm-gestion" aria-label="Notas">
       <h3>Notas internas</h3>
       <ul class="adm-notas" id="detNotas"></ul>
       <form id="formNota" class="adm-nota-form">

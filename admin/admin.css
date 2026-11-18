@@ -61,6 +61,9 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
 .adm-fila-nombre{font-size:18px;color:var(--green)}
 .adm-fila-meta{font-size:14px;color:var(--muted)}
 .adm-fila-meta span+span::before{content:" · "}
+.adm-fila-nota{display:block;padding:6px 10px;background:#fff;border-left:3px solid var(--gold);font-size:14px;line-height:1.4;color:var(--ink);overflow-wrap:anywhere}
+.adm-fila-nota strong{font-weight:400;color:var(--gold-ink)}
+.adm-fila-nota small{color:var(--muted)}
 .adm-fecha{margin-left:auto;font-size:13px;color:var(--muted)}
 .adm-chips{display:flex;flex-wrap:wrap;gap:6px}
 .adm-chip{padding:2px 10px;border:1px solid var(--line);border-radius:999px;font-size:13px;background:#fff;color:var(--ink)}
@@ -79,6 +82,8 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
 .adm-dialog::backdrop{background:rgba(0,16,14,.6)}
 .adm-dialog-in{padding:16px var(--pad) 48px;display:flex;flex-direction:column;gap:20px}
 .adm-dialog-bar{display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:space-between;position:sticky;top:0;z-index:2;padding:10px 0;background:var(--ivory);border-bottom:1px solid var(--line)}
+.adm-dialog-bar .adm-estado-row{flex:1 1 100%;padding:8px 12px;background:var(--paper);border:1px solid var(--gold)}
+.adm-estado-label{flex:none;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-ink)}
 
 .ficha{background:var(--paper);border:1px solid var(--line);padding:clamp(16px,3vw,28px);display:flex;flex-direction:column;gap:18px}
 .ficha h2{font-family:var(--f-display);font-weight:400;text-transform:uppercase;letter-spacing:.05em;font-size:clamp(26px,4vw,36px);color:var(--green);line-height:1.1}
@@ -108,17 +113,26 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
 #fichaPrint{display:none}
 
 @media print{
-  @page{margin:14mm}
-  body{background:#fff;color:#000}
+  @page{size:A4;margin:14mm}
+  /* Sin alturas ni recortes heredados de la pantalla: la hoja manda. */
+  html,body{height:auto!important;min-height:0!important;overflow:visible!important;width:auto!important;background:#fff!important;color:#000}
   .adm-top,.adm-bar,.adm-filtros,.adm-hint,.adm-error,.adm-aviso,#vistaLogin,#detalle,.adm-vacio{display:none!important}
-  .adm-main{padding:0;max-width:none}
-  .adm-fila{break-inside:avoid;border:0;border-bottom:1px solid #999;border-left:0;padding:6px 0;background:none}
+  .adm-main{padding:0;max-width:none;width:auto}
+  .adm-lista{display:block}
+  .adm-fila{display:block;width:100%;break-inside:avoid;border:0;border-bottom:1px solid #999;border-left:0;padding:6px 0;background:none;margin:0}
   .adm-badge,.adm-chip{border:1px solid #999;background:none!important;color:#000!important}
 
   body[data-print="ficha"] #vistaApp{display:none!important}
-  body[data-print="ficha"] #fichaPrint{display:block}
-  body[data-print="ficha"] .ficha{border:0;padding:0;background:none}
-  body[data-print="ficha"] .ficha h2{color:#000}
+  body[data-print="ficha"] #fichaPrint{display:block!important;width:100%;max-width:none;overflow:visible}
+  body[data-print="ficha"] .ficha{display:block;width:100%;max-width:none;border:0;padding:0;background:none;font-size:11pt}
+  body[data-print="ficha"] .ficha > *{margin-bottom:14px}
+  body[data-print="ficha"] .ficha section{break-inside:avoid;page-break-inside:avoid}
+  body[data-print="ficha"] .ficha h2{color:#000;font-size:24pt}
   body[data-print="ficha"] .ficha h3{color:#444}
-  body[data-print="listado"] #fichaPrint{display:none}
+  body[data-print="ficha"] .ficha dl{grid-template-columns:minmax(0,45%) minmax(0,1fr)}
+  body[data-print="ficha"] .ficha dt,body[data-print="ficha"] .ficha dd{overflow-wrap:anywhere}
+  body[data-print="ficha"] .ficha p{font-size:11pt}
+  body[data-print="ficha"] .ficha-grilla{width:auto;max-width:100%;break-inside:avoid}
+  body[data-print="ficha"] .ficha-grilla tr{break-inside:avoid}
+  body[data-print="listado"] #fichaPrint{display:none!important}
 }

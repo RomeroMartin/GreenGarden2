@@ -138,6 +138,7 @@ async function cargar() {
       return Object.assign({ id: d.id }, x, {
         fecha: x.creadoEn && x.creadoEn.toDate ? x.creadoEn.toDate() : null,
         estadoEn: x.estadoEn && x.estadoEn.toDate ? x.estadoEn.toDate() : null,
+        ultimaNotaEn: x.ultimaNotaEn && x.ultimaNotaEn.toDate ? x.ultimaNotaEn.toDate() : null,
         puestos: Array.isArray(x.puestos) ? x.puestos : [],
         extras: x.extras || {},
         disponibilidad: Object.assign({ grilla: [] }, x.disponibilidad),
@@ -229,7 +230,12 @@ function pintarLista() {
       h('span', { class: 'adm-chips' }, nombresPuestos(p).map(n => h('span', { class: 'adm-chip', text: n }))),
       h('span', { class: 'adm-fila-meta' },
         h('span', { text: p.zona }), h('span', { text: p.experienciaAnios || 'Sin dato de experiencia' }), h('span', { text: p.telefono })
-      )
+      ),
+      p.ultimaNota ? h('span', { class: 'adm-fila-nota' },
+        h('strong', { text: 'Nota' + (p.cantNotas > 1 ? ' (' + p.cantNotas + ' en total)' : '') + ': ' }),
+        p.ultimaNota.length > 140 ? p.ultimaNota.slice(0, 140) + '…' : p.ultimaNota,
+        h('small', { text: ' — ' + (p.ultimaNotaPor || '') + (p.ultimaNotaEn ? ', ' + fmtFecha(p.ultimaNotaEn) : '') })
+      ) : null
     );
     fila.addEventListener('click', () => abrirDetalle(p));
     return h('li', null, fila);
@@ -343,14 +349,29 @@ $('formNota').addEventListener('submit', async (ev) => {
   if (!texto || !actual) return;
   mostrar($('detError'), '');
   const btn = ev.submitter; btn.disabled = true;
+  const p = actual;
   try {
-    await addDoc(collection(db, 'postulaciones', actual.id, 'notas'), { texto, por: perfil.email, en: serverTimestamp() });
+    await addDoc(collection(db, 'postulaciones', p.id, 'notas'), { texto, por: perfil.email, en: serverTimestamp() });
     notasActual.push({ texto, por: perfil.email, en: new Date() });
     pintarNotas();
     $('notaTexto').value = '';
   } catch (err) {
     console.error(err);
     mostrar($('detError'), 'No pudimos guardar la nota.');
+    btn.disabled = false;
+    return;
+  }
+  // Resumen de la última nota en la propia postulación, para verla en el listado sin abrirla.
+  try {
+    const cant = Math.max(notasActual.length, (p.cantNotas || 0) + 1);
+    await updateDoc(doc(db, 'postulaciones', p.id), {
+      ultimaNota: texto.slice(0, 200), ultimaNotaPor: perfil.email, ultimaNotaEn: serverTimestamp(), cantNotas: cant
+    });
+    Object.assign(p, { ultimaNota: texto.slice(0, 200), ultimaNotaPor: perfil.email, ultimaNotaEn: new Date(), cantNotas: cant });
+    aplicarFiltros();
+  } catch (err) {
+    console.error(err);
+    mostrar($('detError'), 'La nota se guardó, pero no pudimos mostrarla en el listado.');
   } finally { btn.disabled = false; }
 });
 
@@ -387,15 +408,23 @@ $('btnDepurar').addEventListener('click', async () => {
 });
 
 // ── Imprimir ────────────────────────────────────────────────
-function imprimir(modo) {
+function imprimir(modo, reabrir) {
   document.body.dataset.print = modo;
-  const limpiar = () => { delete document.body.dataset.print; $('fichaPrint').replaceChildren(); window.removeEventListener('afterprint', limpiar); };
+  const limpiar = () => {
+    delete document.body.dataset.print;
+    $('fichaPrint').replaceChildren();
+    window.removeEventListener('afterprint', limpiar);
+    if (reabrir) reabrir();
+  };
   window.addEventListener('afterprint', limpiar);
   window.print();
 }
 $('detImprimir').addEventListener('click', () => {
-  $('fichaPrint').replaceChildren(renderFicha(actual, notasActual, true));
-  imprimir('ficha');
+  // Se cierra el panel de detalle antes de imprimir: así la ficha sale sola, sin nada superpuesto.
+  const p = actual, notas = notasActual;
+  $('fichaPrint').replaceChildren(renderFicha(p, notas, true));
+  dlg.close();
+  imprimir('ficha', () => { actual = p; notasActual = notas; if (!dlg.open) dlg.showModal(); });
 });
 $('btnImprimirLista').addEventListener('click', () => imprimir('listado'));
 
@@ -435,11 +464,13 @@ $('btnExcel').addEventListener('click', async () => {
         'Comentarios': p.resumen || '',
         'Referencias': p.referencias || '',
         'Estado': estadoNombre[p.estado || 'nuevo'] || p.estado,
-        'Estado cambiado por': p.estadoPor || ''
+        'Estado cambiado por': p.estadoPor || '',
+        'Última nota': p.ultimaNota ? p.ultimaNota + ' (' + (p.ultimaNotaPor || '') + ')' : '',
+        'Cantidad de notas': p.cantNotas || 0
       };
     });
     const ws = XLSX.utils.json_to_sheet(filas);
-    ws['!cols'] = [16, 24, 14, 28, 18, 28, 20, 16, 30, 40, 12, 14, 9, 50, 40, 30, 12, 26].map(w => ({ wch: w }));
+    ws['!cols'] = [16, 24, 14, 28, 18, 28, 20, 16, 30, 40, 12, 14, 9, 50, 40, 30, 12, 26, 50, 10].map(w => ({ wch: w }));
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Postulaciones');
     const hoy = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Argentina/Buenos_Aires' });

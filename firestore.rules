@@ -77,9 +77,19 @@ service cloud.firestore {
           && d.estadoEn == request.time;
       }
 
+      // Resumen de la última nota (para mostrarla en el listado sin abrir la postulación).
+      function resumenDeNotaValido() {
+        let d = request.resource.data;
+        return d.diff(resource.data).affectedKeys().hasOnly(['ultimaNota', 'ultimaNotaPor', 'ultimaNotaEn', 'cantNotas'])
+          && d.ultimaNota is string && d.ultimaNota.size() >= 1 && d.ultimaNota.size() <= 200
+          && d.ultimaNotaPor == mail()
+          && d.ultimaNotaEn == request.time
+          && d.cantNotas is int && d.cantNotas >= 1 && d.cantNotas <= 500;
+      }
+
       allow create: if postulacionValida(request.resource.data);
       allow read: if esStaff();
-      allow update: if esStaff() && cambioDeEstadoValido();
+      allow update: if esStaff() && (cambioDeEstadoValido() || resumenDeNotaValido());
       allow delete: if esAdmin();
 
       // Notas internas: se agregan, no se editan. Cada una queda firmada por quien la escribió.
