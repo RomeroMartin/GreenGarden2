@@ -76,7 +76,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 .header-bar{height:var(--header-h);display:flex;align-items:center;justify-content:space-between;gap:16px}
 .header-logo img{height:54px;width:auto}
 .nav-desktop{display:none;align-items:center;gap:36px}
-.nav-desktop a{color:var(--ivory);text-decoration:none;font-size:13px;letter-spacing:.18em;text-transform:uppercase}
+.nav-desktop a{color:var(--ivory);text-decoration:none;font-size:13px;letter-spacing:.18em;text-transform:uppercase;white-space:nowrap}
 .nav-desktop a:hover{color:var(--gold)}
 .header-actions{display:flex;align-items:center;gap:18px}
 .status{display:none;align-items:center;gap:8px;color:var(--muted-dark-2);font-size:13px;letter-spacing:.04em}
@@ -95,8 +95,17 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 .nav-mobile .status{display:flex;margin-top:22px;font-size:15px}
 
 @media (min-width:900px){
-  .nav-desktop,.status{display:flex}
+  .status{display:flex}
+}
+/* El menú de escritorio recién entra desde 1100px (con "Trabajá con nosotros" no cabe en menos). */
+@media (min-width:1100px){
+  .nav-desktop{display:flex;gap:24px}
+  .nav-desktop a{letter-spacing:.12em}
   .menu-toggle,.nav-mobile,.nav-mobile.is-open{display:none}
+}
+@media (min-width:1280px){
+  .nav-desktop{gap:36px}
+  .nav-desktop a{letter-spacing:.18em}
 }
 
 /* ── Utilidades de sección ── */
@@ -113,7 +122,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 .footer-brand{display:flex;flex-direction:column;align-items:center;gap:14px}
 .footer-brand img{width:200px;height:auto}
 .footer-brand p{font-family:var(--f-italic);font-size:19px;line-height:1.4;color:var(--gold)}
-.footer-cols{width:100%;max-width:760px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:32px 48px}
+.footer-cols{width:100%;max-width:980px;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:32px 40px}
 .footer-col{display:flex;flex-direction:column;align-items:center;gap:10px;font-size:15px;line-height:1.5;color:#D9D4C8}
 .footer-col h3{font-family:var(--f-text);font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:400;color:var(--gold)}
 .footer-col a{color:var(--ivory);text-decoration:none}
