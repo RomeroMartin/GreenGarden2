@@ -419,14 +419,33 @@ function imprimir(modo, reabrir) {
   window.addEventListener('afterprint', limpiar);
   window.print();
 }
+// Envuelve el contenido en una tabla con espaciadores arriba y abajo que se repiten en cada hoja (ver admin.css).
+function marcoImpresion(...hijos) {
+  const hueco = () => h('div', { class: 'print-gap' });
+  return h('table', { class: 'print-frame', role: 'presentation' },
+    h('thead', null, h('tr', null, h('td', null, hueco()))),
+    h('tfoot', null, h('tr', null, h('td', null, hueco()))),
+    h('tbody', null, h('tr', null, h('td', { class: 'print-body' }, ...hijos)))
+  );
+}
+
 $('detImprimir').addEventListener('click', () => {
   // Se cierra el panel de detalle antes de imprimir: así la ficha sale sola, sin nada superpuesto.
   const p = actual, notas = notasActual;
-  $('fichaPrint').replaceChildren(renderFicha(p, notas, true));
+  $('fichaPrint').replaceChildren(marcoImpresion(renderFicha(p, notas, true)));
   dlg.close();
   imprimir('ficha', () => { actual = p; notasActual = notas; if (!dlg.open) dlg.showModal(); });
 });
-$('btnImprimirLista').addEventListener('click', () => imprimir('listado'));
+$('btnImprimirLista').addEventListener('click', () => {
+  const lista = $('lista').cloneNode(true);
+  lista.removeAttribute('id');
+  $('fichaPrint').replaceChildren(marcoImpresion(
+    h('h2', { class: 'print-title', text: 'Postulaciones · Green Garden' }),
+    h('p', { class: 'ficha-sub', text: visibles.length + ' postulaciones · ' + fmtFecha(new Date()) }),
+    lista
+  ));
+  imprimir('listado');
+});
 
 // ── Excel ───────────────────────────────────────────────────
 function cargarSheetJS() {
