@@ -251,3 +251,5 @@ body.carta-open{overflow:hidden}
 /* Hoja 03 · Entradas: más aire entre renglones desde Empanada salteña y logos más abajo */
 .hoja--entradas .platos > li:nth-child(n+11){margin-top:5px}
 .hoja--entradas .hoja-logo + .hoja-pie{margin-top:12px}
+/* Hoja 04 · Nuestra cocina: más separación entre el título y los platos */
+.hoja--nuestra-cocina .hoja-titulo{margin-bottom:36px!important}
