@@ -253,3 +253,10 @@ body.carta-open{overflow:hidden}
 .hoja--entradas .hoja-logo + .hoja-pie{margin-top:12px}
 /* Hoja 04 · Nuestra cocina: más separación entre el título y los platos */
 .hoja--nuestra-cocina .hoja-titulo{margin-bottom:36px!important}
+/* Hoja 06 · Chicos, sándwichs y hamburguesas: letras +1 pt (sin pie), logo más grande y más abajo */
+.hoja--chicos-sandwichs-hamburguesas .hoja-titulo{font-size:27.3px}
+.hoja--chicos-sandwichs-hamburguesas .plato-nombre,.hoja--chicos-sandwichs-hamburguesas .precio{font-size:19.9px}
+.hoja--chicos-sandwichs-hamburguesas .plato-desc,.hoja--chicos-sandwichs-hamburguesas .plato-nota{font-size:19.3px}
+.hoja--chicos-sandwichs-hamburguesas .opciones{font-size:22.6px}
+.hoja--chicos-sandwichs-hamburguesas .hoja-logo img{width:272px}
+.hoja--chicos-sandwichs-hamburguesas .hoja-logo + .hoja-pie{margin-top:12px}
