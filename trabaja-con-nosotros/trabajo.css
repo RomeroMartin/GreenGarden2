@@ -1,12 +1,15 @@
 /* Green Garden — /trabaja-con-nosotros/ (formulario de postulación). Requiere base.css y pages.css. */
 
+/* Al enfocar o desplazar un campo, que no quede tapado por el encabezado fijo ni por la barra Anterior/Siguiente */
+html{scroll-padding-top:96px;scroll-padding-bottom:112px}
+
 .sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 .job-hero .watermark{right:-10%;top:-20%}
 .job-section{background:var(--ivory)}
 .job-wrap{max-width:720px;margin:0 auto;padding:clamp(24px,5vw,56px) var(--pad) clamp(48px,7vw,88px);display:flex;flex-direction:column;gap:16px}
 
-.job-card{background:var(--paper);border:1px solid var(--line);border-radius:2px;padding:clamp(20px,4vw,36px)}
+.job-card{--job-pad:clamp(20px,4vw,36px);background:var(--paper);border:1px solid var(--line);border-radius:2px;padding:var(--job-pad)}
 .job-notice{padding:14px 18px;background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--gold);font-size:16px;line-height:1.5;color:var(--muted)}
 .job-notice--warn{border-left-color:#B3402F}
 
@@ -14,6 +17,8 @@
 .job-progress{height:4px;background:var(--line);border-radius:2px;overflow:hidden}
 .job-progress-bar{height:100%;width:0;background:var(--gold);transition:width .3s ease}
 .job-step-label{margin-top:10px;font-family:var(--f-italic);font-size:17px;color:var(--gold-ink)}
+.job-nota{margin-top:2px;font-size:14px;color:var(--muted)}
+.job-nota[hidden]{display:none}
 
 /* Pasos */
 .job-step{border:0;margin:18px 0 0;padding:0;min-width:0;display:flex;flex-direction:column;gap:18px}
@@ -89,10 +94,15 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
 .resumen-foto{width:72px;height:96px;object-fit:cover;border:1px solid var(--line)}
 
 /* Resumen final */
-.resumen{display:grid;grid-template-columns:1fr;gap:2px 16px;margin:0;padding:14px 16px;background:#fff;border:1px solid var(--line);font-size:15px}
-.resumen dt{margin-top:10px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-ink)}
-.resumen dt:first-child{margin-top:0}
-.resumen dd{margin:0;color:var(--ink);overflow-wrap:anywhere}
+.resumen{display:flex;flex-direction:column;gap:12px}
+.resumen-sec{padding:12px 14px;background:#fff;border:1px solid var(--line)}
+.resumen-cab{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:4px}
+.resumen-cab h3{font-family:var(--f-text);font-weight:400;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-ink)}
+.resumen-editar{min-height:44px;padding:0 6px;background:none;border:0;font:inherit;font-size:15px;color:var(--green);text-decoration:underline;cursor:pointer}
+.resumen-sec dl{margin:0;display:grid;grid-template-columns:minmax(0,1fr);font-size:15px}
+.resumen-sec dt{margin-top:8px;font-size:13px;color:var(--muted)}
+.resumen-sec dt:first-child{margin-top:0}
+.resumen-sec dd{margin:0;color:var(--ink);overflow-wrap:anywhere}
 
 .privacidad{background:#fff;border:1px solid var(--line)}
 .privacidad summary{min-height:48px;display:flex;align-items:center;padding:0 16px;cursor:pointer;color:var(--green);font-size:15px}
@@ -102,14 +112,31 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
 /* Trampa para bots: fuera de pantalla, no display:none (algunos bots lo detectan) */
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 
-/* Errores */
+/* Errores en el lugar del campo */
+.field-error{margin:6px 0 0;font-size:14px;line-height:1.4;color:#9c2f1d}
+[data-err-host] > .field-error,.pregunta > .field-error,.check--consent > .field-error{margin:0 0 10px;padding:8px 12px;background:#fbeeea;border-left:3px solid #B3402F}
+.check--consent{flex-wrap:wrap}
+.check--consent > .field-error{flex:1 1 100%;order:-1}
+.hint--der{text-align:right}
+
+/* Atajo para sumar trabajos */
+.btn-mas{align-self:flex-start;min-height:46px;padding:0 18px;background:none;border:1px dashed var(--gold-ink);border-radius:2px;font:inherit;font-size:15px;color:var(--gold-ink);cursor:pointer}
+.btn-mas[hidden]{display:none}
+.trabajo[hidden],#trabajosWrap[hidden]{display:none}
+#trabajosWrap{display:flex;flex-direction:column;gap:12px}
+#trabajosBox{display:flex;flex-direction:column;gap:12px}
+
+/* Errores generales */
 .job-errors{margin-top:16px;padding:12px 16px;background:#fbeeea;border:1px solid #B3402F;color:#7a2418;font-size:15px}
 .job-errors[hidden]{display:none}
 .job-errors ul{margin:6px 0 0;padding-left:18px;list-style:disc}
 
 /* Navegación */
-.job-nav{display:flex;gap:10px;margin-top:28px}
-.job-nav .btn{flex:1}
+/* Barra de navegación: queda pegada al borde inferior de la pantalla en los pasos largos */
+.job-nav{position:sticky;bottom:0;z-index:5;display:flex;gap:10px;margin:28px calc(var(--job-pad) * -1) calc(var(--job-pad) * -1);padding:12px var(--job-pad) calc(12px + env(safe-area-inset-bottom,0px));background:var(--paper);border-top:1px solid var(--line)}
+.job-nav .btn{flex:1 1 0;min-width:0;padding:0 12px;letter-spacing:.1em;line-height:1.2;text-align:center}
+.job-nav #btnSend{flex:2 1 0}
+.job-nav .btn--outline{background:transparent}
 .job-nav [hidden]{display:none}
 .job-nav .btn[disabled]{opacity:.6;cursor:wait}
 
