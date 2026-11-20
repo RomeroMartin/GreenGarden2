@@ -233,3 +233,5 @@ body.carta-open{overflow:hidden}
 .hoja--bienvenidos .gg{height:1.55em}
 .hoja--bienvenidos .hoja-pie{font-size:25.3px}
 .hoja--bienvenidos .hoja-pie svg{width:23px;height:23px}
+/* Hoja 02 · Playroom: más aire entre el primer párrafo y el servicio de mesa */
+.hoja--playroom .hoja-texto + .platos{margin-top:30px}
