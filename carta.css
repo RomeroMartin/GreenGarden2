@@ -264,3 +264,6 @@ body.carta-open{overflow:hidden}
 .hoja--parrilla .hoja-texto{margin-bottom:44px!important}
 /* Hoja 08 · Guarniciones: más separación entre renglones de la lista */
 .hoja--guarniciones .platos{gap:15px}
+/* Hoja 08 · Guarniciones: logo un poco más grande */
+.hoja--guarniciones .hoja-logo--chico img{width:182px}
+.hoja--guarniciones .hoja-logo + .hoja-pie{margin-top:18px}
