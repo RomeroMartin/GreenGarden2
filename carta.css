@@ -244,3 +244,7 @@ body.carta-open{overflow:hidden}
 .hoja--playroom .hoja-titulo ~ .platos .plato-nombre,.hoja--playroom .hoja-titulo ~ .platos .precio{font-size:19.9px}
 .hoja--playroom .hoja-titulo ~ .platos .plato-nota{font-size:19.3px}
 .hoja--playroom .lema{font-size:23.8px}
+/* Hoja 02 · Playroom: bloque usuario/contraseña más abajo y QR un poco más grande */
+.hoja--playroom .playroom{grid-template-columns:1fr 204px}
+.hoja--playroom .playroom img{width:204px}
+.hoja--playroom .playroom dl{margin-top:22px}
