@@ -56,17 +56,6 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
 .pregunta:last-child{border-bottom:0}
 .pregunta .field-title{font-size:16px}
 
-/* Grilla de disponibilidad */
-.grilla-wrap{overflow-x:auto;border:1px solid var(--line);background:#fff}
-.grilla{width:100%;border-collapse:collapse;font-size:14px}
-.grilla th,.grilla td{padding:6px 4px;text-align:center;border-bottom:1px solid var(--line)}
-.grilla tbody tr:last-child th,.grilla tbody tr:last-child td{border-bottom:0}
-.grilla thead th{font-weight:400;color:var(--muted);font-size:13px;line-height:1.25}
-.grilla thead th small{display:block;color:var(--gold-ink)}
-.grilla tbody th{text-align:left;padding-left:12px;font-weight:400;color:var(--ink);white-space:nowrap}
-.grilla input{width:24px;height:24px;accent-color:var(--green);cursor:pointer}
-.grilla td label{display:flex;align-items:center;justify-content:center;min-height:40px;cursor:pointer}
-
 /* Foto */
 .foto-row{display:flex;align-items:center;gap:16px}
 .foto-preview{flex:none;width:96px;height:128px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line);color:var(--gold-ink);overflow:hidden}
@@ -80,10 +69,22 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
 .foto-error[hidden]{display:none}
 .foto-preview.is-loading{opacity:.5}
 
-/* Disponibilidad completa */
+/* Disponibilidad por día */
 .check--todo{padding:12px 14px;background:#fff;border:1px solid var(--gold)}
-.grilla th:last-child,.grilla td:last-child{border-left:1px solid var(--gold);background:#fcfaf4}
-.grilla input[data-dia]{accent-color:var(--gold-ink)}
+#diasLista{display:flex;flex-direction:column;margin-top:12px;background:#fff;border:1px solid var(--line)}
+.dia{display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.dia:last-child{border-bottom:0}
+.dia-nombre{font-size:16px;color:var(--green)}
+.dia .opcion span{padding:0 14px;min-height:42px}
+.dia-horario{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.dia-horario[hidden]{display:none}
+.dia-horario select{flex:1 1 110px;min-width:0}
+.dia-a{color:var(--muted)}
+.dia-copiar{flex:1 1 100%;min-height:44px;padding:0;background:none;border:0;font:inherit;font-size:14px;color:var(--gold-ink);text-decoration:underline;text-align:left;cursor:pointer}
+
+/* Detalle de la experiencia (aparece si responde "Sí") */
+.desarrollo{margin-top:6px}
+.desarrollo[hidden]{display:none}
 
 /* Trabajos anteriores */
 .trabajo{display:grid;grid-template-columns:1fr;gap:10px;padding:14px;background:#fff;border:1px solid var(--line)}

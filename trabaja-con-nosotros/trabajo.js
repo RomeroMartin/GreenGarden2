@@ -5,7 +5,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/fireba
 import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { firebaseConfig, configurado } from '/firebase-config.js';
 import {
-  SECTORES, PUESTOS, MAX_PUESTOS, PREGUNTAS, DIAS, TURNOS,
+  SECTORES, PUESTOS, MAX_PUESTOS, PREGUNTAS, DIAS, HORAS, ORDEN_HORA, textoDia,
   JORNADAS, EMPIEZA, ANIOS, puestoPorId
 } from '/trabajo-datos.js';
 
@@ -25,7 +25,7 @@ let volverAResumen = false;   // true mientras se corrige algo desde el resumen 
 let enviado = false;
 let errSeq = 0;
 const NOMBRES_PASO = ['Tus datos', 'Tu puesto', 'Sobre el puesto', 'Disponibilidad', 'Experiencia', 'Revisión'];
-const HOSTS = '.field, .pregunta, .check--consent, [data-err-host]'; // contenedores donde se muestra cada error
+const HOSTS = '.field, .pregunta, .check--consent, .dia, [data-err-host]'; // contenedores donde se muestra cada error
 const suave = () => (window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
 
 // ── Utilidades ──────────────────────────────────────────────
@@ -91,10 +91,11 @@ function armarPreguntas() {
   const box = $('preguntasBox');
   const guardadas = {};
   box.querySelectorAll('input:checked').forEach(i => { guardadas[i.name] = i.value; });
+  box.querySelectorAll('textarea').forEach(t => { guardadas[t.name] = t.value; });
   box.replaceChildren();
   const elegidos = puestosElegidos();
   PREGUNTAS.filter(q => q.para.some(p => elegidos.includes(p))).forEach(q => {
-    box.append(h('div', { class: 'pregunta', role: 'radiogroup', 'aria-labelledby': 'q-' + q.id },
+    const bloque = h('div', { class: 'pregunta', role: 'radiogroup', 'aria-labelledby': 'q-' + q.id },
       h('p', { class: 'field-title', id: 'q-' + q.id, text: q.label }),
       h('div', { class: 'opciones' }, q.opciones.map(op =>
         h('label', { class: 'opcion' },
@@ -102,63 +103,85 @@ function armarPreguntas() {
           h('span', { text: op })
         )
       ))
-    ));
-  });
-}
-
-function armarGrilla() {
-  const head = $('grillaHead');
-  TURNOS.forEach(t => head.append(h('th', { scope: 'col' }, t.nombre, h('small', { text: t.horas }))));
-  head.append(h('th', { scope: 'col' }, 'Todo el día'));
-  const body = $('grillaBody');
-  DIAS.forEach(d => {
-    body.append(h('tr', null,
-      h('th', { scope: 'row', text: d.nombre }),
-      TURNOS.map(t => h('td', null,
-        h('label', null,
-          h('span', { class: 'sr-only', text: d.nombre + ' ' + t.nombre }),
-          h('input', { type: 'checkbox', name: 'grilla', value: d.id + '-' + t.id })
-        )
-      )),
-      // Un solo tilde marca los 3 turnos del día (sin "name": no se envía, solo es un atajo).
-      h('td', null,
-        h('label', null,
-          h('span', { class: 'sr-only', text: 'Todos los turnos del ' + d.nombre.toLowerCase() }),
-          h('input', { type: 'checkbox', 'data-dia': d.id })
-        )
-      )
-    ));
-  });
-  $('grilla').addEventListener('change', (ev) => {
-    const el = ev.target;
-    if (el.dataset && el.dataset.dia) {
-      form.querySelectorAll('input[name="grilla"]').forEach(c => { if (c.value.startsWith(el.dataset.dia + '-')) c.checked = el.checked; });
+    );
+    if (q.desarrollo) {
+      const dsr = q.desarrollo, name = 'q_' + dsr.id;
+      const ta = h('textarea', { id: name, name, rows: '3', maxlength: String(dsr.max), 'aria-describedby': name + '-cuenta' });
+      ta.value = guardadas[name] || '';
+      const cuenta = h('p', { class: 'hint hint--der', id: name + '-cuenta', text: ta.value.length + ' / ' + dsr.max });
+      ta.addEventListener('input', () => { cuenta.textContent = ta.value.length + ' / ' + dsr.max; });
+      bloque.append(h('div', { class: 'desarrollo field', 'data-desarrollo': dsr.id }, h('label', { for: name, text: dsr.label }), ta, cuenta));
     }
-    sincronizarGrilla();
+    box.append(bloque);
+  });
+  sincronizarDesarrollos();
+}
+
+// El cuadro de "contanos brevemente" solo se ve si respondió "Sí".
+function sincronizarDesarrollos() {
+  PREGUNTAS.filter(q => q.desarrollo).forEach(q => {
+    const w = $('preguntasBox').querySelector('[data-desarrollo="' + q.desarrollo.id + '"]');
+    if (!w) return;
+    const marcada = form.querySelector('input[name="q_' + q.id + '"]:checked');
+    w.hidden = !(marcada && marcada.value === q.desarrollo.cuando);
+  });
+}
+
+// Disponibilidad: por cada día, "No puedo" / "Full time" / "Horario" (desde-hasta).
+function armarDias() {
+  const lista = $('diasLista');
+  const horas = (name, vacio, etiqueta) => {
+    const sel = h('select', { name, 'aria-label': etiqueta });
+    sel.append(h('option', { value: '', text: vacio }));
+    HORAS.forEach(x => sel.append(h('option', { value: x, text: x })));
+    return sel;
+  };
+  DIAS.forEach(d => {
+    const name = 'dia_' + d.id;
+    const radios = [['no', 'No puedo'], ['full', 'Full time'], ['horario', 'Horario']].map(([v, t]) =>
+      h('label', { class: 'opcion' },
+        h('input', Object.assign({ type: 'radio', name, value: v }, v === 'no' ? { checked: '' } : {})),
+        h('span', { text: t })));
+    const copiar = h('button', { type: 'button', class: 'dia-copiar', 'data-dia': d.id, text: 'Usar este horario en todos los días' });
+    lista.append(h('div', { class: 'dia', 'data-dia': d.id },
+      h('p', { class: 'dia-nombre', id: 'dn-' + d.id, text: d.nombre }),
+      h('div', { class: 'opciones', role: 'radiogroup', 'aria-labelledby': 'dn-' + d.id }, radios),
+      h('div', { class: 'dia-horario', hidden: '' },
+        horas(name + '_desde', 'Desde', 'Desde, ' + d.nombre), h('span', { class: 'dia-a', text: 'a' }), horas(name + '_hasta', 'Hasta', 'Hasta, ' + d.nombre), copiar)
+    ));
+  });
+  lista.addEventListener('change', (ev) => { if (ev.target.type === 'radio') sincronizarDias(); guardarBorrador(); });
+  lista.addEventListener('click', (ev) => {
+    const b = ev.target.closest('.dia-copiar');
+    if (!b) return;
+    const dsd = form.elements['dia_' + b.dataset.dia + '_desde'].value, hst = form.elements['dia_' + b.dataset.dia + '_hasta'].value;
+    DIAS.forEach(d => {
+      form.querySelector('input[name="dia_' + d.id + '"][value="horario"]').checked = true;
+      form.elements['dia_' + d.id + '_desde'].value = dsd;
+      form.elements['dia_' + d.id + '_hasta'].value = hst;
+    });
+    sincronizarDias();
     guardarBorrador();
   });
-  $('grillaTodos').addEventListener('change', (ev) => {
-    form.querySelectorAll('input[name="grilla"]').forEach(c => { c.checked = ev.target.checked; });
-    sincronizarGrilla();
+  $('diasTodos').addEventListener('change', (ev) => {
+    DIAS.forEach(d => { form.querySelector('input[name="dia_' + d.id + '"][value="' + (ev.target.checked ? 'full' : 'no') + '"]').checked = true; });
+    sincronizarDias();
     guardarBorrador();
   });
 }
 
-// Mantiene coherentes los atajos: "Todo el día" por fila y "Disponibilidad completa" general.
-function sincronizarGrilla() {
-  const celdas = Array.from(form.querySelectorAll('input[name="grilla"]'));
+// Muestra el desde/hasta solo en los días con "Horario" y mantiene el atajo general al día.
+function sincronizarDias() {
+  let full = 0, conAlgo = 0;
   DIAS.forEach(d => {
-    const cs = celdas.filter(c => c.value.startsWith(d.id + '-'));
-    const n = cs.filter(c => c.checked).length;
-    const t = form.querySelector('input[data-dia="' + d.id + '"]');
-    if (!t) return;
-    t.checked = n === cs.length;
-    t.indeterminate = n > 0 && n < cs.length;
+    const v = form.querySelector('input[name="dia_' + d.id + '"]:checked').value;
+    form.querySelector('.dia[data-dia="' + d.id + '"] .dia-horario').hidden = v !== 'horario';
+    if (v === 'full') full++;
+    if (v !== 'no') conAlgo++;
   });
-  const marcadas = celdas.filter(c => c.checked).length;
-  const g = $('grillaTodos');
-  g.checked = marcadas === celdas.length;
-  g.indeterminate = marcadas > 0 && marcadas < celdas.length;
+  const g = $('diasTodos');
+  g.checked = full === DIAS.length;
+  g.indeterminate = conAlgo > 0 && full < DIAS.length;
 }
 
 function llenarSelect(id, opciones) {
@@ -205,7 +228,23 @@ function actualizarTrabajos() {
 function leer() {
   const fd = new FormData(form);
   const extras = {};
-  PREGUNTAS.forEach(q => { const v = fd.get('q_' + q.id); if (v) extras[q.id] = String(v); });
+  PREGUNTAS.forEach(q => {
+    const v = fd.get('q_' + q.id);
+    if (v) extras[q.id] = String(v);
+    if (q.desarrollo && v === q.desarrollo.cuando) {
+      const t = limpiar(fd.get('q_' + q.desarrollo.id)).slice(0, q.desarrollo.max);
+      if (t) extras[q.desarrollo.id] = t;
+    }
+  });
+  const dias = {};
+  DIAS.forEach(d => {
+    const v = fd.get('dia_' + d.id);
+    if (v === 'full') dias[d.id] = 'full';
+    else if (v === 'horario') {
+      const a = fd.get('dia_' + d.id + '_desde'), z = fd.get('dia_' + d.id + '_hasta');
+      if (a && z && ORDEN_HORA[z] > ORDEN_HORA[a]) dias[d.id] = a + '-' + z;
+    }
+  });
   const sinExperiencia = fd.get('anios') === 'Sin experiencia';
   const trabajos = sinExperiencia ? [] : [0, 1, 2].map(i => ({
     lugar: limpiar(fd.get('tr' + i + '_lugar')).slice(0, 60),
@@ -220,7 +259,7 @@ function leer() {
     puestos: puestosElegidos(),
     extras,
     disponibilidad: {
-      grilla: fd.getAll('grilla').map(String),
+      dias,
       empieza: String(fd.get('empieza') || ''),
       jornada: String(fd.get('jornada') || ''),
       feriados: fd.get('feriados') === '1'
@@ -253,10 +292,20 @@ function validar(n) {
   if (n === 3) {
     PREGUNTAS.filter(q => q.para.some(p => d.puestos.includes(p))).forEach(q => {
       if (!d.extras[q.id]) e.push({ el: form.querySelector('input[name="q_' + q.id + '"]'), msg: 'Elegí una opción.' });
+      else if (q.desarrollo && d.extras[q.id] === q.desarrollo.cuando && !d.extras[q.desarrollo.id]) {
+        e.push({ el: form.elements['q_' + q.desarrollo.id], msg: 'Contanos brevemente tu experiencia (hasta ' + q.desarrollo.max + ' caracteres).' });
+      }
     });
   }
   if (n === 4) {
-    if (d.disponibilidad.grilla.length < 1) e.push({ el: form.querySelector('input[name="grilla"]'), msg: 'Marcá al menos un día y turno en que podrías trabajar.' });
+    DIAS.forEach(dd => {
+      if (form.querySelector('input[name="dia_' + dd.id + '"]:checked').value !== 'horario') return;
+      const a = form.elements['dia_' + dd.id + '_desde'], z = form.elements['dia_' + dd.id + '_hasta'];
+      if (!a.value) e.push({ el: a, msg: 'Elegí desde qué hora podés el ' + dd.nombre.toLowerCase() + '.' });
+      else if (!z.value) e.push({ el: z, msg: 'Elegí hasta qué hora podés el ' + dd.nombre.toLowerCase() + '.' });
+      else if (ORDEN_HORA[z.value] <= ORDEN_HORA[a.value]) e.push({ el: z, msg: 'La hora de salida tiene que ser posterior a la de entrada.' });
+    });
+    if (!e.length && !Object.keys(d.disponibilidad.dias).length) e.push({ el: $('diasTodos'), msg: 'Elegí al menos un día en el que puedas trabajar (Full time o un horario).' });
     if (!d.disponibilidad.jornada) e.push({ el: f('jornada'), msg: 'Elegí la jornada que buscás.' });
     if (!d.disponibilidad.empieza) e.push({ el: f('empieza'), msg: 'Indicá cuándo podrías empezar.' });
   }
@@ -281,13 +330,13 @@ function ponerError(el, msg) {
 
 function quitarError(host) {
   host.querySelectorAll(':scope > .field-error').forEach(p => {
-    host.querySelectorAll('[aria-describedby]').forEach(x => {
+    host.querySelectorAll('[aria-describedby~="' + p.id + '"]').forEach(x => {
       const resto = x.getAttribute('aria-describedby').split(' ').filter(t => t && t !== p.id).join(' ');
       if (resto) x.setAttribute('aria-describedby', resto); else x.removeAttribute('aria-describedby');
+      x.removeAttribute('aria-invalid');
     });
     p.remove();
   });
-  host.querySelectorAll('[aria-invalid]').forEach(x => x.removeAttribute('aria-invalid'));
 }
 
 function mostrarErrores(errs) {
@@ -307,8 +356,8 @@ function mostrarErrores(errs) {
 
 // Al corregir un campo, su aviso desaparece.
 function limpiarAviso(el) {
-  const host = el.closest && el.closest(HOSTS);
-  if (host) quitarError(host);
+  let host = el.closest && el.closest(HOSTS);
+  while (host) { quitarError(host); host = host.parentElement && host.parentElement.closest(HOSTS); }
 }
 
 // Los datos de contacto se revisan al salir de cada campo (si ya escribió algo).
@@ -377,12 +426,9 @@ form.addEventListener('keydown', (ev) => {
 });
 
 // ── Resumen final ───────────────────────────────────────────
-function etiquetaGrilla(grilla) {
-  if (!grilla.length) return '—';
-  return DIAS.map(d => {
-    const ts = TURNOS.filter(t => grilla.includes(d.id + '-' + t.id)).map(t => t.nombre.toLowerCase());
-    return ts.length === TURNOS.length ? d.nombre.slice(0, 3) + ': todo el día' : ts.length ? d.nombre.slice(0, 3) + ': ' + ts.join(', ') : null;
-  }).filter(Boolean).join(' · ');
+function etiquetaDias(dias) {
+  const l = DIAS.filter(d => dias[d.id]).map(d => d.nombre.slice(0, 3) + ': ' + textoDia(dias[d.id]));
+  return l.length ? l.join(' · ') : '—';
 }
 
 function armarResumen() {
@@ -400,10 +446,14 @@ function armarResumen() {
     ['Foto', d.foto ? h('img', { src: d.foto, alt: 'Tu foto', class: 'resumen-foto' }) : 'Sin foto']
   ]);
   sec('Puestos', 2, [['Puestos elegidos', d.puestos.map(id => puestoPorId[id].nombre).join(', ')]]);
-  const resp = PREGUNTAS.filter(q => d.extras[q.id]).map(q => [q.label, d.extras[q.id]]);
+  const resp = [];
+  PREGUNTAS.filter(q => d.extras[q.id]).forEach(q => {
+    resp.push([q.label, d.extras[q.id]]);
+    if (q.desarrollo && d.extras[q.desarrollo.id]) resp.push([q.desarrollo.label, d.extras[q.desarrollo.id]]);
+  });
   if (resp.length) sec('Sobre el puesto', 3, resp);
   sec('Disponibilidad', 4, [
-    ['Días y turnos', etiquetaGrilla(d.disponibilidad.grilla)],
+    ['Días y horarios', etiquetaDias(d.disponibilidad.dias)],
     ['Feriados', d.disponibilidad.feriados ? 'Sí' : 'No'],
     ['Jornada', d.disponibilidad.jornada],
     ['Puede empezar', d.disponibilidad.empieza]
@@ -454,7 +504,9 @@ function restaurarBorrador() {
     aplicarDatos(datos);                 // 1) puestos y campos fijos
     armarPreguntas();                    // 2) preguntas según puestos
     aplicarDatos(datos);                 // 3) respuestas
-    sincronizarGrilla();
+    $('preguntasBox').querySelectorAll('textarea').forEach(t => t.dispatchEvent(new Event('input')));
+    sincronizarDesarrollos();
+    sincronizarDias();
     actualizarPuestos();
     actualizarTrabajos();
     mostrarPaso(p);
@@ -463,7 +515,7 @@ function restaurarBorrador() {
 }
 
 form.addEventListener('input', (ev) => { limpiarAviso(ev.target); guardarBorrador(); });
-form.addEventListener('change', (ev) => { limpiarAviso(ev.target); guardarBorrador(); });
+form.addEventListener('change', (ev) => { limpiarAviso(ev.target); if (ev.target.name && ev.target.name.startsWith('q_')) sincronizarDesarrollos(); guardarBorrador(); });
 
 // ── Foto: se achica en el navegador antes de guardarla ──────
 const FOTO_LADO = 480;          // píxeles del lado más largo
@@ -599,7 +651,7 @@ form.addEventListener('submit', async (ev) => {
 
 // ── Inicio ──────────────────────────────────────────────────
 armarPuestos();
-armarGrilla();
+armarDias();
 armarTrabajos();
 llenarSelect('f-jornada', JORNADAS);
 llenarSelect('f-empieza', EMPIEZA);
@@ -608,7 +660,7 @@ const cuentaResumen = () => { $('resumenCuenta').textContent = $('f-resumen').va
 $('f-resumen').addEventListener('input', cuentaResumen);
 conectar();
 restaurarFoto();
-sincronizarGrilla();
+sincronizarDias();
 actualizarPuestos();
 actualizarTrabajos();
 // Al abrir la página no se hace scroll solo (se ve el título); con un borrador se vuelve al paso donde quedó.
