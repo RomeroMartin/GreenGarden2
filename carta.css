@@ -277,3 +277,6 @@ body.carta-open{overflow:hidden}
 .hoja--wraps-y-ensaladas .hoja-logo + .hoja-pie{margin-top:38px}
 /* Hoja 17 · Cervezas: más espacio entre cada cerveza */
 .hoja--cervezas .platos{gap:24px}
+/* Hoja 18 · Cafetería: el bloque desde CAFETERÍA CLÁSICA más cerca del título de la página */
+.hoja--cafeteria .horarios + .hoja-titulo{margin-top:6px!important}
+.hoja--cafeteria .platos{gap:20px}
