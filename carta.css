@@ -287,3 +287,9 @@ body.carta-open{overflow:hidden}
 .hoja--bebidas-y-smoothies .hoja-titulo--linea{font-size:31.3px}
 .hoja--bebidas-y-smoothies .lema--oscuro{font-size:23.8px}
 .hoja--bebidas-y-smoothies .platos{gap:18px}
+/* Hoja 20 · Sándwich, clásicos y tostados: letras +1 pt (sin pie) y más separación entre productos */
+.hoja--sandwich-clasicos-tostados .hoja-titulo{font-size:27.3px}
+.hoja--sandwich-clasicos-tostados .plato-nombre,.hoja--sandwich-clasicos-tostados .precio{font-size:19.9px}
+.hoja--sandwich-clasicos-tostados .plato-desc,.hoja--sandwich-clasicos-tostados .plato-nota{font-size:19.3px}
+.hoja--sandwich-clasicos-tostados .plato-desc{max-width:100%}
+.hoja--sandwich-clasicos-tostados .platos{gap:16px}
