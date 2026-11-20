@@ -1,0 +1,198 @@
+/* ==========================================================================
+   Carta en HTML: hojas A4 (794 × 1123 px = A4 a 96 dpi), modal y modo lectura.
+   Las hojas viven en menu.html. Para cambiar un precio, buscá el plato ahí.
+   ========================================================================== */
+
+:root{
+  --hoja-w:794px;
+  --hoja-h:1123px;
+  --hoja-tinta:#231F20;   /* texto de la carta */
+  --hoja-verde:#062A26;   /* títulos e íconos */
+  --hoja-oro:#CFA550;     /* puntitos y detalles */
+}
+
+/* ---------- La hoja ---------- */
+.hoja{
+  width:var(--hoja-w);height:var(--hoja-h);box-sizing:border-box;
+  padding:64px 98px 46px;
+  display:flex;flex-direction:column;
+  background:#fff;color:var(--hoja-tinta);
+  font-family:var(--f-text);font-size:18.6px;line-height:1.2;
+  transform-origin:top left;transform:scale(var(--s,1));
+  overflow:hidden;text-align:left;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;
+}
+.hoja *{box-sizing:border-box}
+.hoja h2,.hoja h3,.hoja p,.hoja ul{margin:0;padding:0}
+.hoja ul{list-style:none}
+
+.hoja-titulo{
+  font-family:var(--f-display);font-weight:400;font-size:26px;line-height:1.1;
+  letter-spacing:.03em;text-align:center;color:var(--hoja-verde);
+  margin:0 0 26px!important;
+}
+.hoja-titulo:not(:first-child){margin-top:34px!important}
+
+/* Platos con puntitos hasta el precio */
+.platos{display:flex;flex-direction:column;gap:8px}
+.platos--lista{gap:9px}
+.plato-linea{display:flex;align-items:baseline;gap:6px}
+.plato-nombre{font-family:var(--f-text);font-weight:400;font-size:18.6px;line-height:1.15;color:var(--hoja-tinta)}
+.plato-nota{font-family:var(--f-italic);font-weight:300;font-size:18.0px}
+.puntos{flex:1 1 16px;min-width:16px;border-bottom:1.5px dotted var(--hoja-oro);transform:translateY(-3px)}
+.precio{font-size:18.6px;white-space:nowrap}
+.plato-desc{margin-top:0!important;max-width:86%;font-family:var(--f-italic);font-weight:300;font-size:18.0px;line-height:1.12}
+
+/* Hoja con mucho contenido: letra un poco más chica, como en el PDF */
+.hoja--densa .plato-nombre,.hoja--densa .precio{font-size:17px}
+.hoja--densa .plato-desc{font-size:16.5px;line-height:1.08}
+.hoja--densa .platos{gap:7px}
+.hoja--densa .hoja-titulo{margin-bottom:20px!important}
+
+/* Hojas sin logo al pie: los platos se reparten hasta abajo, como en el PDF */
+.hoja--llena > .platos:last-of-type{flex:1 1 auto;justify-content:space-between;padding-bottom:28px}
+
+/* Logo "Green Garden" dentro del texto */
+.gg{display:inline-block;height:1.55em;width:auto;vertical-align:-.42em;margin:0 .12em}
+.plato-nombre .gg{height:1.75em;vertical-align:-.5em}
+
+/* Bloques de texto */
+.hoja-texto{display:flex;flex-direction:column;gap:22px;font-family:var(--f-italic);font-weight:300;font-size:20px;line-height:1.3}
+.hoja-texto--aireado{gap:0;font-size:18.6px;line-height:2.05}
+.hoja-texto--medio{font-size:20.0px;line-height:1.95;margin-bottom:22px!important}
+.hoja-bajada{font-family:var(--f-italic);font-weight:300;font-size:20.0px;margin:-4px 0 22px!important}
+.horarios{text-align:center;font-size:21.3px;line-height:1.5;margin:-4px 0 0!important}
+.horarios span{white-space:nowrap;margin:0 .35em}
+.horarios i{font-family:var(--f-italic);font-weight:300;font-style:normal}
+
+.opciones{display:flex;flex-direction:column;gap:9px;margin:18px 0 0!important;font-family:var(--f-italic);font-weight:300;font-size:21.3px}
+.opciones li{display:flex;align-items:center;gap:8px}
+.opciones img{width:20px;height:auto}
+
+.lema{margin-top:auto!important;text-align:center;font-family:var(--f-display);font-size:22.5px;line-height:1.5;letter-spacing:.03em}
+.lema--grande{font-size:35px;line-height:1.35;color:var(--hoja-verde);margin-bottom:14px!important}
+.lema .gg{height:1.7em;vertical-align:-.5em}
+
+/* Logo, sello y pie */
+.hoja-logo{margin-top:auto;display:flex;justify-content:center}
+.hoja-logo img{width:236px;height:auto}
+.hoja-logo--arriba{margin:0 0 28px}
+.hoja-logo--arriba img{width:200px}
+.hoja-logo--chico img{width:150px}
+.hoja-logo--doble{gap:70px;align-items:center}
+.hoja-logo--doble .sello{width:124px}
+.hoja-pie{margin-top:26px;display:flex;justify-content:center;gap:42px;font-size:22.6px;flex:none}
+.hoja-logo + .hoja-pie,.lema + .hoja-pie{margin-top:26px}
+.hoja > .hoja-pie:only-of-type{margin-top:auto}
+.hoja-pie a{display:inline-flex;align-items:center;gap:6px;color:var(--hoja-tinta);text-decoration:none}
+.hoja-pie svg{width:22px;height:22px;flex:none}
+
+/* Hoja 2: playroom */
+.playroom{display:grid;grid-template-columns:1fr 180px;gap:8px 24px;align-items:center;margin-bottom:22px}
+.playroom ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:20px;font-size:18.6px}
+.playroom dl{margin:6px 0 0;font-size:18.6px}
+.playroom dt{display:inline;font-family:var(--f-display);font-size:23.5px;color:var(--hoja-verde);letter-spacing:.03em}
+.playroom dd{display:inline;margin:0}
+.playroom dd::after{content:"";display:block}
+.playroom img{width:180px;height:auto}
+
+/* Hoja 8: punto de cocción */
+.coccion{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center;border:3px solid var(--hoja-verde);border-radius:14px;padding:18px 0 14px 26px;margin-bottom:30px}
+.coccion h2{font-family:var(--f-display);font-weight:400;font-size:20px;letter-spacing:.03em;margin-bottom:16px}
+.coccion ul{display:flex;flex-direction:column;gap:4px;font-family:var(--f-display);font-size:20px;letter-spacing:.03em}
+.coccion figure{margin:0;display:flex;flex-direction:column;align-items:flex-end}
+.coccion img{width:290px;height:auto}
+.coccion figcaption{width:290px;padding-left:46px;display:flex;gap:22px;font-family:var(--f-display);font-size:18px}
+
+/* Hoja 4: milanesa para compartir */
+.compartir{margin-top:14px}
+.compartir .plato-desc{margin:10px 0 10px!important}
+.compartir .platos{gap:12px}
+.compartir .plato-nombre{font-family:var(--f-italic);font-weight:300;font-size:18.0px}
+.compartir + .platos{margin-top:16px}
+
+.marcas{margin-top:auto;width:100%;height:auto}
+
+/* ---------- Tarjetas (miniaturas) ---------- */
+.hoja-card{position:relative}
+.hoja-card .page-thumb{background:#fff}
+.hoja-card .page-zoom{top:auto;bottom:10px}
+.hoja-card .page-thumb .hoja{position:absolute;top:0;left:0;--s:.25;pointer-events:none}
+.hoja-abrir{position:absolute;inset:0;width:100%;height:100%;border:0;padding:0;background:transparent;cursor:zoom-in;z-index:1}
+.hoja-abrir:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.hoja-card:hover .page-thumb{border-color:var(--gold)}
+.hoja-card .page-thumb{box-shadow:0 2px 6px rgba(0,47,42,.08),0 10px 24px rgba(0,47,42,.08)}
+.carta-acciones{display:flex;flex-wrap:wrap;gap:10px}
+.carta-acciones button{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:1px solid var(--line);border-radius:2px;background:var(--paper);color:var(--green);font:inherit;font-size:15px;cursor:pointer}
+.carta-acciones button:hover{border-color:var(--gold)}
+
+/* ---------- Modal ---------- */
+body.carta-open{overflow:hidden}
+.carta-modal{position:fixed;inset:0;z-index:10000;display:flex;flex-direction:column;background:#00100e;color:var(--ivory)}
+.carta-modal[hidden]{display:none}
+.carta-barra{flex:none;display:flex;align-items:center;gap:10px;padding:10px 12px}
+.carta-barra .carta-cuenta{flex:1;min-width:0;text-align:center;font-family:var(--f-italic);font-weight:300;font-size:16px;color:var(--gold);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.carta-btn{flex:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:44px;height:44px;padding:0 14px;border:1px solid rgba(214,179,106,.5);border-radius:22px;background:rgba(0,47,42,.9);color:var(--ivory);font:inherit;font-size:15px;cursor:pointer}
+.carta-btn:hover{border-color:var(--gold);background:var(--green-2)}
+.carta-btn:disabled{opacity:.35;cursor:default}
+.carta-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.carta-btn--icono{padding:0;width:44px}
+.carta-btn--lectura{background:#fff;color:var(--green);border-color:#fff}
+.carta-btn--lectura:hover{background:var(--paper);color:var(--green)}
+.carta-escenario{position:relative;flex:1;min-height:0;overflow:auto;padding:4px 12px 24px;touch-action:pan-x pan-y pinch-zoom;-webkit-overflow-scrolling:touch}
+.carta-marco{margin:0 auto;position:relative;background:#fff;box-shadow:0 20px 60px rgba(0,0,0,.45);overflow:hidden;cursor:zoom-in}
+.carta-modal.is-zoom .carta-marco{cursor:zoom-out}
+.carta-marco .hoja{position:absolute;top:0;left:0}
+.carta-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:2}
+.carta-nav--prev{left:16px}
+.carta-nav--next{right:16px}
+@media (pointer:coarse),(max-width:899px){.carta-nav{display:none}}
+
+/* ---------- Modo lectura: la misma hoja, sin tamaño fijo y con letra grande ---------- */
+.carta-modal.is-lectura .carta-marco{width:auto!important;height:auto!important;max-width:640px;border-radius:4px;cursor:auto}
+.hoja.hoja--lectura{position:static;width:auto;height:auto;transform:none;padding:28px 22px 32px;font-size:17px}
+.hoja--lectura .hoja-titulo{font-size:28px;margin-bottom:12px!important}
+.hoja--lectura .hoja-titulo:not(:first-child){margin-top:36px!important}
+.hoja--lectura .platos,.hoja--lectura .platos--lista{gap:0}
+.hoja--lectura .platos > li{padding:14px 0;border-bottom:1px solid #E8E2D4}
+.hoja--lectura .plato-linea{justify-content:space-between;gap:14px}
+.hoja--lectura .puntos{display:none}
+.hoja--lectura .plato-nombre,.hoja--lectura .precio{font-size:17px;line-height:1.25}
+.hoja--lectura .precio{color:var(--hoja-verde)}
+.hoja--lectura .plato-desc{max-width:none;margin-top:4px!important;font-size:16px;line-height:1.35;color:#4A4647}
+.hoja--lectura .plato-nota{font-size:15px}
+.hoja--lectura .hoja-texto,.hoja--lectura .hoja-texto--aireado,.hoja--lectura .hoja-texto--medio{font-size:17px;line-height:1.5;gap:16px}
+.hoja--lectura .horarios span{display:block}
+.hoja--lectura .lema{margin-top:32px!important;font-size:20px}
+.hoja--lectura .lema--grande{font-size:22px}
+.hoja--lectura .hoja-logo,.hoja--lectura .marcas{display:none}
+.hoja--lectura .hoja-logo--arriba{display:flex}
+.hoja--lectura .playroom{grid-template-columns:1fr;justify-items:start}
+.hoja--lectura .coccion{grid-template-columns:1fr;padding:18px}
+.hoja--lectura .coccion figure{align-items:flex-start}
+.hoja--lectura .coccion img,.hoja--lectura .coccion figcaption{width:min(290px,100%)}
+.hoja--lectura .compartir .plato-nombre{font-size:16px}
+.hoja--lectura .hoja-pie{margin-top:32px;flex-direction:column;align-items:stretch;gap:10px}
+.hoja--lectura .hoja-pie a{justify-content:center;min-height:48px;border-radius:24px;border:1px solid var(--line);font-size:16px}
+.hoja--lectura .hoja-pie a[href^="tel"]{background:var(--hoja-verde);border-color:var(--hoja-verde);color:#fff}
+.hoja--lectura .hoja-pie a[href^="tel"] svg *{stroke:#fff}
+
+/* ---------- Impresión: una hoja A4 por página ---------- */
+@page{size:A4;margin:0}
+@media print{
+  body{background:#fff!important}
+  body *{visibility:hidden}
+  #almuerzo,#almuerzo .page-grid,#almuerzo .page-grid *{visibility:visible}
+  .site-header,.site-footer,.menu-tabs-bar,.page-hero,.cta-band,.carta-modal,.skip-link,
+  #almuerzo .cat-banner,#almuerzo .cat-meta,.page-label,.hoja-abrir{display:none!important}
+  main > section:not(#almuerzo){display:none!important}
+  #almuerzo{display:block!important;padding:0!important;margin:0!important}
+  #almuerzo .container,#almuerzo .panel-inner{max-width:none!important;padding:0!important;margin:0!important;display:block!important}
+  #almuerzo .page-grid{display:block!important;margin:0;padding:0}
+  #almuerzo .page-grid > li{display:block;margin:0;padding:0}
+  .hoja-card .page-thumb{position:static;aspect-ratio:auto;border:0;box-shadow:none;width:auto;height:auto;overflow:visible}
+  .hoja-card .page-thumb .hoja{position:static;transform:none;width:var(--hoja-w);height:var(--hoja-h);break-after:page;page-break-after:always}
+  #almuerzo .page-grid > li:last-child .hoja{break-after:auto;page-break-after:auto}
+  .page-zoom{display:none!important}
+  body.sin-precios .precio,body.sin-precios .puntos{visibility:hidden!important}
+}
