@@ -248,3 +248,6 @@ body.carta-open{overflow:hidden}
 .hoja--playroom .playroom{grid-template-columns:1fr 204px}
 .hoja--playroom .playroom img{width:204px}
 .hoja--playroom .playroom dl{margin-top:22px}
+/* Hoja 03 · Entradas: más aire entre renglones desde Empanada salteña y logos más abajo */
+.hoja--entradas .platos > li:nth-child(n+11){margin-top:5px}
+.hoja--entradas .hoja-logo + .hoja-pie{margin-top:12px}
