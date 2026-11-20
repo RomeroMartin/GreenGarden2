@@ -134,7 +134,7 @@ Sale una hoja A4 por página, igual a la que se ve en la web. La versión **sin 
 
 ## 7. Cómo lo ve el cliente
 
-- **Grilla de tarjetas:** cada hoja se muestra achicada, como si fuera una foto de la carta. La escala se calcula con CSS, así que no hay parpadeo al cargar.
+- **Grilla de tarjetas:** cada hoja se muestra achicada, como si fuera una foto de la carta.
 - **Al tocar una tarjeta** se abre un modal con la hoja grande:
   - **Flechas abajo** (anterior / siguiente), un contador (por ejemplo "Entradas · 3 / 17") y la X para cerrar.
   - En el celular también se puede **deslizar** a los costados para cambiar de hoja, y en la compu usar las **flechas del teclado** o **Esc** para cerrar.

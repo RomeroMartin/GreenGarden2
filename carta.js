@@ -13,12 +13,7 @@
     var hoja = card.querySelector('.hoja');
     if (thumb && hoja) hoja.style.setProperty('--s', (thumb.clientWidth / HOJA_W).toFixed(4));
   }
-  // Los navegadores modernos calculan la escala solo con CSS (carta.css), sin parpadeo.
-  // El JS queda de respaldo para navegadores viejos.
-  var escalaEnCss = window.CSS && CSS.supports && CSS.supports('width', '1cqw') && CSS.supports('width', 'calc(tan(atan2(1px, 1px)) * 1px)');
-  if (escalaEnCss) {
-    /* nada que hacer */
-  } else if ('ResizeObserver' in window) {
+  if ('ResizeObserver' in window) {
     var ro = new ResizeObserver(function (entries) {
       entries.forEach(function (e) { escalarMiniatura(e.target.closest('.hoja-card')); });
     });

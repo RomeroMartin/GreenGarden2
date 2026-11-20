@@ -143,12 +143,7 @@
 .hoja-card{position:relative}
 .hoja-card .page-thumb{background:#fff}
 .hoja-card .page-zoom{top:auto;bottom:10px}
-.hoja-card .page-thumb{container-type:inline-size}
 .hoja-card .page-thumb .hoja{position:absolute;top:0;left:0;--s:.25;pointer-events:none}
-/* Escala exacta al ancho de la tarjeta, sin esperar al JS (tan/atan2 convierte px en número) */
-@supports (width:1cqw) and (width:calc(tan(atan2(1px,1px))*1px)){
-  .hoja-card .page-thumb .hoja{--s:tan(atan2(100cqw,var(--hoja-w)))}
-}
 .hoja-abrir{position:absolute;inset:0;width:100%;height:100%;border:0;padding:0;background:transparent;cursor:zoom-in;z-index:1}
 .hoja-abrir:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 .hoja-card:hover .page-thumb{border-color:var(--gold)}
