@@ -11,8 +11,8 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 import { firebaseConfig, configurado } from '/firebase-config.js';
 import {
-  SECTORES, PUESTOS, PREGUNTAS, DIAS, TURNOS, ESTADOS, MESES_CONSERVACION,
-  puestoPorId, preguntaPorId
+  SECTORES, PUESTOS, PREGUNTAS, DIAS, ESTADOS, MESES_CONSERVACION,
+  puestoPorId, preguntaPorId, diasDe
 } from '/trabajo-datos.js';
 
 const $ = (id) => document.getElementById(id);
@@ -49,12 +49,22 @@ function opciones(sel, lista, primera) {
   sel.replaceChildren(h('option', { value: '', text: primera }), ...lista.map(([v, t]) => h('option', { value: v, text: t })));
 }
 
-function resumenDisponibilidad(grilla) {
-  const dias = DIAS.map(d => {
-    const ts = TURNOS.filter(t => grilla.includes(d.id + '-' + t.id)).map(t => t.nombre.toLowerCase());
-    return ts.length ? d.nombre.slice(0, 3) + ': ' + ts.join(', ') : null;
-  }).filter(Boolean);
-  return dias.join(' · ') || '—';
+// Sirve para el formato nuevo (horario por día) y para las postulaciones viejas (franjas fijas).
+function resumenDisponibilidad(disp) {
+  const l = diasDe(disp).filter(x => x.valor).map(x => x.dia.nombre.slice(0, 3) + ': ' + x.texto);
+  return l.join(' · ') || '—';
+}
+
+// Respuestas del puesto en el orden del formulario; el detalle de la experiencia va debajo de su pregunta.
+function respuestasDe(p) {
+  const vistos = new Set(), r = [];
+  PREGUNTAS.forEach(q => {
+    if (p.extras[q.id] === undefined) return;
+    r.push([q.label, p.extras[q.id]]); vistos.add(q.id);
+    if (q.desarrollo && p.extras[q.desarrollo.id]) { r.push(['Detalle de su experiencia', p.extras[q.desarrollo.id]]); vistos.add(q.desarrollo.id); }
+  });
+  Object.keys(p.extras).filter(id => !vistos.has(id)).forEach(id => r.push([preguntaPorId[id] ? preguntaPorId[id].label : id, p.extras[id]]));
+  return r;
 }
 
 // ── Inicio ──────────────────────────────────────────────────
@@ -294,7 +304,7 @@ async function cargar() {
         ultimaNotaEn: x.ultimaNotaEn && x.ultimaNotaEn.toDate ? x.ultimaNotaEn.toDate() : null,
         puestos: Array.isArray(x.puestos) ? x.puestos : [],
         extras: x.extras || {},
-        disponibilidad: Object.assign({ grilla: [] }, x.disponibilidad),
+        disponibilidad: Object.assign({}, x.disponibilidad),
         trabajos: Array.isArray(x.trabajos) ? x.trabajos : []
       });
     });
@@ -348,7 +358,7 @@ function aplicarFiltros() {
     if (sector && !sectoresDe(p).includes(sector)) return false;
     if (puesto && !p.puestos.includes(puesto)) return false;
     if (estado && (p.estado || 'nuevo') !== estado) return false;
-    if (dia && !p.disponibilidad.grilla.some(g => g.startsWith(dia + '-'))) return false;
+    if (dia && !diasDe(p.disponibilidad).some(x => x.dia.id === dia && x.valor)) return false;
     if (desde && (!p.fecha || p.fecha < desde)) return false;
     return true;
   });
@@ -420,15 +430,13 @@ function renderFicha(p, notas, paraImprimir) {
   ])));
   f.append(h('section', null, h('h3', { text: 'Puestos que le interesan' }), h('p', { text: nombresPuestos(p).join(' · ') })));
 
-  const resp = Object.keys(p.extras).map(id => [preguntaPorId[id] ? preguntaPorId[id].label : id, p.extras[id]]);
+  const resp = respuestasDe(p);
   if (resp.length) f.append(h('section', null, h('h3', { text: 'Sobre el puesto' }), dl(resp)));
 
-  const g = p.disponibilidad.grilla || [];
-  const tabla = h('table', { class: 'ficha-grilla' },
-    h('thead', null, h('tr', null, h('th', { scope: 'col', text: '' }), TURNOS.map(t => h('th', { scope: 'col' }, t.nombre, h('small', { text: t.horas }))))),
-    h('tbody', null, DIAS.map(d => h('tr', null,
-      h('th', { scope: 'row', text: d.nombre }),
-      TURNOS.map(t => h('td', { text: g.includes(d.id + '-' + t.id) ? '●' : '' }))
+  const tabla = h('table', { class: 'ficha-grilla ficha-dias' },
+    h('tbody', null, diasDe(p.disponibilidad).map(x => h('tr', null,
+      h('th', { scope: 'row', text: x.dia.nombre }),
+      h('td', { text: x.texto, class: x.valor ? '' : 'sin' })
     )))
   );
   f.append(h('section', null, h('h3', { text: 'Disponibilidad' }), h('div', { class: 'ficha-grilla-wrap' }, tabla),
@@ -635,11 +643,11 @@ $('btnExcel').addEventListener('click', async () => {
         'Sectores': sectoresDe(p).map(s => SECTORES[s].nombre).join(', '),
         'Años de experiencia': p.experienciaAnios || '',
         'Último trabajo': [ult.lugar, ult.puesto, ult.tiempo].filter(Boolean).join(' · '),
-        'Disponibilidad': resumenDisponibilidad(p.disponibilidad.grilla || []),
+        'Disponibilidad': resumenDisponibilidad(p.disponibilidad),
         'Jornada': p.disponibilidad.jornada || '',
         'Puede empezar': p.disponibilidad.empieza || '',
         'Feriados': p.disponibilidad.feriados ? 'Sí' : 'No',
-        'Sobre el puesto': Object.keys(p.extras).map(id => (preguntaPorId[id] ? preguntaPorId[id].label : id) + ' ' + p.extras[id]).join(' | '),
+        'Sobre el puesto': respuestasDe(p).map(([k, v]) => k + ' ' + v).join(' | '),
         'Comentarios': p.resumen || '',
         'Referencias': p.referencias || '',
         'Estado': estadoNombre[p.estado || 'nuevo'] || p.estado,

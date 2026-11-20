@@ -117,6 +117,9 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
 .ficha-grilla thead th small{display:block;font-size:11px;color:var(--gold-ink)}
 .ficha-grilla th:first-child{text-align:left;font-weight:400}
 .ficha-grilla thead th{font-weight:400;color:var(--muted)}
+.ficha-dias td{text-align:left;padding:4px 10px}
+.ficha-dias td.sin{color:var(--muted)}
+.ficha-dias th{width:34%;white-space:nowrap}
 .ficha-trabajo{padding:6px 0;border-bottom:1px dashed var(--line);font-size:15px}
 .ficha-trabajo:last-child{border-bottom:0}
 

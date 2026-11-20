@@ -143,18 +143,13 @@
       <!-- Paso 4 -->
       <fieldset class="job-step" data-step="4" hidden>
         <legend>Disponibilidad</legend>
-        <p class="hint">Marcá todos los días y turnos en los que podrías trabajar.</p>
-        <div class="grilla-box" data-err-host>
-        <label class="check check--todo">
-          <input type="checkbox" id="grillaTodos">
-          <span>Tengo disponibilidad completa (todos los días, en los 3 turnos)</span>
-        </label>
-        <div class="grilla-wrap">
-          <table class="grilla" id="grilla">
-            <thead><tr id="grillaHead"><th scope="col"><span class="sr-only">Día</span></th></tr></thead>
-            <tbody id="grillaBody"></tbody>
-          </table>
-        </div>
+        <p class="hint">Para cada día, elegí <strong>Full time</strong> si podés trabajar en cualquier horario, o <strong>Horario</strong> para indicar desde qué hora hasta qué hora.</p>
+        <div id="diasBox" data-err-host>
+          <label class="check check--todo">
+            <input type="checkbox" id="diasTodos">
+            <span>Tengo disponibilidad completa (Full time todos los días)</span>
+          </label>
+          <div id="diasLista"></div>
         </div>
         <div class="field">
           <label class="check"><input type="checkbox" name="feriados" value="1"> <span>Puedo trabajar feriados</span></label>

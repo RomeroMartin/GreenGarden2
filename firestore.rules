@@ -60,6 +60,72 @@ service cloud.firestore {
     // ── Postulaciones
     match /postulaciones/{id} {
 
+      // Respuestas del puesto: solo claves conocidas (las actuales y las de formularios anteriores), con largo acotado.
+      // Si se agrega una pregunta en trabajo-datos.js, hay que sumar su clave acá.
+      function extrasValidos(e) {
+        return e.keys().hasOnly([
+      'manipulacion', 'exp-cocina', 'exp-pan', 'madrugada', 'cocteleria', 'espresso',
+      'producciones', 'exp-salon', 'caja', 'ingles', 'bandeja', 'equipo-a-cargo',
+      'rotativos', 'partidos', 'ninos', 'primeros-aux', 'exp-cocina-texto', 'exp-pan-texto',
+      'exp-salon-texto', 'alto-volumen', 'parrilla', 'pizza'
+        ])
+          && e.size() <= 24
+          && (!('manipulacion' in e) || (e['manipulacion'] is string && e['manipulacion'].size() <= 60))
+          && (!('exp-cocina' in e) || (e['exp-cocina'] is string && e['exp-cocina'].size() <= 60))
+          && (!('exp-pan' in e) || (e['exp-pan'] is string && e['exp-pan'].size() <= 60))
+          && (!('madrugada' in e) || (e['madrugada'] is string && e['madrugada'].size() <= 60))
+          && (!('cocteleria' in e) || (e['cocteleria'] is string && e['cocteleria'].size() <= 60))
+          && (!('espresso' in e) || (e['espresso'] is string && e['espresso'].size() <= 60))
+          && (!('producciones' in e) || (e['producciones'] is string && e['producciones'].size() <= 60))
+          && (!('exp-salon' in e) || (e['exp-salon'] is string && e['exp-salon'].size() <= 60))
+          && (!('caja' in e) || (e['caja'] is string && e['caja'].size() <= 60))
+          && (!('ingles' in e) || (e['ingles'] is string && e['ingles'].size() <= 60))
+          && (!('bandeja' in e) || (e['bandeja'] is string && e['bandeja'].size() <= 60))
+          && (!('equipo-a-cargo' in e) || (e['equipo-a-cargo'] is string && e['equipo-a-cargo'].size() <= 60))
+          && (!('rotativos' in e) || (e['rotativos'] is string && e['rotativos'].size() <= 60))
+          && (!('partidos' in e) || (e['partidos'] is string && e['partidos'].size() <= 60))
+          && (!('ninos' in e) || (e['ninos'] is string && e['ninos'].size() <= 60))
+          && (!('primeros-aux' in e) || (e['primeros-aux'] is string && e['primeros-aux'].size() <= 60))
+          && (!('exp-cocina-texto' in e) || (e['exp-cocina-texto'] is string && e['exp-cocina-texto'].size() <= 200))
+          && (!('exp-pan-texto' in e) || (e['exp-pan-texto'] is string && e['exp-pan-texto'].size() <= 200))
+          && (!('exp-salon-texto' in e) || (e['exp-salon-texto'] is string && e['exp-salon-texto'].size() <= 200))
+          && (!('alto-volumen' in e) || (e['alto-volumen'] is string && e['alto-volumen'].size() <= 60))
+          && (!('parrilla' in e) || (e['parrilla'] is string && e['parrilla'].size() <= 60))
+          && (!('pizza' in e) || (e['pizza'] is string && e['pizza'].size() <= 60));
+      }
+
+      // Disponibilidad por día: 'full' (cualquier horario) o 'HH:00-HH:00'. Solo viajan los días con disponibilidad.
+      function diaValido(v) { return v is string && v.matches('^(full|[0-9]{2}:00-[0-9]{2}:00)$'); }
+
+      function disponibilidadNueva(x) {
+        return x.keys().hasOnly(['dias', 'empieza', 'jornada', 'feriados'])
+          && x.keys().hasAll(['dias', 'empieza', 'jornada', 'feriados'])
+          && x.dias is map && x.dias.size() >= 1 && x.dias.size() <= 7
+          && x.dias.keys().hasOnly(['lun', 'mar', 'mie', 'jue', 'vie', 'sab', 'dom'])
+          && (!('lun' in x.dias) || diaValido(x.dias.lun))
+          && (!('mar' in x.dias) || diaValido(x.dias.mar))
+          && (!('mie' in x.dias) || diaValido(x.dias.mie))
+          && (!('jue' in x.dias) || diaValido(x.dias.jue))
+          && (!('vie' in x.dias) || diaValido(x.dias.vie))
+          && (!('sab' in x.dias) || diaValido(x.dias.sab))
+          && (!('dom' in x.dias) || diaValido(x.dias.dom));
+      }
+
+      // Formato anterior (franjas fijas): se sigue aceptando para que el cambio de formulario no corte ningún envío.
+      function disponibilidadAnterior(x) {
+        return x.keys().hasOnly(['grilla', 'empieza', 'jornada', 'feriados'])
+          && x.keys().hasAll(['grilla', 'empieza', 'jornada', 'feriados'])
+          && x.grilla is list && x.grilla.size() >= 1 && x.grilla.size() <= 21;
+      }
+
+      function disponibilidadValida(x) {
+        return x is map
+          && (disponibilidadNueva(x) || disponibilidadAnterior(x))
+          && x.empieza is string && x.empieza.size() <= 40
+          && x.jornada is string && x.jornada.size() <= 40
+          && x.feriados is bool;
+      }
+
       function postulacionValida(d) {
         return d.keys().hasOnly([
             'nombre', 'telefono', 'email', 'zona', 'puestos', 'extras', 'disponibilidad',
@@ -78,13 +144,8 @@ service cloud.firestore {
             'cocinero', 'bachero', 'parrillero', 'pizzero', 'jefe-cocina', 'pastelero', 'panadero',
             'bartender', 'barista', 'camarero', 'recepcionista', 'mostrador', 'cajero', 'jefe-sala', 'playroom'
           ])
-          && d.extras is map && d.extras.size() <= 20
-          && d.disponibilidad is map
-          && d.disponibilidad.keys().hasOnly(['grilla', 'empieza', 'jornada', 'feriados'])
-          && d.disponibilidad.grilla is list && d.disponibilidad.grilla.size() >= 1 && d.disponibilidad.grilla.size() <= 21
-          && d.disponibilidad.empieza is string && d.disponibilidad.empieza.size() <= 40
-          && d.disponibilidad.jornada is string && d.disponibilidad.jornada.size() <= 40
-          && d.disponibilidad.feriados is bool
+          && d.extras is map && extrasValidos(d.extras)
+          && disponibilidadValida(d.disponibilidad)
           && d.experienciaAnios is string && d.experienciaAnios.size() <= 40
           && d.trabajos is list && d.trabajos.size() <= 3
           && d.resumen is string && d.resumen.size() <= 800
