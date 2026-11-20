@@ -260,3 +260,5 @@ body.carta-open{overflow:hidden}
 .hoja--chicos-sandwichs-hamburguesas .opciones{font-size:22.6px}
 .hoja--chicos-sandwichs-hamburguesas .hoja-logo img{width:272px}
 .hoja--chicos-sandwichs-hamburguesas .hoja-logo + .hoja-pie{margin-top:12px}
+/* Hoja 07 · Nuestra parrilla: más separación entre el párrafo y los platos */
+.hoja--parrilla .hoja-texto{margin-bottom:44px!important}
