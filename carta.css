@@ -262,3 +262,5 @@ body.carta-open{overflow:hidden}
 .hoja--chicos-sandwichs-hamburguesas .hoja-logo + .hoja-pie{margin-top:12px}
 /* Hoja 07 · Nuestra parrilla: más separación entre el párrafo y los platos */
 .hoja--parrilla .hoja-texto{margin-bottom:44px!important}
+/* Hoja 08 · Guarniciones: más separación entre renglones de la lista */
+.hoja--guarniciones .platos{gap:15px}
