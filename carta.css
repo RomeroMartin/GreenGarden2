@@ -280,3 +280,11 @@ body.carta-open{overflow:hidden}
 /* Hoja 18 · Cafetería: el bloque desde CAFETERÍA CLÁSICA más cerca del título de la página */
 .hoja--cafeteria .horarios + .hoja-titulo{margin-top:6px!important}
 .hoja--cafeteria .platos{gap:20px}
+/* Hoja 19 · Bebidas y smoothies: letras +1 pt (sin pie) y más separación entre renglones */
+.hoja--bebidas-y-smoothies .plato-nombre,.hoja--bebidas-y-smoothies .precio{font-size:19.9px}
+.hoja--bebidas-y-smoothies .plato-desc,.hoja--bebidas-y-smoothies .plato-nota,.hoja--bebidas-y-smoothies .sublista .plato-nombre .plato-nota{font-size:19.3px}
+.hoja--bebidas-y-smoothies .hoja-titulo{font-size:27.3px}
+.hoja--bebidas-y-smoothies .hoja-titulo--linea{font-size:31.3px}
+.hoja--bebidas-y-smoothies .lema--oscuro{font-size:23.8px}
+.hoja--bebidas-y-smoothies .platos{gap:18px}
+.hoja--bebidas-y-smoothies .sublista{gap:7px}
