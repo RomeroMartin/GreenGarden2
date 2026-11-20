@@ -56,6 +56,7 @@
 
 /* Logo "Green Garden" dentro del texto */
 .gg{display:inline-block;height:1.55em;width:auto;vertical-align:-.42em;margin:0 .12em}
+.gg--p{margin-right:0}  /* logo seguido de coma o punto: sin espacio de más */
 .plato-nombre .gg{height:1.75em;vertical-align:-.5em}
 
 /* Bloques de texto */
@@ -142,7 +143,12 @@
 .hoja-card{position:relative}
 .hoja-card .page-thumb{background:#fff}
 .hoja-card .page-zoom{top:auto;bottom:10px}
+.hoja-card .page-thumb{container-type:inline-size}
 .hoja-card .page-thumb .hoja{position:absolute;top:0;left:0;--s:.25;pointer-events:none}
+/* Escala exacta al ancho de la tarjeta, sin esperar al JS (tan/atan2 convierte px en número) */
+@supports (width:1cqw) and (width:calc(tan(atan2(1px,1px))*1px)){
+  .hoja-card .page-thumb .hoja{--s:tan(atan2(100cqw,var(--hoja-w)))}
+}
 .hoja-abrir{position:absolute;inset:0;width:100%;height:100%;border:0;padding:0;background:transparent;cursor:zoom-in;z-index:1}
 .hoja-abrir:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 .hoja-card:hover .page-thumb{border-color:var(--gold)}
@@ -223,11 +229,10 @@ body.carta-open{overflow:hidden}
 /* ---------- Ajustes por hoja (pedidos en la revisión) ---------- */
 /* Hoja 01 · Bienvenidos: logo más grande y todas las letras +1 pt (≈1,33 px) */
 .hoja--bienvenidos .hoja-logo--arriba img{width:250px}
-.hoja--bienvenidos .hoja-titulo{font-size:36.3px}
+.hoja--bienvenidos .hoja-titulo{font-size:36.3px;margin-bottom:18px!important}
 .hoja--bienvenidos .horarios{font-size:22.6px}
 .hoja--bienvenidos{padding-top:66px}
 .hoja--bienvenidos .hoja-texto{font-size:21.3px;gap:18px;line-height:1.2}
-.hoja--bienvenidos .hoja-titulo{margin-bottom:18px!important}
 .hoja--bienvenidos .hoja-titulo:not(:first-child){margin-top:28px!important}
 .hoja--bienvenidos .hoja-logo--arriba{margin-bottom:22px}
 .hoja--bienvenidos .gg{height:1.55em}
@@ -269,10 +274,8 @@ body.carta-open{overflow:hidden}
 .hoja--guarniciones .hoja-logo + .hoja-pie{margin-top:18px}
 /* Hoja 09 · Wraps y ensaladas: platos +1 pt, más aire bajo el título y logo más abajo */
 .hoja--wraps-y-ensaladas .plato-nombre,.hoja--wraps-y-ensaladas .precio{font-size:19.9px}
-.hoja--wraps-y-ensaladas .plato-desc{font-size:19.3px}
+.hoja--wraps-y-ensaladas .plato-desc{font-size:19.3px;max-width:100%}
 .hoja--wraps-y-ensaladas .hoja-titulo{margin-bottom:44px!important}
-.hoja--wraps-y-ensaladas .hoja-logo + .hoja-pie{margin-top:14px}
-.hoja--wraps-y-ensaladas .plato-desc{max-width:100%}
 .hoja--wraps-y-ensaladas .platos{gap:24px}
 .hoja--wraps-y-ensaladas .hoja-logo + .hoja-pie{margin-top:38px}
 /* Hoja 17 · Cervezas: más espacio entre cada cerveza */
