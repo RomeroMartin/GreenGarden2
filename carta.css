@@ -219,3 +219,17 @@ body.carta-open{overflow:hidden}
   .page-zoom{display:none!important}
   body.sin-precios .precio,body.sin-precios .puntos{visibility:hidden!important}
 }
+
+/* ---------- Ajustes por hoja (pedidos en la revisión) ---------- */
+/* Hoja 01 · Bienvenidos: logo más grande y todas las letras +1 pt (≈1,33 px) */
+.hoja--bienvenidos .hoja-logo--arriba img{width:250px}
+.hoja--bienvenidos .hoja-titulo{font-size:36.3px}
+.hoja--bienvenidos .horarios{font-size:22.6px}
+.hoja--bienvenidos{padding-top:66px}
+.hoja--bienvenidos .hoja-texto{font-size:21.3px;gap:18px;line-height:1.2}
+.hoja--bienvenidos .hoja-titulo{margin-bottom:18px!important}
+.hoja--bienvenidos .hoja-titulo:not(:first-child){margin-top:28px!important}
+.hoja--bienvenidos .hoja-logo--arriba{margin-bottom:22px}
+.hoja--bienvenidos .gg{height:1.55em}
+.hoja--bienvenidos .hoja-pie{font-size:25.3px}
+.hoja--bienvenidos .hoja-pie svg{width:23px;height:23px}
