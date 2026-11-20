@@ -267,3 +267,10 @@ body.carta-open{overflow:hidden}
 /* Hoja 08 · Guarniciones: logo un poco más grande */
 .hoja--guarniciones .hoja-logo--chico img{width:182px}
 .hoja--guarniciones .hoja-logo + .hoja-pie{margin-top:18px}
+/* Hoja 09 · Wraps y ensaladas: platos +1 pt, más aire bajo el título y logo más abajo */
+.hoja--wraps-y-ensaladas .plato-nombre,.hoja--wraps-y-ensaladas .precio{font-size:19.9px}
+.hoja--wraps-y-ensaladas .plato-desc{font-size:19.3px}
+.hoja--wraps-y-ensaladas .hoja-titulo{margin-bottom:44px!important}
+.hoja--wraps-y-ensaladas .hoja-logo + .hoja-pie{margin-top:14px}
+.hoja--wraps-y-ensaladas .plato-desc{max-width:100%}
+.hoja--wraps-y-ensaladas .platos{gap:24px}
