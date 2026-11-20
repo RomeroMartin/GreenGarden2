@@ -14,7 +14,7 @@ Esta guía explica cómo está armada y cómo hacer los cambios habituales.
 | `carta.css` | El diseño de las hojas A4, el modal, el modo lectura, la impresión y los ajustes finos por hoja. |
 | `carta.js` | Las miniaturas, el modal con flechas, el modo lectura, el deslizar para cambiar de hoja y la impresión. |
 | `img/carta/` | Las imágenes que no son texto: logo, sello "masa casera", QR del playroom, punto de cocción, logos de cervezas e íconos Sin TACC y vegano. |
-| `fonts/` | GreenFont (letras y números), Myriad Pro Regular y Myriad Pro Light SemiCondensed Italic. |
+| `fonts/` | GreenFont (letras y números) y Source Sans 3 (Regular y Light Italic), con su licencia en `OFL-SourceSans3.txt`. |
 
 En `menu.html` hay tres pestañas y cada una tiene su grilla de hojas, entre estos dos comentarios:
 
@@ -32,7 +32,7 @@ En `menu.html` hay tres pestañas y cada una tiene su grilla de hojas, entre est
 
 Cada hoja es un `<article class="hoja hoja--NOMBRE">`, por ejemplo `hoja--entradas`, `hoja--postres` o `hoja--cafeteria`. Ese nombre sirve para hacerle ajustes de diseño solo a esa hoja (ver punto 5).
 
-> ⚠️ **No hace falta tocar las fotos viejas** de `img/menu/` (`menu01.webp` a `menu17.webp`, `merienda01–04`, `menutacc01–02`). La carta ya no las usa: quedan solo como respaldo y para comparar.
+> Las fotos viejas de la carta (`img/menu/`) **ya no existen en el repo**: se borraron porque nada las usaba. Si algún día hacen falta, están en el historial de git (commit anterior a la carta en HTML).
 
 ---
 
@@ -108,7 +108,7 @@ Las propiedades que más se usan:
 
 Como referencia, 1 punto tipográfico ≈ 1,33 px.
 
-Algunas hojas tienen además un `style="--gap:…;--aire:…"` en su `<article>` dentro de `menu.html`. Es el espaciado que se calculó para que los platos ocupen el alto de la hoja como en el PDF. Si hay una regla para esa hoja en `carta.css`, manda la de `carta.css`.
+Algunas hojas tienen además un `style="--gap:…;--aire:…"` en su `<article>` dentro de `menu.html`. Es el espaciado que se calculó para que los platos ocupen el alto de la hoja como en el PDF. Si hay una regla para esa hoja en `carta.css`, manda la de `carta.css` (por eso en las hojas que ya tienen su propio `gap` en `carta.css` se quitó el `--gap` inline, que no se usaba).
 
 ---
 
@@ -139,7 +139,9 @@ Sale una hoja A4 por página, igual a la que se ve en la web. La versión **sin 
   - **Flechas abajo** (anterior / siguiente), un contador (por ejemplo "Entradas · 3 / 17") y la X para cerrar.
   - En el celular también se puede **deslizar** a los costados para cambiar de hoja, y en la compu usar las **flechas del teclado** o **Esc** para cerrar.
   - Tocar la hoja la **amplía**, y tocarla de nuevo la achica.
-  - El botón **"Modo lectura"** muestra la misma hoja en una columna, con letra grande y separadores, ideal para el celular. Al final de cada hoja aparecen botones grandes para el Instagram y para reservar llamando. El navegador recuerda si el cliente prefiere el modo lectura.
+  - El botón **"Modo lectura"** muestra la misma hoja en una columna, con letra grande y separadores, ideal para el celular. Al final de cada hoja aparecen botones grandes para el Instagram y para reservar llamando.
+  - **En el celular (pantalla de menos de 700 px) la carta abre directamente en modo lectura.** El cliente puede pasar a "Ver hoja" y el navegador recuerda su elección. En compu y tablet grande abre la hoja entera.
+  - **Botón "Atrás" del celular:** cierra la hoja en vez de salir de la carta. Cada hoja tiene su propio link, por ejemplo `https://www.greengarden.com.ar/menu.html#almuerzo/entradas` (se arma solo: pestaña + nombre de la hoja). Sirve para mandar por WhatsApp o ponerlo en un QR.
 - Cada pestaña recorre solo sus hojas.
 
 ---
@@ -159,14 +161,23 @@ Para un cambio chico de un precio también podés editar directo en `main`, pero
 
 ---
 
-## 9. Tipografías y licencias
+## 9. SEO: lo que Google lee
 
-- **GreenFont** (Regular + Numeros) es la tipografía propia de la marca. Los números de los títulos salen automáticamente del archivo "Numeros".
-- **Myriad Pro** es una fuente comercial de Adobe. Ya se usaba en la web antes de este cambio. Para su uso en la web conviene tener la licencia en regla: Adobe Fonts la incluye con Creative Cloud. Si no, se puede cambiar por una alternativa gratuita de Google Fonts editando las dos líneas `@font-face` de `base.css`.
+- **Texto real:** cada plato, descripción y precio es texto HTML, no imagen.
+- **Datos estructurados (schema.org):** `carta.js` arma solo, leyendo las hojas, los datos `Restaurant → Menu → MenuSection → MenuItem` (nombre, descripción, precio en ARS, y marca "sin gluten" en la pestaña Sin TACC) y los cuelga del mismo restaurante que ya está declarado en `index.html`. **No hay que mantener nada aparte:** si cambiás un precio en `menu.html`, los datos para Google cambian solos.
+- **Cómo comprobarlo:** pegá la dirección de la web en <https://search.google.com/test/rich-results> (o en el validador de schema.org) y buscá "Restaurante".
+- El título y la descripción de `menu.html` incluyen "menú", "precios" y "La Plata", que es lo que la gente busca.
 
 ---
 
-## 10. Datos de origen y transcripción
+## 10. Tipografías y licencias
+
+- **GreenFont** (Regular + Numeros) es la tipografía propia de la marca. Los números de los títulos salen automáticamente del archivo "Numeros".
+- **Source Sans 3** (Regular y Light Italic) es la tipografía de los textos. Es de uso libre (licencia SIL OFL, incluida en `fonts/OFL-SourceSans3.txt`), así que no requiere licencia paga. Reemplazó a Myriad Pro, que es comercial. Como su cursiva es un poco más ancha que la de Myriad, en `base.css` el `@font-face` de la cursiva usa `size-adjust:92%` para que los renglones corten donde cortaban antes; si algún día se cambia la fuente, conviene volver a revisar que ninguna hoja se desborde.
+
+---
+
+## 11. Datos de origen y transcripción
 
 - Las 17 hojas de Almuerzos & Cenas se transcribieron del PDF del diseñador `GG_OCT_2026` (octubre 2026).
 - Desayunos & Meriendas y Sin TACC se transcribieron de las imágenes que había en la web.

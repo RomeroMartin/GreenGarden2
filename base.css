@@ -3,8 +3,8 @@
 @font-face{font-family:"Green Font";src:url("fonts/GreenFont-Regular.woff2") format("woff2");font-weight:400;font-display:swap}
 /* Números 0-9 en Green Font: misma familia, solo se usa para dígitos */
 @font-face{font-family:"Green Font";src:url("fonts/GreenFont-Numeros.woff2") format("woff2");font-weight:400;font-display:swap;unicode-range:U+0030-0039}
-@font-face{font-family:"Myriad";src:url("fonts/MyriadPro-Regular.woff2") format("woff2");font-weight:400;font-display:swap}
-@font-face{font-family:"Myriad Italic";src:url("fonts/MyriadPro-LightSemiCnIt.woff2") format("woff2");font-weight:300;font-display:swap}
+@font-face{font-family:"Source Sans 3";src:url("fonts/SourceSans3-Regular.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Source Sans 3 Italic";src:url("fonts/SourceSans3-LightItalic.woff2") format("woff2");font-weight:300;font-display:swap;size-adjust:92%}
 
 :root{
   --green:#002f2a;
@@ -21,9 +21,9 @@
   --black:#000;
   --header-h:76px;
   --pad:clamp(20px,5vw,48px);
-  --f-display:"Green Font","Myriad","Segoe UI",sans-serif;
-  --f-text:"Myriad","Segoe UI",Arial,sans-serif;
-  --f-italic:"Myriad Italic","Myriad","Segoe UI",sans-serif;
+  --f-display:"Green Font","Source Sans 3","Segoe UI",sans-serif;
+  --f-text:"Source Sans 3","Segoe UI",Arial,sans-serif;
+  --f-italic:"Source Sans 3 Italic","Source Sans 3","Segoe UI",sans-serif;
 }
 
 *,*::before,*::after{box-sizing:border-box}

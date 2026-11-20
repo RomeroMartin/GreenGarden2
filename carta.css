@@ -43,7 +43,7 @@
 .plato-nota{font-family:var(--f-italic);font-weight:300;font-size:18.0px}
 .puntos{flex:1 1 16px;min-width:16px;border-bottom:1.5px dotted var(--hoja-oro);transform:translateY(-3px)}
 .precio{font-size:18.6px;white-space:nowrap}
-.plato-desc{margin-top:0!important;max-width:86%;font-family:var(--f-italic);font-weight:300;font-size:18.0px;line-height:1.12}
+.plato-desc{margin-top:0!important;max-width:91%;font-family:var(--f-italic);font-weight:300;font-size:18.0px;line-height:1.12}
 
 /* Hoja con mucho contenido: letra un poco más chica, como en el PDF */
 .hoja--densa .plato-nombre,.hoja--densa .precio{font-size:17px}
@@ -56,6 +56,7 @@
 
 /* Logo "Green Garden" dentro del texto */
 .gg{display:inline-block;height:1.55em;width:auto;vertical-align:-.42em;margin:0 .12em}
+.gg--p{margin-right:0}  /* logo seguido de coma o punto: sin espacio de más */
 .plato-nombre .gg{height:1.75em;vertical-align:-.5em}
 
 /* Bloques de texto */
@@ -223,11 +224,10 @@ body.carta-open{overflow:hidden}
 /* ---------- Ajustes por hoja (pedidos en la revisión) ---------- */
 /* Hoja 01 · Bienvenidos: logo más grande y todas las letras +1 pt (≈1,33 px) */
 .hoja--bienvenidos .hoja-logo--arriba img{width:250px}
-.hoja--bienvenidos .hoja-titulo{font-size:36.3px}
+.hoja--bienvenidos .hoja-titulo{font-size:36.3px;margin-bottom:18px!important}
 .hoja--bienvenidos .horarios{font-size:22.6px}
 .hoja--bienvenidos{padding-top:66px}
 .hoja--bienvenidos .hoja-texto{font-size:21.3px;gap:18px;line-height:1.2}
-.hoja--bienvenidos .hoja-titulo{margin-bottom:18px!important}
 .hoja--bienvenidos .hoja-titulo:not(:first-child){margin-top:28px!important}
 .hoja--bienvenidos .hoja-logo--arriba{margin-bottom:22px}
 .hoja--bienvenidos .gg{height:1.55em}
@@ -269,17 +269,15 @@ body.carta-open{overflow:hidden}
 .hoja--guarniciones .hoja-logo + .hoja-pie{margin-top:18px}
 /* Hoja 09 · Wraps y ensaladas: platos +1 pt, más aire bajo el título y logo más abajo */
 .hoja--wraps-y-ensaladas .plato-nombre,.hoja--wraps-y-ensaladas .precio{font-size:19.9px}
-.hoja--wraps-y-ensaladas .plato-desc{font-size:19.3px}
+.hoja--wraps-y-ensaladas .plato-desc{font-size:19.3px;max-width:100%}
 .hoja--wraps-y-ensaladas .hoja-titulo{margin-bottom:44px!important}
-.hoja--wraps-y-ensaladas .hoja-logo + .hoja-pie{margin-top:14px}
-.hoja--wraps-y-ensaladas .plato-desc{max-width:100%}
 .hoja--wraps-y-ensaladas .platos{gap:24px}
 .hoja--wraps-y-ensaladas .hoja-logo + .hoja-pie{margin-top:38px}
 /* Hoja 17 · Cervezas: más espacio entre cada cerveza */
 .hoja--cervezas .platos{gap:24px}
 /* Hoja 18 · Cafetería: el bloque desde CAFETERÍA CLÁSICA más cerca del título de la página */
 .hoja--cafeteria .horarios + .hoja-titulo{margin-top:6px!important}
-.hoja--cafeteria .platos{gap:20px}
+.hoja--cafeteria .platos{gap:19.5px}
 /* Hoja 19 · Bebidas y smoothies: letras +1 pt (sin pie) y más separación entre renglones */
 .hoja--bebidas-y-smoothies .plato-nombre,.hoja--bebidas-y-smoothies .precio{font-size:19.9px}
 .hoja--bebidas-y-smoothies .plato-desc,.hoja--bebidas-y-smoothies .plato-nota,.hoja--bebidas-y-smoothies .sublista .plato-nombre .plato-nota{font-size:19.3px}

@@ -24,6 +24,12 @@
     todas();
   }
 
+  // Los links (Instagram, teléfono) de las miniaturas quedan tapados por el botón de abrir:
+  // se sacan del orden de Tab para no enfocar links invisibles.
+  cards.forEach(function (c) {
+    Array.prototype.forEach.call(c.querySelectorAll('.hoja a[href]'), function (a) { a.tabIndex = -1; });
+  });
+
   /* ---------- Modal ---------- */
   var ICON = {
     cerrar: '<path d="M6 6l12 12M18 6L6 18"/>',
@@ -62,8 +68,12 @@
   var btnNext = modal.querySelector('[data-accion="next"]');
 
   var grupo = cards, indice = 0, abridor = null, zoom = false;
-  var lectura = false;
-  try { lectura = localStorage.getItem('carta-lectura') === '1'; } catch (e) {}
+  // Modo lectura: lo que eligió el cliente; si nunca eligió, lectura en celular y hoja en pantallas grandes.
+  var lectura = window.innerWidth < 700;
+  try {
+    var guardado = localStorage.getItem('carta-lectura');
+    if (guardado !== null) lectura = guardado === '1';
+  } catch (e) {}
 
   function ajuste() {
     var w = escenario.clientWidth - 24;
@@ -103,6 +113,7 @@
     copia.removeAttribute('id');
     Array.prototype.forEach.call(copia.querySelectorAll('[id]'), function (n) { n.removeAttribute('id'); });
     copia.removeAttribute('aria-labelledby');
+    Array.prototype.forEach.call(copia.querySelectorAll('a[tabindex]'), function (a) { a.removeAttribute('tabindex'); });
     marco.innerHTML = '';
     marco.appendChild(copia);
     zoom = false;
@@ -115,25 +126,71 @@
     pintar();
   }
 
-  function abrir(i, desde) {
+  /* ---------- Historial: el botón "Atrás" cierra la hoja, y cada hoja tiene su link ----------
+     La hoja abierta se refleja en la dirección: menu.html#almuerzo/entradas */
+  var empujado = false; // true si abrir la hoja agregó una entrada al historial
+
+  function slugDe(card) {
+    var h = card.querySelector('.hoja');
+    return h && h.id ? h.id.replace(/^hoja-/, '') : '';
+  }
+  function hashDeHoja() {
+    var panel = grupo[indice].closest('.menu-panel');
+    return '#' + panel.id + '/' + slugDe(grupo[indice]);
+  }
+  function hojaDelHash() {
+    var m = /^#([\w-]+)\/([\w-]+)$/.exec(location.hash);
+    var panel = m && document.getElementById(m[1]);
+    if (!panel) return null;
+    var g = cards.filter(function (c) { return c.closest('.menu-panel') === panel; });
+    for (var i = 0; i < g.length; i++) if (slugDe(g[i]) === m[2]) return { grupo: g, indice: i };
+    return null;
+  }
+  function marcarHistorial(nueva) {
+    try {
+      if (nueva) { history.pushState({ carta: 1 }, '', hashDeHoja()); empujado = true; }
+      else history.replaceState(history.state, '', hashDeHoja());
+    } catch (e) {}
+  }
+
+  function abrir(i, desde, yaEnHistorial) {
     abridor = desde || null;
     modal.hidden = false;
     document.body.classList.add('carta-open');
     cargar(i);
+    marcarHistorial(!yaEnHistorial);
     btnCerrar.focus();
   }
 
-  function cerrar() {
+  function cerrar(porAtras) {
+    var panel = grupo[indice] && grupo[indice].closest('.menu-panel');
     modal.hidden = true;
     document.body.classList.remove('carta-open');
     marco.innerHTML = '';
     if (abridor && abridor.focus) abridor.focus();
+    try {
+      if (!porAtras && empujado) history.back();
+      else if (!porAtras && panel) history.replaceState(history.state, '', '#' + panel.id);
+    } catch (e) {}
+    empujado = false;
   }
 
   function ir(d) {
     var n = indice + d;
-    if (n >= 0 && n < grupo.length) cargar(n);
+    if (n >= 0 && n < grupo.length) { cargar(n); marcarHistorial(false); }
   }
+
+  // "Atrás" / "Adelante" del navegador, o un link directo a una hoja
+  function sincronizarConHash() {
+    var h = hojaDelHash();
+    if (h) {
+      grupo = h.grupo;
+      if (modal.hidden) abrir(h.indice, null, true); else { cargar(h.indice); }
+    } else if (!modal.hidden) {
+      cerrar(true);
+    }
+  }
+  window.addEventListener('popstate', sincronizarConHash);
 
   // Cada pestaña (almuerzo, merienda, sin TACC) es su propio grupo de hojas
   cards.forEach(function (card) {
@@ -146,7 +203,7 @@
     });
   });
 
-  btnCerrar.addEventListener('click', cerrar);
+  btnCerrar.addEventListener('click', function () { cerrar(); });
   btnPrev.addEventListener('click', function () { ir(-1); });
   btnNext.addEventListener('click', function () { ir(1); });
   btnLectura.addEventListener('click', function () {
@@ -197,6 +254,59 @@
     x0 = null;
     if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) ir(dx < 0 ? 1 : -1);
   }, { passive: true });
+
+  /* ---------- SEO: datos estructurados de la carta (schema.org) ----------
+     Se arman leyendo las mismas hojas que se ven, así los precios nunca quedan desactualizados:
+     al cambiar un precio en menu.html, esto se actualiza solo. Se cuelga del Restaurant del index (@id). */
+  function textoLimpio(el, sinNota) {
+    var c = el.cloneNode(true);
+    if (sinNota) Array.prototype.forEach.call(c.querySelectorAll('.plato-nota'), function (n) { n.remove(); });
+    Array.prototype.forEach.call(c.querySelectorAll('img[alt]'), function (i) { i.replaceWith(document.createTextNode(i.alt)); });
+    return c.textContent.replace(/\s+/g, ' ').replace(/^\*\s*/, '').replace(/\s+([,.;:])/g, '$1').trim();
+  }
+  function ofertas(txt) {
+    var nums = (txt.match(/\d{1,3}(?:\.\d{3})*/g) || []).map(function (n) { return n.replace(/\./g, ''); });
+    var o = nums.map(function (n) { return { '@type': 'Offer', price: n, priceCurrency: 'ARS' }; });
+    return o.length === 1 ? o[0] : o;
+  }
+  function datosEstructurados() {
+    var base = location.origin && /^https?:/.test(location.origin) ? 'https://www.greengarden.com.ar/menu.html' : '';
+    var menus = Array.prototype.map.call(document.querySelectorAll('.menu-panel'), function (panel) {
+      var titulo = panel.querySelector('.cat-banner h2');
+      var sinTacc = panel.id === 'sintacc';
+      var secciones = [];
+      Array.prototype.forEach.call(panel.querySelectorAll('.hoja'), function (hoja) {
+        var items = [];
+        Array.prototype.forEach.call(hoja.querySelectorAll('.plato-linea'), function (linea) {
+          var precio = linea.querySelector('.precio');
+          var nombre = linea.querySelector('.plato-nombre, .hoja-titulo--linea');
+          if (!precio || !nombre || !/\d/.test(precio.textContent)) return;
+          var nota = linea.querySelector('.plato-nota');
+          var desc = linea.nextElementSibling;
+          var partes = [];
+          if (nota) partes.push(textoLimpio(nota).replace(/^\(|\)$/g, ''));
+          if (desc && desc.classList.contains('plato-desc')) partes.push(textoLimpio(desc));
+          var item = { '@type': 'MenuItem', name: textoLimpio(nombre, true), offers: ofertas(precio.textContent) };
+          if (partes.length) item.description = partes.join('. ').replace(/\.\./g, '.');
+          if (sinTacc) item.suitableForDiet = 'https://schema.org/GlutenFreeDiet';
+          items.push(item);
+        });
+        if (items.length) secciones.push({ '@type': 'MenuSection', name: hoja.getAttribute('aria-label') || '', hasMenuItem: items });
+      });
+      var menu = { '@type': 'Menu', name: titulo ? titulo.textContent.trim() : panel.id, url: base + '#' + panel.id, inLanguage: 'es-AR', hasMenuSection: secciones };
+      if (sinTacc) menu.suitableForDiet = 'https://schema.org/GlutenFreeDiet';
+      return menu;
+    }).filter(function (m) { return m.hasMenuSection.length; });
+    if (!menus.length) return;
+    var s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.textContent = JSON.stringify({ '@context': 'https://schema.org', '@type': 'Restaurant', '@id': 'https://www.greengarden.com.ar/#restaurant', hasMenu: menus });
+    document.head.appendChild(s);
+  }
+  try { datosEstructurados(); } catch (e) {}
+
+  // Si la dirección trae una hoja (menu.html#almuerzo/entradas), se abre sola
+  if (hojaDelHash()) sincronizarConHash();
 
   /* ---------- Imprimir / guardar PDF (uso interno) ----------
      Los botones no se muestran a los clientes: aparecen solo abriendo
