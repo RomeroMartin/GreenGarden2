@@ -237,3 +237,10 @@ body.carta-open{overflow:hidden}
 .hoja--playroom .hoja-texto + .platos{margin-top:30px}
 /* Hoja 02 · Playroom: menos interlineado en los párrafos */
 .hoja--playroom .hoja-texto--aireado{line-height:1.55}
+/* Hoja 02 · Playroom: del título PLAYROOM para abajo, letras +1 pt (sin párrafos ni pie) */
+.hoja--playroom .hoja-titulo{font-size:27.3px}
+.hoja--playroom .playroom ol,.hoja--playroom .playroom dl{font-size:19.9px}
+.hoja--playroom .playroom dt{font-size:24.8px}
+.hoja--playroom .hoja-titulo ~ .platos .plato-nombre,.hoja--playroom .hoja-titulo ~ .platos .precio{font-size:19.9px}
+.hoja--playroom .hoja-titulo ~ .platos .plato-nota{font-size:19.3px}
+.hoja--playroom .lema{font-size:23.8px}
