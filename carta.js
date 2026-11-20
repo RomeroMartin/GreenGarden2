@@ -43,12 +43,14 @@
   modal.innerHTML =
     '<div class="carta-barra">' +
       '<button type="button" class="carta-btn carta-btn--lectura" data-accion="lectura"></button>' +
-      '<span class="carta-cuenta" aria-live="polite"></span>' +
       '<button type="button" class="carta-btn carta-btn--icono" data-accion="cerrar" aria-label="Cerrar">' + svg(ICON.cerrar) + '</button>' +
     '</div>' +
     '<div class="carta-escenario"><div class="carta-marco"></div></div>' +
-    '<button type="button" class="carta-btn carta-btn--icono carta-nav carta-nav--prev" data-accion="prev" aria-label="Hoja anterior">' + svg(ICON.prev) + '</button>' +
-    '<button type="button" class="carta-btn carta-btn--icono carta-nav carta-nav--next" data-accion="next" aria-label="Hoja siguiente">' + svg(ICON.next) + '</button>';
+    '<div class="carta-barra carta-barra--pie">' +
+      '<button type="button" class="carta-btn carta-btn--icono" data-accion="prev" aria-label="Hoja anterior">' + svg(ICON.prev) + '</button>' +
+      '<span class="carta-cuenta" aria-live="polite"></span>' +
+      '<button type="button" class="carta-btn carta-btn--icono" data-accion="next" aria-label="Hoja siguiente">' + svg(ICON.next) + '</button>' +
+    '</div>';
   document.body.appendChild(modal);
 
   var escenario = modal.querySelector('.carta-escenario');
@@ -59,7 +61,7 @@
   var btnPrev = modal.querySelector('[data-accion="prev"]');
   var btnNext = modal.querySelector('[data-accion="next"]');
 
-  var indice = 0, abridor = null, zoom = false;
+  var grupo = cards, indice = 0, abridor = null, zoom = false;
   var lectura = false;
   try { lectura = localStorage.getItem('carta-lectura') === '1'; } catch (e) {}
 
@@ -95,8 +97,8 @@
   }
 
   function cargar(i) {
-    indice = Math.max(0, Math.min(cards.length - 1, i));
-    var original = cards[indice].querySelector('.hoja');
+    indice = Math.max(0, Math.min(grupo.length - 1, i));
+    var original = grupo[indice].querySelector('.hoja');
     var copia = original.cloneNode(true);
     copia.removeAttribute('id');
     Array.prototype.forEach.call(copia.querySelectorAll('[id]'), function (n) { n.removeAttribute('id'); });
@@ -105,11 +107,11 @@
     marco.appendChild(copia);
     zoom = false;
     escenario.scrollTo(0, 0);
-    var nombre = cards[indice].getAttribute('data-nombre') || '';
-    cuenta.textContent = nombre + ' · ' + (indice + 1) + ' / ' + cards.length;
+    var nombre = grupo[indice].getAttribute('data-nombre') || '';
+    cuenta.textContent = nombre + ' · ' + (indice + 1) + ' / ' + grupo.length;
     modal.setAttribute('aria-label', 'Carta: ' + nombre);
     btnPrev.disabled = indice === 0;
-    btnNext.disabled = indice === cards.length - 1;
+    btnNext.disabled = indice === grupo.length - 1;
     pintar();
   }
 
@@ -130,12 +132,18 @@
 
   function ir(d) {
     var n = indice + d;
-    if (n >= 0 && n < cards.length) cargar(n);
+    if (n >= 0 && n < grupo.length) cargar(n);
   }
 
-  cards.forEach(function (card, i) {
+  // Cada pestaña (almuerzo, merienda, sin TACC) es su propio grupo de hojas
+  cards.forEach(function (card) {
     var b = card.querySelector('.hoja-abrir');
-    if (b) b.addEventListener('click', function () { abrir(i, b); });
+    if (!b) return;
+    b.addEventListener('click', function () {
+      var panel = card.closest('.menu-panel');
+      grupo = cards.filter(function (c) { return c.closest('.menu-panel') === panel; });
+      abrir(grupo.indexOf(card), b);
+    });
   });
 
   btnCerrar.addEventListener('click', cerrar);
@@ -190,7 +198,18 @@
     if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) ir(dx < 0 ? 1 : -1);
   }, { passive: true });
 
-  /* ---------- Imprimir / guardar PDF ---------- */
+  /* ---------- Imprimir / guardar PDF (uso interno) ----------
+     Los botones no se muestran a los clientes: aparecen solo abriendo
+     menu.html?imprimir . Igual, Ctrl+P en la página imprime la carta en A4. */
+  if (/[?&]imprimir\b/.test(location.search)) {
+    Array.prototype.forEach.call(document.querySelectorAll('.menu-panel .cat-meta'), function (meta) {
+      var acciones = document.createElement('div');
+      acciones.className = 'carta-acciones';
+      acciones.innerHTML = '<button type="button" data-imprimir="con-precios">Imprimir esta carta (A4)</button>' +
+        '<button type="button" data-imprimir="sin-precios">Imprimir sin precios</button>';
+      meta.appendChild(acciones);
+    });
+  }
   Array.prototype.forEach.call(document.querySelectorAll('[data-imprimir]'), function (b) {
     b.addEventListener('click', function () {
       document.body.classList.toggle('sin-precios', b.getAttribute('data-imprimir') === 'sin-precios');

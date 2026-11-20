@@ -14,7 +14,7 @@
 /* ---------- La hoja ---------- */
 .hoja{
   width:var(--hoja-w);height:var(--hoja-h);box-sizing:border-box;
-  padding:64px 98px 46px;
+  padding:84px 98px 54px;
   display:flex;flex-direction:column;
   background:#fff;color:var(--hoja-tinta);
   font-family:var(--f-text);font-size:18.6px;line-height:1.2;
@@ -31,11 +31,13 @@
   letter-spacing:.03em;text-align:center;color:var(--hoja-verde);
   margin:0 0 26px!important;
 }
-.hoja-titulo:not(:first-child){margin-top:34px!important}
+.hoja-titulo:not(:first-child){margin-top:calc(34px + var(--aire,0px))!important}
+.hoja-titulo--grande{font-size:35px}
+.hoja-titulo--grande:first-child{margin-bottom:30px!important}
 
 /* Platos con puntitos hasta el precio */
-.platos{display:flex;flex-direction:column;gap:8px}
-.platos--lista{gap:9px}
+.platos{display:flex;flex-direction:column;gap:var(--gap,8px)}
+.platos--lista{gap:var(--gap-lista,9px)}
 .plato-linea{display:flex;align-items:baseline;gap:6px}
 .plato-nombre{font-family:var(--f-text);font-weight:400;font-size:18.6px;line-height:1.15;color:var(--hoja-tinta)}
 .plato-nota{font-family:var(--f-italic);font-weight:300;font-size:18.0px}
@@ -76,12 +78,13 @@
 /* Logo, sello y pie */
 .hoja-logo{margin-top:auto;display:flex;justify-content:center}
 .hoja-logo img{width:236px;height:auto}
+.hoja-logo--grande img{width:280px}
 .hoja-logo--arriba{margin:0 0 28px}
 .hoja-logo--arriba img{width:200px}
 .hoja-logo--chico img{width:150px}
 .hoja-logo--doble{gap:70px;align-items:center}
 .hoja-logo--doble .sello{width:124px}
-.hoja-pie{margin-top:26px;display:flex;justify-content:center;gap:42px;font-size:22.6px;flex:none}
+.hoja-pie{margin-top:26px;display:flex;justify-content:center;gap:44px;font-size:24px;flex:none}
 .hoja-logo + .hoja-pie,.lema + .hoja-pie{margin-top:26px}
 .hoja > .hoja-pie:only-of-type{margin-top:auto}
 .hoja-pie a{display:inline-flex;align-items:center;gap:6px;color:var(--hoja-tinta);text-decoration:none}
@@ -113,6 +116,28 @@
 
 .marcas{margin-top:auto;width:100%;height:auto}
 
+/* Desayunos & Meriendas y Sin TACC */
+.horarios--chico{font-size:14px;margin:-18px 0 26px!important}
+.titulo-precio{margin-top:calc(34px + var(--aire,0px))}
+.titulo-precio .plato-linea{gap:10px}
+.hoja-titulo--linea{margin:0!important;text-align:left;font-size:30px}
+.titulo-precio .plato-desc{margin-top:2px!important}
+.sublista{display:flex;flex-direction:column;gap:3px;margin-top:12px!important}
+.sublista .plato-nombre .plato-nota{font-size:18px}
+.asteriscos{display:flex;flex-direction:column;gap:14px;margin-top:22px!important;font-size:18.6px}
+.asteriscos i{font-family:var(--f-italic);font-weight:300;font-style:normal}
+.lista-simple{display:flex;flex-direction:column;gap:16px;margin-top:26px!important;font-size:18.6px}
+.lema--oscuro{margin-top:34px!important;font-size:22.5px;color:var(--hoja-tinta)}
+.lema--verde{margin:30px 0 0!important;font-size:26px;line-height:1.45;color:var(--hoja-verde)}
+.hoja .platos--separado{margin-top:44px}
+.hoja-logo--sintacc{gap:56px;align-items:center}
+.hoja-logo--sintacc .icono{width:104px;height:auto}
+.hoja--lectura .titulo-precio .hoja-titulo--linea{font-size:24px}
+.hoja--lectura .sublista,.hoja--lectura .asteriscos,.hoja--lectura .lista-simple{font-size:17px}
+.hoja--lectura .hoja-logo--sintacc{display:flex;justify-content:flex-start;gap:16px;margin-top:28px}
+.hoja--lectura .hoja-logo--sintacc img:first-child{display:none}
+.hoja--lectura .hoja-logo--sintacc .icono{width:56px}
+
 /* ---------- Tarjetas (miniaturas) ---------- */
 .hoja-card{position:relative}
 .hoja-card .page-thumb{background:#fff}
@@ -130,8 +155,10 @@
 body.carta-open{overflow:hidden}
 .carta-modal{position:fixed;inset:0;z-index:10000;display:flex;flex-direction:column;background:#00100e;color:var(--ivory)}
 .carta-modal[hidden]{display:none}
-.carta-barra{flex:none;display:flex;align-items:center;gap:10px;padding:10px 12px}
-.carta-barra .carta-cuenta{flex:1;min-width:0;text-align:center;font-family:var(--f-italic);font-weight:300;font-size:16px;color:var(--gold);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.carta-barra{flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px}
+.carta-barra--pie{padding:10px 12px calc(10px + env(safe-area-inset-bottom));border-top:1px solid rgba(214,179,106,.25)}
+.carta-barra--pie .carta-btn{width:52px;height:52px;border-radius:26px}
+.carta-cuenta{flex:1;min-width:0;text-align:center;font-family:var(--f-italic);font-weight:300;font-size:16px;color:var(--gold);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .carta-btn{flex:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:44px;height:44px;padding:0 14px;border:1px solid rgba(214,179,106,.5);border-radius:22px;background:rgba(0,47,42,.9);color:var(--ivory);font:inherit;font-size:15px;cursor:pointer}
 .carta-btn:hover{border-color:var(--gold);background:var(--green-2)}
 .carta-btn:disabled{opacity:.35;cursor:default}
@@ -139,14 +166,10 @@ body.carta-open{overflow:hidden}
 .carta-btn--icono{padding:0;width:44px}
 .carta-btn--lectura{background:#fff;color:var(--green);border-color:#fff}
 .carta-btn--lectura:hover{background:var(--paper);color:var(--green)}
-.carta-escenario{position:relative;flex:1;min-height:0;overflow:auto;padding:4px 12px 24px;touch-action:pan-x pan-y pinch-zoom;-webkit-overflow-scrolling:touch}
+.carta-escenario{position:relative;flex:1;min-height:0;overflow:auto;padding:4px 12px 16px;touch-action:pan-x pan-y pinch-zoom;-webkit-overflow-scrolling:touch}
 .carta-marco{margin:0 auto;position:relative;background:#fff;box-shadow:0 20px 60px rgba(0,0,0,.45);overflow:hidden;cursor:zoom-in}
 .carta-modal.is-zoom .carta-marco{cursor:zoom-out}
 .carta-marco .hoja{position:absolute;top:0;left:0}
-.carta-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:2}
-.carta-nav--prev{left:16px}
-.carta-nav--next{right:16px}
-@media (pointer:coarse),(max-width:899px){.carta-nav{display:none}}
 
 /* ---------- Modo lectura: la misma hoja, sin tamaño fijo y con letra grande ---------- */
 .carta-modal.is-lectura .carta-marco{width:auto!important;height:auto!important;max-width:640px;border-radius:4px;cursor:auto}
@@ -182,17 +205,17 @@ body.carta-open{overflow:hidden}
 @media print{
   body{background:#fff!important}
   body *{visibility:hidden}
-  #almuerzo,#almuerzo .page-grid,#almuerzo .page-grid *{visibility:visible}
+  .menu-panel:not([hidden]),.menu-panel:not([hidden]) .page-grid,.menu-panel:not([hidden]) .page-grid *{visibility:visible}
   .site-header,.site-footer,.menu-tabs-bar,.page-hero,.cta-band,.carta-modal,.skip-link,
-  #almuerzo .cat-banner,#almuerzo .cat-meta,.page-label,.hoja-abrir{display:none!important}
-  main > section:not(#almuerzo){display:none!important}
-  #almuerzo{display:block!important;padding:0!important;margin:0!important}
-  #almuerzo .container,#almuerzo .panel-inner{max-width:none!important;padding:0!important;margin:0!important;display:block!important}
-  #almuerzo .page-grid{display:block!important;margin:0;padding:0}
-  #almuerzo .page-grid > li{display:block;margin:0;padding:0}
+  .cat-banner,.cat-meta,.page-label,.hoja-abrir{display:none!important}
+  main > section:not(.menu-panel),.menu-panel[hidden]{display:none!important}
+  .menu-panel{display:block!important;padding:0!important;margin:0!important}
+  .menu-panel .container,.menu-panel .panel-inner{max-width:none!important;padding:0!important;margin:0!important;display:block!important}
+  .menu-panel .page-grid{display:block!important;margin:0;padding:0}
+  .menu-panel .page-grid > li{display:block;margin:0;padding:0}
   .hoja-card .page-thumb{position:static;aspect-ratio:auto;border:0;box-shadow:none;width:auto;height:auto;overflow:visible}
   .hoja-card .page-thumb .hoja{position:static;transform:none;width:var(--hoja-w);height:var(--hoja-h);break-after:page;page-break-after:always}
-  #almuerzo .page-grid > li:last-child .hoja{break-after:auto;page-break-after:auto}
+  .menu-panel .page-grid > li:last-child .hoja{break-after:auto;page-break-after:auto}
   .page-zoom{display:none!important}
   body.sin-precios .precio,body.sin-precios .puntos{visibility:hidden!important}
 }
