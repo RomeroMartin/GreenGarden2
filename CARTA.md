@@ -14,7 +14,7 @@ Esta guía explica cómo está armada y cómo hacer los cambios habituales.
 | `carta.css` | El diseño de las hojas A4, el modal, el modo lectura, la impresión y los ajustes finos por hoja. |
 | `carta.js` | Las miniaturas, el modal con flechas, el modo lectura, el deslizar para cambiar de hoja y la impresión. |
 | `img/carta/` | Las imágenes que no son texto: logo, sello "masa casera", QR del playroom, punto de cocción, logos de cervezas e íconos Sin TACC y vegano. |
-| `fonts/` | GreenFont (letras y números), Myriad Pro Regular y Myriad Pro Light SemiCondensed Italic. |
+| `fonts/` | GreenFont (letras y números) y Source Sans 3 (Regular y Light Italic), con su licencia en `OFL-SourceSans3.txt`. |
 
 En `menu.html` hay tres pestañas y cada una tiene su grilla de hojas, entre estos dos comentarios:
 
@@ -173,7 +173,7 @@ Para un cambio chico de un precio también podés editar directo en `main`, pero
 ## 10. Tipografías y licencias
 
 - **GreenFont** (Regular + Numeros) es la tipografía propia de la marca. Los números de los títulos salen automáticamente del archivo "Numeros".
-- **Myriad Pro** es una fuente comercial de Adobe. Ya se usaba en la web antes de este cambio. Para su uso en la web conviene tener la licencia en regla: Adobe Fonts la incluye con Creative Cloud. Si no, se puede cambiar por una alternativa gratuita de Google Fonts editando las dos líneas `@font-face` de `base.css`.
+- **Source Sans 3** (Regular y Light Italic) es la tipografía de los textos. Es de uso libre (licencia SIL OFL, incluida en `fonts/OFL-SourceSans3.txt`), así que no requiere licencia paga. Reemplazó a Myriad Pro, que es comercial. Como su cursiva es un poco más ancha que la de Myriad, en `base.css` el `@font-face` de la cursiva usa `size-adjust:92%` para que los renglones corten donde cortaban antes; si algún día se cambia la fuente, conviene volver a revisar que ninguna hoja se desborde.
 
 ---
 

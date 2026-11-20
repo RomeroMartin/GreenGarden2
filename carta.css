@@ -43,7 +43,7 @@
 .plato-nota{font-family:var(--f-italic);font-weight:300;font-size:18.0px}
 .puntos{flex:1 1 16px;min-width:16px;border-bottom:1.5px dotted var(--hoja-oro);transform:translateY(-3px)}
 .precio{font-size:18.6px;white-space:nowrap}
-.plato-desc{margin-top:0!important;max-width:86%;font-family:var(--f-italic);font-weight:300;font-size:18.0px;line-height:1.12}
+.plato-desc{margin-top:0!important;max-width:91%;font-family:var(--f-italic);font-weight:300;font-size:18.0px;line-height:1.12}
 
 /* Hoja con mucho contenido: letra un poco más chica, como en el PDF */
 .hoja--densa .plato-nombre,.hoja--densa .precio{font-size:17px}
@@ -282,7 +282,7 @@ body.carta-open{overflow:hidden}
 .hoja--cervezas .platos{gap:24px}
 /* Hoja 18 · Cafetería: el bloque desde CAFETERÍA CLÁSICA más cerca del título de la página */
 .hoja--cafeteria .horarios + .hoja-titulo{margin-top:6px!important}
-.hoja--cafeteria .platos{gap:20px}
+.hoja--cafeteria .platos{gap:19.5px}
 /* Hoja 19 · Bebidas y smoothies: letras +1 pt (sin pie) y más separación entre renglones */
 .hoja--bebidas-y-smoothies .plato-nombre,.hoja--bebidas-y-smoothies .precio{font-size:19.9px}
 .hoja--bebidas-y-smoothies .plato-desc,.hoja--bebidas-y-smoothies .plato-nota,.hoja--bebidas-y-smoothies .sublista .plato-nombre .plato-nota{font-size:19.3px}
