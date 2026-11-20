@@ -87,28 +87,27 @@
 
       <div class="job-progress" aria-hidden="true"><div class="job-progress-bar" id="jobBar"></div></div>
       <p class="job-step-label" id="jobStepLabel" aria-live="polite"></p>
-
-      <div class="job-errors" id="jobErrors" role="alert" tabindex="-1" hidden></div>
+      <p class="job-nota" id="jobNota">Lleva unos 3 minutos. Tu avance se guarda en este dispositivo.</p>
 
       <!-- Paso 1 -->
       <fieldset class="job-step" data-step="1">
         <legend>Tus datos</legend>
         <div class="field">
           <label for="f-nombre">Nombre y apellido</label>
-          <input id="f-nombre" name="nombre" type="text" maxlength="80" autocomplete="name" required>
+          <input id="f-nombre" name="nombre" type="text" maxlength="80" autocomplete="name" autocapitalize="words" enterkeyhint="next" required>
         </div>
         <div class="field">
           <label for="f-telefono">WhatsApp</label>
-          <input id="f-telefono" name="telefono" type="tel" inputmode="tel" maxlength="20" autocomplete="tel-national" placeholder="221 555 1234" required aria-describedby="h-telefono">
+          <input id="f-telefono" name="telefono" type="tel" inputmode="tel" maxlength="20" autocomplete="tel-national" enterkeyhint="next" placeholder="221 555 1234" required aria-describedby="h-telefono">
           <p class="hint" id="h-telefono">Código de área + número, sin 0 ni 15.</p>
         </div>
         <div class="field">
           <label for="f-email">Email</label>
-          <input id="f-email" name="email" type="email" maxlength="120" autocomplete="email" required>
+          <input id="f-email" name="email" type="email" inputmode="email" maxlength="120" autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="next" required>
         </div>
         <div class="field">
           <label for="f-zona">Barrio o localidad donde vivís</label>
-          <input id="f-zona" name="zona" type="text" maxlength="80" autocomplete="address-level2" placeholder="Ej: City Bell, Tolosa, Centro" required>
+          <input id="f-zona" name="zona" type="text" maxlength="80" autocomplete="address-level2" autocapitalize="words" enterkeyhint="done" placeholder="Ej: City Bell, Tolosa, Centro" required>
         </div>
         <div class="field foto-field">
           <span class="field-title">Foto <span class="opt">(opcional)</span></span>
@@ -117,7 +116,7 @@
               <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.5 20c.9-3.6 3.8-5.6 7.5-5.6s6.6 2 7.5 5.6"/></svg>
             </div>
             <div class="foto-acciones">
-              <label class="btn btn--outline foto-btn" for="f-foto" id="fotoBtn">Elegir o sacar una foto</label>
+              <label class="btn btn--outline foto-btn" for="f-foto" id="fotoBtn">Subir foto</label>
               <input id="f-foto" type="file" accept="image/*" class="sr-only" aria-describedby="h-foto">
               <button type="button" class="foto-quitar" id="fotoQuitar" hidden>Quitar foto</button>
             </div>
@@ -130,8 +129,8 @@
       <!-- Paso 2 -->
       <fieldset class="job-step" data-step="2" hidden>
         <legend>¿Qué puesto te interesa?</legend>
-        <p class="hint">Elegí hasta <span id="maxPuestos">4</span>.</p>
-        <div id="puestosBox"></div>
+        <p class="hint" id="puestosHint" aria-live="polite">Elegí hasta 4 puestos.</p>
+        <div id="puestosBox" data-err-host></div>
       </fieldset>
 
       <!-- Paso 3 -->
@@ -145,6 +144,7 @@
       <fieldset class="job-step" data-step="4" hidden>
         <legend>Disponibilidad</legend>
         <p class="hint">Marcá todos los días y turnos en los que podrías trabajar.</p>
+        <div class="grilla-box" data-err-host>
         <label class="check check--todo">
           <input type="checkbox" id="grillaTodos">
           <span>Tengo disponibilidad completa (todos los días, en los 3 turnos)</span>
@@ -154,6 +154,7 @@
             <thead><tr id="grillaHead"><th scope="col"><span class="sr-only">Día</span></th></tr></thead>
             <tbody id="grillaBody"></tbody>
           </table>
+        </div>
         </div>
         <div class="field">
           <label class="check"><input type="checkbox" name="feriados" value="1"> <span>Puedo trabajar feriados</span></label>
@@ -175,21 +176,22 @@
           <label for="f-anios">Años de experiencia en gastronomía</label>
           <select id="f-anios" name="anios" required></select>
         </div>
-        <div id="trabajosBox"></div>
+        <div id="trabajosWrap"><div id="trabajosBox"></div></div>
         <div class="field">
           <label for="f-resumen">Contanos algo más sobre vos <span class="opt">(opcional)</span></label>
-          <textarea id="f-resumen" name="resumen" rows="4" maxlength="800"></textarea>
+          <textarea id="f-resumen" name="resumen" rows="4" maxlength="800" aria-describedby="resumenCuenta"></textarea>
+          <p class="hint hint--der" id="resumenCuenta">0 / 800</p>
         </div>
         <div class="field">
           <label for="f-referencias">Referencias laborales <span class="opt">(opcional)</span></label>
-          <input id="f-referencias" name="referencias" type="text" maxlength="400" placeholder="Nombre, lugar y teléfono de alguien que pueda recomendarte">
+          <input id="f-referencias" name="referencias" type="text" maxlength="400" placeholder="Nombre, lugar y teléfono">
         </div>
       </fieldset>
 
       <!-- Paso 6 -->
       <fieldset class="job-step" data-step="6" hidden>
         <legend>Revisá y enviá</legend>
-        <dl class="resumen" id="resumenBox"></dl>
+        <div class="resumen" id="resumenBox"></div>
 
         <div class="field hp" aria-hidden="true">
           <label for="f-web">No completar este campo</label>
@@ -213,6 +215,8 @@
           </div>
         </details>
       </fieldset>
+
+      <div class="job-errors" id="jobErrors" role="alert" tabindex="-1" hidden></div>
 
       <div class="job-nav">
         <button type="button" class="btn btn--outline" id="btnPrev" hidden>Anterior</button>

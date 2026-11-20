@@ -21,6 +21,12 @@ const btnPrev = $('btnPrev'), btnNext = $('btnNext'), btnSend = $('btnSend');
 const erroresBox = $('jobErrors');
 const abierta = Date.now();
 let paso = 1;
+let volverAResumen = false;   // true mientras se corrige algo desde el resumen final
+let enviado = false;
+let errSeq = 0;
+const NOMBRES_PASO = ['Tus datos', 'Tu puesto', 'Sobre el puesto', 'Disponibilidad', 'Experiencia', 'Revisión'];
+const HOSTS = '.field, .pregunta, .check--consent, [data-err-host]'; // contenedores donde se muestra cada error
+const suave = () => (window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
 
 // ── Utilidades ──────────────────────────────────────────────
 function h(tag, attrs, ...hijos) {
@@ -43,6 +49,13 @@ function normalizarTelefono(txt) {
   return d;
 }
 
+// 2215551234 → "221 555 1234" (los de 2 dígitos de área, como 11, → "11 5555 1234")
+function formatearTelefono(el) {
+  const d = normalizarTelefono(el.value);
+  if (!/^\d{10}$/.test(d)) return;
+  el.value = d.startsWith('11') ? d.slice(0, 2) + ' ' + d.slice(2, 6) + ' ' + d.slice(6) : d.slice(0, 3) + ' ' + d.slice(3, 6) + ' ' + d.slice(6);
+}
+
 function puestosElegidos() {
   return Array.from(form.querySelectorAll('input[name="puesto"]:checked')).map(i => i.value);
 }
@@ -50,7 +63,6 @@ function puestosElegidos() {
 // ── Construcción de partes dinámicas ────────────────────────
 function armarPuestos() {
   const box = $('puestosBox');
-  $('maxPuestos').textContent = MAX_PUESTOS;
   Object.keys(SECTORES).forEach(sid => {
     const lista = PUESTOS.filter(p => p.sector === sid);
     box.append(h('div', { class: 'puestos-sector' },
@@ -63,10 +75,16 @@ function armarPuestos() {
       ))
     ));
   });
-  box.addEventListener('change', () => {
-    const n = puestosElegidos().length;
-    box.querySelectorAll('input[name="puesto"]').forEach(i => { i.disabled = n >= MAX_PUESTOS && !i.checked; });
-  });
+  box.addEventListener('change', actualizarPuestos);
+}
+
+function actualizarPuestos() {
+  const n = puestosElegidos().length;
+  $('puestosBox').querySelectorAll('input[name="puesto"]').forEach(i => { i.disabled = n >= MAX_PUESTOS && !i.checked; });
+  $('puestosHint').textContent = n >= MAX_PUESTOS
+    ? 'Elegiste ' + n + ' de ' + MAX_PUESTOS + '. Para cambiar uno, primero sacá otro.'
+    : n ? 'Elegiste ' + n + ' de ' + MAX_PUESTOS + '. Podés sumar hasta ' + (MAX_PUESTOS - n) + ' más.'
+        : 'Elegí hasta ' + MAX_PUESTOS + ' puestos.';
 }
 
 function armarPreguntas() {
@@ -149,16 +167,38 @@ function llenarSelect(id, opciones) {
   opciones.forEach(o => sel.append(h('option', { value: o, text: o })));
 }
 
+const TITULOS_TRABAJO = ['Último trabajo', 'Trabajo anterior', 'Otro trabajo anterior'];
+
 function armarTrabajos() {
   const box = $('trabajosBox');
-  ['Último trabajo', 'Trabajo anterior', 'Otro trabajo anterior'].forEach((t, i) => {
-    box.append(h('div', { class: 'trabajo' },
-      h('p', { class: 'trabajo-titulo', text: t + (i ? ' (opcional)' : ' (si tuviste)') }),
-      h('label', null, 'Lugar', h('input', { type: 'text', name: 'tr' + i + '_lugar', maxlength: '60' })),
-      h('label', null, 'Puesto', h('input', { type: 'text', name: 'tr' + i + '_puesto', maxlength: '60' })),
+  TITULOS_TRABAJO.forEach((t, i) => {
+    const g = h('div', { class: 'trabajo' },
+      h('p', { class: 'trabajo-titulo', text: t }),
+      h('label', null, 'Lugar', h('input', { type: 'text', name: 'tr' + i + '_lugar', maxlength: '60', autocapitalize: 'sentences' })),
+      h('label', null, 'Puesto', h('input', { type: 'text', name: 'tr' + i + '_puesto', maxlength: '60', autocapitalize: 'sentences' })),
       h('label', null, 'Tiempo', h('input', { type: 'text', name: 'tr' + i + '_tiempo', maxlength: '40', placeholder: 'Ej: 2 años' }))
-    ));
+    );
+    if (i > 0) g.hidden = true;           // los demás aparecen con "Agregar otro trabajo"
+    box.append(g);
   });
+  const mas = h('button', { type: 'button', class: 'btn-mas', id: 'btnMasTrabajos', text: '+ Agregar otro trabajo' });
+  mas.addEventListener('click', () => {
+    const oculto = box.querySelector('.trabajo[hidden]');
+    if (oculto) { oculto.hidden = false; const i = oculto.querySelector('input'); if (i) i.focus({ preventScroll: false }); }
+    actualizarTrabajos();
+  });
+  $('trabajosWrap').append(mas);
+  $('f-anios').addEventListener('change', actualizarTrabajos);
+}
+
+// Sin experiencia → no se piden trabajos. Los bloques con datos (p. ej. de un borrador) siempre se muestran.
+function actualizarTrabajos() {
+  const box = $('trabajosBox');
+  $('trabajosWrap').hidden = $('f-anios').value === 'Sin experiencia';
+  box.querySelectorAll('.trabajo').forEach(g => {
+    if (g.hidden && Array.from(g.querySelectorAll('input')).some(x => x.value.trim())) g.hidden = false;
+  });
+  $('btnMasTrabajos').hidden = !box.querySelector('.trabajo[hidden]');
 }
 
 // ── Lectura del formulario ──────────────────────────────────
@@ -166,7 +206,8 @@ function leer() {
   const fd = new FormData(form);
   const extras = {};
   PREGUNTAS.forEach(q => { const v = fd.get('q_' + q.id); if (v) extras[q.id] = String(v); });
-  const trabajos = [0, 1, 2].map(i => ({
+  const sinExperiencia = fd.get('anios') === 'Sin experiencia';
+  const trabajos = sinExperiencia ? [] : [0, 1, 2].map(i => ({
     lugar: limpiar(fd.get('tr' + i + '_lugar')).slice(0, 60),
     puesto: limpiar(fd.get('tr' + i + '_puesto')).slice(0, 60),
     tiempo: limpiar(fd.get('tr' + i + '_tiempo')).slice(0, 40)
@@ -202,8 +243,8 @@ function validar(n) {
   const f = (name) => form.elements[name];
   if (n === 1) {
     if (d.nombre.length < 2) e.push({ el: f('nombre'), msg: 'Escribí tu nombre y apellido.' });
-    if (!/^\d{10}$/.test(d.telefono)) e.push({ el: f('telefono'), msg: 'Escribí tu WhatsApp con código de área y sin 0 ni 15 (10 dígitos). Ej: 221 555 1234.' });
-    if (!EMAIL_RE.test(d.email)) e.push({ el: f('email'), msg: 'Escribí un email válido.' });
+    if (!/^\d{10}$/.test(d.telefono)) e.push({ el: f('telefono'), msg: 'Escribí tu WhatsApp con código de área, sin 0 ni 15 (10 dígitos). Ej: 221 555 1234.' });
+    if (!EMAIL_RE.test(d.email)) e.push({ el: f('email'), msg: 'Escribí un email válido. Ej: nombre@gmail.com' });
     if (d.zona.length < 2) e.push({ el: f('zona'), msg: 'Indicá tu barrio o localidad.' });
   }
   if (n === 2) {
@@ -211,7 +252,7 @@ function validar(n) {
   }
   if (n === 3) {
     PREGUNTAS.filter(q => q.para.some(p => d.puestos.includes(p))).forEach(q => {
-      if (!d.extras[q.id]) e.push({ el: form.querySelector('input[name="q_' + q.id + '"]'), msg: 'Respondé: ' + q.label });
+      if (!d.extras[q.id]) e.push({ el: form.querySelector('input[name="q_' + q.id + '"]'), msg: 'Elegí una opción.' });
     });
   }
   if (n === 4) {
@@ -228,41 +269,105 @@ function validar(n) {
   return e;
 }
 
-function mostrarErrores(errs) {
-  form.querySelectorAll('[aria-invalid]').forEach(el => el.removeAttribute('aria-invalid'));
-  if (!errs.length) { erroresBox.hidden = true; erroresBox.replaceChildren(); return; }
-  errs.forEach(x => x.el && x.el.setAttribute('aria-invalid', 'true'));
-  erroresBox.replaceChildren(
-    h('strong', { text: errs.length === 1 ? 'Revisá este dato:' : 'Revisá estos datos:' }),
-    h('ul', null, errs.map(x => h('li', { text: x.msg })))
-  );
-  erroresBox.hidden = false;
-  erroresBox.focus();
+// ── Errores: cada uno aparece junto a su campo ──────────────
+function ponerError(el, msg) {
+  const host = el.closest(HOSTS) || el.parentElement;
+  if (host.querySelector(':scope > .field-error')) return;      // un solo mensaje por contenedor
+  const p = h('p', { class: 'field-error', id: 'err-' + (++errSeq), text: msg });
+  if (host.matches('[data-err-host]')) host.prepend(p); else host.append(p);
+  el.setAttribute('aria-invalid', 'true');
+  el.setAttribute('aria-describedby', ((el.getAttribute('aria-describedby') || '') + ' ' + p.id).trim());
 }
 
+function quitarError(host) {
+  host.querySelectorAll(':scope > .field-error').forEach(p => {
+    host.querySelectorAll('[aria-describedby]').forEach(x => {
+      const resto = x.getAttribute('aria-describedby').split(' ').filter(t => t && t !== p.id).join(' ');
+      if (resto) x.setAttribute('aria-describedby', resto); else x.removeAttribute('aria-describedby');
+    });
+    p.remove();
+  });
+  host.querySelectorAll('[aria-invalid]').forEach(x => x.removeAttribute('aria-invalid'));
+}
+
+function mostrarErrores(errs) {
+  form.querySelectorAll('.field-error').forEach(p => p.remove());
+  form.querySelectorAll('[aria-invalid]').forEach(x => x.removeAttribute('aria-invalid'));
+  erroresBox.hidden = true; erroresBox.replaceChildren();
+  let primero = null;
+  errs.forEach(x => {
+    if (x.el) { ponerError(x.el, x.msg); primero = primero || x.el; }
+    else { erroresBox.replaceChildren(h('strong', { text: x.msg })); erroresBox.hidden = false; primero = primero || erroresBox; }
+  });
+  if (!primero) return;
+  const host = primero.closest ? (primero.closest(HOSTS) || primero) : primero;
+  host.scrollIntoView({ block: 'center', behavior: suave() });
+  try { primero.focus({ preventScroll: true }); } catch (_) { /* nada */ }
+}
+
+// Al corregir un campo, su aviso desaparece.
+function limpiarAviso(el) {
+  const host = el.closest && el.closest(HOSTS);
+  if (host) quitarError(host);
+}
+
+// Los datos de contacto se revisan al salir de cada campo (si ya escribió algo).
+['nombre', 'telefono', 'email', 'zona'].forEach(name => {
+  const el = form.elements[name];
+  el.addEventListener('blur', () => {
+    if (!el.value.trim()) return;
+    if (name === 'telefono') formatearTelefono(el);
+    const host = el.closest('.field');
+    quitarError(host);
+    const fallo = validar(1).find(x => x.el === el);
+    if (fallo) ponerError(el, fallo.msg);
+  });
+});
+
 // ── Navegación entre pasos ──────────────────────────────────
-function mostrarPaso(n) {
+function mostrarPaso(n, { foco = false, scroll = true } = {}) {
   paso = n;
   pasos.forEach(p => { p.hidden = Number(p.dataset.step) !== n; });
   $('jobBar').style.width = ((n - 1) / (TOTAL - 1)) * 100 + '%';
-  $('jobStepLabel').textContent = 'Paso ' + n + ' de ' + TOTAL;
+  $('jobStepLabel').textContent = 'Paso ' + n + ' de ' + TOTAL + ' · ' + NOMBRES_PASO[n - 1];
+  $('jobNota').hidden = n !== 1;
   btnPrev.hidden = n === 1;
   btnNext.hidden = n === TOTAL;
   btnSend.hidden = n !== TOTAL;
+  btnNext.textContent = volverAResumen && n !== 2 ? 'Volver al resumen' : 'Siguiente';
   mostrarErrores([]);
   if (n === 3) armarPreguntas();
+  if (n === 5) actualizarTrabajos();
   if (n === 6) armarResumen();
   guardarBorrador();
-  const top = form.getBoundingClientRect().top + window.scrollY - 90;
-  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+  if (scroll) {
+    const top = form.getBoundingClientRect().top + window.scrollY - 90;
+    window.scrollTo({ top: Math.max(0, top), behavior: suave() });
+  }
+  if (foco) {                       // lectores de pantalla: anuncia el paso nuevo
+    const leyenda = pasos[n - 1].querySelector('legend');
+    if (leyenda) { leyenda.setAttribute('tabindex', '-1'); leyenda.focus({ preventScroll: true }); }
+  }
 }
+
+// Cada avance queda en el historial: el botón "atrás" del celular vuelve al paso anterior en vez de salir de la página.
+function ir(n) {
+  mostrarPaso(n, { foco: true });
+  try { history.pushState({ gg: n }, ''); } catch (_) { /* nada */ }
+}
+window.addEventListener('popstate', (ev) => {
+  if (enviado) return;
+  const n = ev.state && ev.state.gg;
+  mostrarPaso(n >= 1 && n <= TOTAL ? n : 1, { foco: true });
+});
 
 btnNext.addEventListener('click', () => {
   const errs = validar(paso);
   if (errs.length) { mostrarErrores(errs); return; }
-  mostrarPaso(paso + 1);
+  if (volverAResumen && paso !== 2 && paso < TOTAL) { volverAResumen = false; ir(TOTAL); return; }
+  ir(paso + 1);
 });
-btnPrev.addEventListener('click', () => mostrarPaso(paso - 1));
+btnPrev.addEventListener('click', () => { volverAResumen = false; ir(paso - 1); });
 // Enter en un campo avanza de paso en vez de enviar.
 form.addEventListener('keydown', (ev) => {
   if (ev.key === 'Enter' && ev.target.tagName === 'INPUT' && ev.target.type !== 'checkbox' && ev.target.type !== 'radio') {
@@ -276,27 +381,45 @@ function etiquetaGrilla(grilla) {
   if (!grilla.length) return '—';
   return DIAS.map(d => {
     const ts = TURNOS.filter(t => grilla.includes(d.id + '-' + t.id)).map(t => t.nombre.toLowerCase());
-    return ts.length ? d.nombre.slice(0, 3) + ': ' + ts.join(', ') : null;
+    return ts.length === TURNOS.length ? d.nombre.slice(0, 3) + ': todo el día' : ts.length ? d.nombre.slice(0, 3) + ': ' + ts.join(', ') : null;
   }).filter(Boolean).join(' · ');
 }
 
 function armarResumen() {
   const d = leer();
-  const filas = [
-    ['Nombre', d.nombre],
-    ['WhatsApp', d.telefono],
-    ['Email', d.email],
-    ['Zona', d.zona],
-    ['Puestos', d.puestos.map(id => puestoPorId[id].nombre).join(', ')],
-    ['Disponibilidad', etiquetaGrilla(d.disponibilidad.grilla) + (d.disponibilidad.feriados ? ' · feriados' : '')],
-    ['Jornada / inicio', d.disponibilidad.jornada + ' · ' + d.disponibilidad.empieza],
-    ['Experiencia', d.experienciaAnios]
-  ];
   const box = $('resumenBox');
   box.replaceChildren();
-  filas.forEach(([k, v]) => { box.append(h('dt', { text: k }), h('dd', { text: v || '—' })); });
-  if (d.foto) box.append(h('dt', { text: 'Foto' }), h('dd', null, h('img', { src: d.foto, alt: 'Tu foto', class: 'resumen-foto' })));
+  const sec = (titulo, n, filas) => box.append(h('section', { class: 'resumen-sec' },
+    h('div', { class: 'resumen-cab' },
+      h('h3', { text: titulo }),
+      h('button', { type: 'button', class: 'resumen-editar', 'data-paso': String(n), 'aria-label': 'Editar: ' + titulo }, 'Editar')),
+    h('dl', null, filas.flatMap(([k, v]) => [h('dt', { text: k }), h('dd', null, v || '—')]))
+  ));
+  sec('Tus datos', 1, [
+    ['Nombre', d.nombre], ['WhatsApp', d.telefono], ['Email', d.email], ['Zona', d.zona],
+    ['Foto', d.foto ? h('img', { src: d.foto, alt: 'Tu foto', class: 'resumen-foto' }) : 'Sin foto']
+  ]);
+  sec('Puestos', 2, [['Puestos elegidos', d.puestos.map(id => puestoPorId[id].nombre).join(', ')]]);
+  const resp = PREGUNTAS.filter(q => d.extras[q.id]).map(q => [q.label, d.extras[q.id]]);
+  if (resp.length) sec('Sobre el puesto', 3, resp);
+  sec('Disponibilidad', 4, [
+    ['Días y turnos', etiquetaGrilla(d.disponibilidad.grilla)],
+    ['Feriados', d.disponibilidad.feriados ? 'Sí' : 'No'],
+    ['Jornada', d.disponibilidad.jornada],
+    ['Puede empezar', d.disponibilidad.empieza]
+  ]);
+  const exp = [['Años de experiencia', d.experienciaAnios]];
+  d.trabajos.forEach((t, i) => exp.push(['Trabajo ' + (i + 1), [t.lugar, t.puesto, t.tiempo].filter(Boolean).join(' · ')]));
+  if (d.resumen) exp.push(['Sobre vos', d.resumen]);
+  if (d.referencias) exp.push(['Referencias', d.referencias]);
+  sec('Experiencia', 5, exp);
 }
+$('resumenBox').addEventListener('click', (ev) => {
+  const b = ev.target.closest('.resumen-editar');
+  if (!b) return;
+  volverAResumen = true;
+  ir(Number(b.dataset.paso));
+});
 
 // ── Borrador local (solo en este dispositivo) ───────────────
 function guardarBorrador() {
@@ -332,14 +455,15 @@ function restaurarBorrador() {
     armarPreguntas();                    // 2) preguntas según puestos
     aplicarDatos(datos);                 // 3) respuestas
     sincronizarGrilla();
-    $('puestosBox').dispatchEvent(new Event('change'));
+    actualizarPuestos();
+    actualizarTrabajos();
     mostrarPaso(p);
     return true;
   } catch (_) { return false; /* borrador dañado: se ignora */ }
 }
 
-form.addEventListener('input', (ev) => { ev.target.removeAttribute && ev.target.removeAttribute('aria-invalid'); guardarBorrador(); });
-form.addEventListener('change', (ev) => { ev.target.removeAttribute && ev.target.removeAttribute('aria-invalid'); guardarBorrador(); });
+form.addEventListener('input', (ev) => { limpiarAviso(ev.target); guardarBorrador(); });
+form.addEventListener('change', (ev) => { limpiarAviso(ev.target); guardarBorrador(); });
 
 // ── Foto: se achica en el navegador antes de guardarla ──────
 const FOTO_LADO = 480;          // píxeles del lado más largo
@@ -398,7 +522,7 @@ function pintarFoto() {
     prev.append(h('img', { src: foto, alt: '' }));
   } else if (icono) icono.style.display = '';
   $('fotoQuitar').hidden = !foto;
-  $('fotoBtn').textContent = foto ? 'Cambiar foto' : 'Elegir o sacar una foto';
+  $('fotoBtn').textContent = foto ? 'Cambiar foto' : 'Subir foto';
 }
 
 function errorFoto(txt) { $('fotoError').textContent = txt || ''; $('fotoError').hidden = !txt; }
@@ -438,6 +562,7 @@ function conectar() {
 }
 
 function exito(nombre) {
+  enviado = true;
   try { localStorage.removeItem(BORRADOR); localStorage.removeItem(FOTO_KEY); localStorage.setItem(ENVIADA, String(Date.now())); } catch (_) {}
   $('okNombre').textContent = nombre.split(' ')[0];
   form.hidden = true;
@@ -452,7 +577,7 @@ form.addEventListener('submit', async (ev) => {
   // Revalida todo por si se saltearon pasos con el borrador.
   for (let n = 1; n <= TOTAL; n++) {
     const errs = validar(n);
-    if (errs.length) { mostrarPaso(n); mostrarErrores(errs); return; }
+    if (errs.length) { mostrarPaso(n, { foco: true }); mostrarErrores(errs); return; }
   }
   const d = leer();
 
@@ -479,7 +604,14 @@ armarTrabajos();
 llenarSelect('f-jornada', JORNADAS);
 llenarSelect('f-empieza', EMPIEZA);
 llenarSelect('f-anios', ANIOS);
+const cuentaResumen = () => { $('resumenCuenta').textContent = $('f-resumen').value.length + ' / 800'; };
+$('f-resumen').addEventListener('input', cuentaResumen);
 conectar();
 restaurarFoto();
 sincronizarGrilla();
-if (!restaurarBorrador()) mostrarPaso(1);
+actualizarPuestos();
+actualizarTrabajos();
+// Al abrir la página no se hace scroll solo (se ve el título); con un borrador se vuelve al paso donde quedó.
+if (!restaurarBorrador()) mostrarPaso(1, { scroll: false });
+cuentaResumen();
+try { history.replaceState({ gg: paso }, ''); } catch (_) { /* nada */ }

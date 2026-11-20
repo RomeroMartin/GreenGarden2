@@ -425,13 +425,13 @@ function renderFicha(p, notas, paraImprimir) {
 
   const g = p.disponibilidad.grilla || [];
   const tabla = h('table', { class: 'ficha-grilla' },
-    h('thead', null, h('tr', null, h('th', { scope: 'col', text: '' }), TURNOS.map(t => h('th', { scope: 'col', text: t.nombre + ' ' + t.horas })))),
+    h('thead', null, h('tr', null, h('th', { scope: 'col', text: '' }), TURNOS.map(t => h('th', { scope: 'col' }, t.nombre, h('small', { text: t.horas }))))),
     h('tbody', null, DIAS.map(d => h('tr', null,
       h('th', { scope: 'row', text: d.nombre }),
       TURNOS.map(t => h('td', { text: g.includes(d.id + '-' + t.id) ? '●' : '' }))
     )))
   );
-  f.append(h('section', null, h('h3', { text: 'Disponibilidad' }), tabla,
+  f.append(h('section', null, h('h3', { text: 'Disponibilidad' }), h('div', { class: 'ficha-grilla-wrap' }, tabla),
     h('p', { text: [p.disponibilidad.jornada, p.disponibilidad.empieza ? 'Empieza: ' + p.disponibilidad.empieza : '', p.disponibilidad.feriados ? 'Puede trabajar feriados' : 'No marcó feriados'].filter(Boolean).join(' · ') })));
 
   const exp = h('section', null, h('h3', { text: 'Experiencia' }), h('p', { text: p.experienciaAnios || '—' }));

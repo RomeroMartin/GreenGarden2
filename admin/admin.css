@@ -81,25 +81,40 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
 .adm-vacio[hidden]{display:none}
 
 /* Detalle */
-.adm-dialog{width:min(900px,100vw);max-width:100vw;height:100dvh;max-height:100dvh;margin:0 0 0 auto;padding:0;border:0;background:var(--ivory)}
+.adm-dialog{width:min(900px,100vw);max-width:100vw;height:100dvh;max-height:100dvh;margin:0 0 0 auto;padding:0;border:0;background:var(--ivory);overflow-x:hidden}
 .adm-dialog::backdrop{background:rgba(0,16,14,.6)}
 .adm-dialog-in{padding:16px var(--pad) 48px;display:flex;flex-direction:column;gap:20px}
-.adm-dialog-bar{display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:space-between;position:sticky;top:0;z-index:2;padding:10px 0;background:var(--ivory);border-bottom:1px solid var(--line)}
-.adm-dialog-bar .adm-estado-row{flex:1 1 100%;padding:8px 12px;background:var(--paper);border:1px solid var(--gold)}
-.adm-estado-label{flex:none;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-ink)}
-
+.adm-dialog-bar{display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:2;padding:10px 0;background:var(--ivory);border-bottom:1px solid var(--line)}
+.adm-dialog-bar .adm-btn{flex:none}
+.adm-dialog-bar .adm-estado-row{flex:1;min-width:0;display:flex;align-items:center;gap:8px;padding:4px 8px 4px 12px;background:var(--paper);border:1px solid var(--gold)}
+.adm-dialog-bar .adm-estado-row select{flex:1;min-width:0;width:auto;min-height:40px;border:0;background:#fff}
+.adm-estado-label{flex:none;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-ink)}
+.adm-ficha-acciones{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.adm-ficha-acciones .adm-btn{width:100%}
+.adm-estado-info{margin-top:-8px}
+.adm-estado-info:empty{display:none}
+@media (min-width:640px){.adm-ficha-acciones{display:flex;flex-wrap:wrap}.adm-ficha-acciones .adm-btn{width:auto}}
+.adm-dialog-in,.adm-gestion{min-width:0}
 .ficha{background:var(--paper);border:1px solid var(--line);padding:clamp(16px,3vw,28px);display:flex;flex-direction:column;gap:18px}
 .ficha h2{font-family:var(--f-display);font-weight:400;text-transform:uppercase;letter-spacing:.05em;font-size:clamp(26px,4vw,36px);color:var(--green);line-height:1.1}
 .ficha-sub{font-size:14px;color:var(--muted)}
 .ficha-cabecera{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
 .ficha-foto{flex:none;width:112px;height:150px;object-fit:cover;border:1px solid var(--line);background:#fff}
 .ficha h3{font-family:var(--f-text);font-weight:400;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-ink);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--line)}
-.ficha dl{display:grid;grid-template-columns:max-content 1fr;gap:4px 16px;margin:0;font-size:15px}
-.ficha dt{color:var(--muted)}
-.ficha dd{margin:0;overflow-wrap:anywhere}
+.ficha{min-width:0}
+.ficha dl{display:grid;grid-template-columns:minmax(0,1fr);gap:0;margin:0;font-size:15px}
+.ficha dt{color:var(--muted);font-size:13px;margin-top:10px}
+.ficha dt:first-child{margin-top:0}
+.ficha dd{margin:0;min-width:0;overflow-wrap:anywhere;color:var(--ink)}
+@media (min-width:640px){
+  .ficha dl{grid-template-columns:minmax(0,42%) minmax(0,1fr);gap:6px 16px}
+  .ficha dt,.ficha dt:first-child{margin-top:0;font-size:15px}
+}
 .ficha p{font-size:15px;overflow-wrap:anywhere;white-space:pre-wrap}
-.ficha-grilla{border-collapse:collapse;font-size:13px}
-.ficha-grilla th,.ficha-grilla td{border:1px solid var(--line);padding:3px 10px;text-align:center}
+.ficha-grilla-wrap{overflow-x:auto;max-width:100%}
+.ficha-grilla{border-collapse:collapse;font-size:13px;width:100%;max-width:420px}
+.ficha-grilla th,.ficha-grilla td{border:1px solid var(--line);padding:4px 6px;text-align:center}
+.ficha-grilla thead th small{display:block;font-size:11px;color:var(--gold-ink)}
 .ficha-grilla th:first-child{text-align:left;font-weight:400}
 .ficha-grilla thead th{font-weight:400;color:var(--muted)}
 .ficha-trabajo{padding:6px 0;border-bottom:1px dashed var(--line);font-size:15px}

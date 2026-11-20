@@ -77,19 +77,19 @@
 <dialog id="detalle" class="adm-dialog" aria-labelledby="detNombre">
   <div class="adm-dialog-in">
     <div class="adm-dialog-bar">
-      <button type="button" class="adm-btn adm-btn--ghost" id="detCerrar">← Volver al listado</button>
-      <div class="adm-acciones">
-        <a class="adm-btn" id="detWhats" target="_blank" rel="noopener">WhatsApp</a>
-        <a class="adm-btn" id="detMail">Email</a>
-        <button type="button" class="adm-btn" id="detImprimir">Imprimir / PDF</button>
-        <button type="button" class="adm-btn adm-btn--danger" id="detBorrar" hidden>Eliminar</button>
-      </div>
+      <button type="button" class="adm-btn adm-btn--ghost" id="detCerrar" aria-label="Volver al listado">← Volver</button>
       <div class="adm-estado-row">
-        <label class="adm-estado-label" for="detEstado">Estado de la postulación</label>
+        <label class="adm-estado-label" for="detEstado">Estado</label>
         <select id="detEstado"></select>
-        <span class="adm-hint" id="detEstadoInfo"></span>
       </div>
     </div>
+    <div class="adm-ficha-acciones">
+      <a class="adm-btn" id="detWhats" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="adm-btn" id="detMail">Email</a>
+      <button type="button" class="adm-btn" id="detImprimir">Imprimir / PDF</button>
+      <button type="button" class="adm-btn adm-btn--danger" id="detBorrar" hidden>Eliminar</button>
+    </div>
+    <p class="adm-hint adm-estado-info" id="detEstadoInfo"></p>
     <div id="detalleBody"></div>
     <section class="adm-gestion" aria-label="Notas">
       <h3>Notas internas</h3>
