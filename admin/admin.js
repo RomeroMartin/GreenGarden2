@@ -309,11 +309,31 @@ async function cargar() {
       });
     });
     marcarDuplicados();
+    errorCarga = '';
     aplicarFiltros();
   } catch (err) {
     console.error(err);
-    mostrar($('appError'), 'No pudimos cargar las postulaciones. Revisá tu conexión y tocá “Actualizar”.');
+    errorCarga = err.code || 'error';
+    mostrar($('appError'), (ERRORES_CARGA[err.code] || 'No pudimos cargar las postulaciones. Revisá tu conexión y tocá “Actualizar”.') + ' [' + errorCarga + ']');
+    pintarDiag();
   } finally { $('btnActualizar').disabled = false; }
+}
+
+let errorCarga = '';
+const ERRORES_CARGA = {
+  'permission-denied': 'Firebase no deja que este usuario lea las postulaciones. Avisale al administrador: puede ser un problema con el permiso de tu usuario o con las reglas de Firestore.',
+  'resource-exhausted': 'Firebase llegó al límite gratuito de uso. Probá de nuevo más tarde o avisale al administrador.',
+  'unavailable': 'No hay conexión con Firebase. Revisá tu internet y tocá “Actualizar”.',
+  'unauthenticated': 'Tu sesión venció. Salí y volvé a ingresar.'
+};
+
+// Quién está conectado y qué se cargó: con esto alcanza una captura para entender cualquier consulta.
+function pintarDiag() {
+  if (!perfil) { $('admDiag').textContent = ''; return; }
+  const sector = perfil.rol === 'admin' ? '' : perfil.sector
+    ? ' · sector ' + (SECTORES[perfil.sector] ? perfil.sector : '“' + perfil.sector + '” (no reconocido: se muestran todos)')
+    : ' · sin sector (se muestran todos)';
+  $('admDiag').textContent = 'Sesión: ' + perfil.email + ' · ' + perfil.rol + sector + ' · ' + todas.length + ' postulaciones cargadas' + (errorCarga ? ' · error: ' + errorCarga : '');
 }
 $('btnActualizar').addEventListener('click', cargar);
 
@@ -336,11 +356,24 @@ function armarFiltros() {
   // Cada encargado abre el panel filtrado por su sector, pero puede ver todo.
   $('fSector').value = perfil.rol !== 'admin' && SECTORES[perfil.sector] ? perfil.sector : '';
   llenarPuestos();
+  filtroSectorAuto = !!$('fSector').value;
+  pintarAvisoSector();
+}
+
+// El encargado abre el panel con su sector ya filtrado. El aviso dice cuántos hay y deja ver todos con un toque.
+let filtroSectorAuto = false;
+function pintarAvisoSector() {
   const nota = $('avisoSector');
-  if ($('fSector').value) {
-    nota.textContent = 'Te mostramos primero los perfiles de ' + SECTORES[$('fSector').value].nombre + '. Elegí “Todos los sectores” para ver el resto.';
-    nota.hidden = false;
-  } else nota.hidden = true;
+  const sector = $('fSector').value;
+  if (!filtroSectorAuto || !sector || todas.length === 0) { nota.hidden = true; return; }
+  const nombre = SECTORES[sector].nombre;
+  const texto = visibles.length === 0 && todas.length > 0
+    ? 'Todavía no hay perfiles de ' + nombre + ', pero hay ' + todas.length + ' en total.'
+    : 'Te mostramos primero los perfiles de ' + nombre + ' (' + visibles.length + ' de ' + todas.length + ').';
+  const ver = h('button', { type: 'button', class: 'adm-link', text: 'Ver todos los sectores' });
+  ver.addEventListener('click', () => { filtroSectorAuto = false; $('fSector').value = ''; llenarPuestos(); aplicarFiltros(); });
+  nota.replaceChildren(texto, ver);
+  nota.hidden = false;
 }
 
 function llenarPuestos() {
@@ -365,14 +398,14 @@ function aplicarFiltros() {
   pintarLista();
 }
 
-$('fSector').addEventListener('change', () => { llenarPuestos(); $('avisoSector').hidden = true; aplicarFiltros(); });
+$('fSector').addEventListener('change', () => { llenarPuestos(); filtroSectorAuto = false; aplicarFiltros(); });
 ['fQ', 'fPuesto', 'fEstado', 'fDia', 'fDesde'].forEach(id => {
   $(id).addEventListener(id === 'fQ' ? 'input' : 'change', aplicarFiltros);
 });
 $('btnLimpiar').addEventListener('click', () => {
   $('fQ').value = ''; $('fSector').value = ''; llenarPuestos(); $('fPuesto').value = '';
   $('fEstado').value = ''; $('fDia').value = ''; $('fDesde').value = '';
-  $('avisoSector').hidden = true;
+  filtroSectorAuto = false;
   aplicarFiltros();
 });
 
@@ -381,6 +414,11 @@ function pintarLista() {
   const nuevas = todas.filter(p => (p.estado || 'nuevo') === 'nuevo').length;
   $('cuenta').textContent = visibles.length + ' de ' + todas.length + (nuevas ? ' · ' + nuevas + ' nuevas' : '');
   $('vacio').hidden = visibles.length > 0;
+  $('vacio').textContent = todas.length === 0 && !errorCarga
+    ? 'Todavía no hay postulaciones, o este usuario no puede verlas.'
+    : 'No hay postulaciones con estos filtros.';
+  pintarAvisoSector();
+  pintarDiag();
   $('lista').replaceChildren(...visibles.map(p => {
     const est = p.estado || 'nuevo';
     const fila = h('button', { type: 'button', class: 'adm-fila', 'data-estado': est },
