@@ -6,7 +6,10 @@
   var panels = Array.prototype.slice.call(document.querySelectorAll('.menu-panel'));
   if (!tabs.length) return;
 
+  var actual = (panels.filter(function (p) { return !p.hidden; })[0] || {}).id;
+
   function select(id, scroll) {
+    actual = id;
     tabs.forEach(function (t) {
       t.setAttribute('aria-selected', t.getAttribute('aria-controls') === id ? 'true' : 'false');
       t.tabIndex = t.getAttribute('aria-controls') === id ? 0 : -1;
@@ -33,10 +36,13 @@
     });
   });
 
-  function fromHash(scroll) {
-    var id = location.hash.replace('#', '');
-    if (id && panels.some(function (p) { return p.id === id; })) select(id, scroll);
+  // El hash puede traer también una hoja abierta: #almuerzo/entradas (la maneja carta.js).
+  // Si la pestaña ya es la que está a la vista, no se hace scroll (así abrir o cerrar
+  // una hoja con el botón "Atrás" no mueve la página).
+  function fromHash(scroll, forzar) {
+    var id = location.hash.replace('#', '').split('/')[0];
+    if (id && panels.some(function (p) { return p.id === id; })) select(id, scroll && (forzar || id !== actual));
   }
   window.addEventListener('hashchange', function () { fromHash(true); });
-  fromHash(true);
+  fromHash(true, true);
 })();
